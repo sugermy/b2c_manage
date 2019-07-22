@@ -36,10 +36,9 @@
           </div>
         </div>
         <div class="scenic-spot-right">
-            <img src="../../../assets/homeImage/" class="scenic-information-img">
-            <div class="scenic-name">广州长隆
-</div>
-<div class="scenic-introduction"></div>
+          <img class="scenic-information-img" />
+          <div class="scenic-name">广州长隆</div>
+          <div class="scenic-introduction"></div>
         </div>
       </div>
     </div>
@@ -102,7 +101,7 @@ export default {
 .list-div {
   padding: 25px 0;
   border-bottom: 1px dashed rgb(197, 197, 197);
-  position:relative;
+  position: relative;
 }
 .list-img {
   height: 170px;
