@@ -36,9 +36,17 @@
           </div>
         </div>
         <div class="scenic-spot-right">
-          <img class="scenic-information-img" />
+          <img
+            src="../../../assets/homeImage/scenic_spot_description_bg.png"
+            class="scenic-information-img"
+          />
           <div class="scenic-name">广州长隆</div>
-          <div class="scenic-introduction"></div>
+          <div
+            class="scenic-introduction"
+          >广州长隆度假区是长隆集团旗下首个综合性主题旅游度假区，拥有长隆欢乐世界、长隆国际大马戏、长隆水上乐园、长隆野生动物世界、长隆飞鸟乐园和长隆酒店等多家主题公园及酒店，是中国拥有主题公园数量众多和超大规模的综合性。</div>
+          <div class="scenic-telephone-div">
+            
+          </div>
         </div>
       </div>
     </div>
@@ -189,6 +197,38 @@ export default {
 .scenic-spot-right {
   width: 300px;
   display: inline-block;
-  background: white;
+  background: rgb(255, 128, 57);
+  vertical-align: top;
+}
+.scenic-information-img {
+  height: 160px;
+  width: 100%;
+}
+.scenic-name {
+  font-size: 24px;
+  font-family: SourceHanSansCN-Medium;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 1);
+}
+.scenic-introduction {
+  padding: 10px 22px;
+  font-size: 14px;
+  font-family: SourceHanSansCN-Regular;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 1);
+}
+.scenic-telephone-div{
+  margin:22px;
+  background:white;
+
+}
+.scenic-telephone-img{
+  
+}
+.scenic-telephone-name{
+  
+}
+.scenic-telephone-num{
+  
 }
 </style>
