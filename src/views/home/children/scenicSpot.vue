@@ -10,12 +10,15 @@
       </div>
       <div class="scenic-spot-content">
         <div class="scenic-spot-left">
-          <div class="list-title-div">
-            <span class="list-title">水上世界成人票</span>
+          <div class="list-tabs-div">
+            <span class="list-tab">水上世界成人票</span>
           </div>
 
-          <div class="list-div" v-for="item in 4" :key="item">
-            <img src="../../../assets/homeImage/test.png" class="list-img" />
+          <div class="list-div" v-for="item in 4" :key="item">           
+            <div
+              class="list-img"
+           :style="{background: 'url('+listImgError+')', backgroundSize:'100%', backgroundRepeat: 'no-repeat',backgroundPosition:'center center'}"
+            ></div>
             <div class="list-right">
               <div class="list-name">长隆欢乐游泳池</div>
               <div class="list-discount-type">
@@ -29,23 +32,45 @@
                 <div class="price-original">$400</div>
               </div>
               <div class="list-button">
-                <button class="subscribe">立即预订</button>
+                <button class="subscribe" @click="subscribe()">立即预订</button>
                 <button class="details">查看详情</button>
               </div>
             </div>
           </div>
         </div>
         <div class="scenic-spot-right">
-          <img
-            src="../../../assets/homeImage/scenic_spot_description_bg.png"
-            class="scenic-information-img"
-          />
-          <div class="scenic-name">广州长隆</div>
-          <div
-            class="scenic-introduction"
-          >广州长隆度假区是长隆集团旗下首个综合性主题旅游度假区，拥有长隆欢乐世界、长隆国际大马戏、长隆水上乐园、长隆野生动物世界、长隆飞鸟乐园和长隆酒店等多家主题公园及酒店，是中国拥有主题公园数量众多和超大规模的综合性。</div>
-          <div class="scenic-telephone-div">
-            
+          <div class="scenic-top">
+            <img
+              src="../../../assets/homeImage/scenic_spot_description_bg.png"
+              class="scenic-information-img"
+            />
+            <div class="scenic-name">广州长隆</div>
+            <div
+              class="scenic-introduction"
+            >广州长隆度假区是长隆集团旗下首个综合性主题旅游度假区，拥有长隆欢乐世界、长隆国际大马戏、长隆水上乐园、长隆野生动物世界、长隆飞鸟乐园和长隆酒店等多家主题公园及酒店，是中国拥有主题公园数量众多和超大规模的综合性。</div>
+            <div class="scenic-telephone-div">
+              <div class="scenic-telephone-img-div">
+                <img
+                  class="scenic-telephone-img"
+                  src="../../../assets/homeImage/customer_service.png"
+                />
+              </div>
+
+              <div class="scenic-telephone-value">
+                <div class="scenic-telephone-name">全国服务热线</div>
+                <div class="scenic-telephone-num">400-666952</div>
+              </div>
+            </div>
+          </div>
+          <div class="scenic-bottom">
+            <div class="qr-code-div">
+              <img class="qr-code-img" src="../../../assets/homeImage/subscription_number_qr.png" />
+              <div class="qr-code-name">订阅号</div>
+            </div>
+            <div class="qr-code-div">
+              <img class="qr-code-img" src="../../../assets/homeImage/official_website_qr.png" />
+              <div class="qr-code-name">官网</div>
+            </div>
           </div>
         </div>
       </div>
@@ -57,7 +82,17 @@
 export default {
   name: "scenicSpot",
   data() {
-    return {};
+    return {
+      imgSize:"100%",
+      listImgError:require("../../../assets/homeImage/test.png")
+    }
+  },mounted () {
+    console.log("初始化");
+  },
+  methods:{
+    subscribe(){
+      this.$router.push({path:'/home/ScenicSpot/IimmediatePurchase'});
+    }
   }
 };
 </script>
@@ -93,18 +128,27 @@ export default {
   box-sizing: border-box;
 }
 
-.list-title-div {
-  border-bottom: 1px solid rgb(197, 197, 197);
+.list-tabs-div {
   box-sizing: border-box;
+  background:rgba(235,244,247,1);
 }
-.list-title {
-  font-size: 26px;
-  font-family: SourceHanSansCN-Medium;
-  font-weight: 500;
-  color: rgba(54, 128, 255, 1);
-  border-bottom: 3px solid rgb(255, 128, 57);
-  display: inline-block;
-  padding: 8px;
+
+.list-tab {
+font-size:20px;
+font-family:SourceHanSansCN-Medium;
+font-weight:500;
+color:rgba(54,128,255,1);
+padding:14px 30px;
+    display: inline-block;
+}
+.list-tab-active{
+font-size:20px;
+font-family:SourceHanSansCN-Medium;
+font-weight:500;
+color:rgba(255,255,255,1);
+padding:14px 30px;
+    display: inline-block;
+    background:rgba(255,128,57,1);
 }
 .list-div {
   padding: 25px 0;
@@ -115,6 +159,10 @@ export default {
   height: 170px;
   width: 300px;
   display: inline-block;
+  transition: background-size 1s;
+}
+.list-img:hover{
+  background-size:140% !important;
 }
 .list-right {
   display: inline-block;
@@ -169,6 +217,7 @@ export default {
   color: rgba(54, 128, 255, 1);
   padding: 8px 15px;
   margin: 0 8px;
+  cursor:pointer;
 }
 .list-button button:hover {
   background: rgba(54, 128, 255, 1);
@@ -197,8 +246,12 @@ export default {
 .scenic-spot-right {
   width: 300px;
   display: inline-block;
-  background: rgb(255, 128, 57);
+
   vertical-align: top;
+}
+.scenic-top {
+  background: rgb(255, 128, 57);
+  display: inline-block;
 }
 .scenic-information-img {
   height: 160px;
@@ -216,19 +269,84 @@ export default {
   font-family: SourceHanSansCN-Regular;
   font-weight: 400;
   color: rgba(255, 255, 255, 1);
+  line-height: 29px;
+  text-align: left;
+  text-indent: 28px;
 }
-.scenic-telephone-div{
-  margin:22px;
-  background:white;
-
+.scenic-telephone-div {
+  margin: 22px;
+  background: white;
+  display: flex;
+  padding: 15px;
 }
-.scenic-telephone-img{
-  
+.scenic-telephone-img-div {
+  align-items: center;
+  display: flex;
 }
-.scenic-telephone-name{
-  
+.scenic-telephone-img {
+  height: 36px;
+  width: 36px;
 }
-.scenic-telephone-num{
-  
+.scenic-telephone-value {
+  margin-left: 15px;
+  text-align: left;
+}
+.scenic-telephone-name {
+  font-size: 12px;
+  font-family: SourceHanSansCN-Medium;
+  font-weight: 500;
+  color: rgba(153, 153, 153, 1);
+  text-align: left;
+  margin-bottom: 6px;
+}
+.scenic-telephone-num {
+  font-size: 18px;
+  font-family: DINAlternate-Bold;
+  font-weight: bold;
+  color: rgba(63, 134, 255, 1);
+  letter-spacing: 3px;
+  text-align: left;
+}
+.scenic-bottom {
+  background: rgb(255, 128, 57);
+  display: inline-block;
+  display: flex;
+  padding: 26px 36px;
+  margin-top: 13px;
+  justify-content: space-between;
+  position: relative;
+}
+.scenic-bottom:before {
+  content: "";
+  position: absolute;
+  width: 7px;
+  height: 31px;
+  border-radius: 4px;
+  top: -22px;
+  right: 60px;
+  background: white;
+}
+.scenic-bottom:after {
+  content: "";
+  position: absolute;
+  width: 7px;
+  height: 31px;
+  border-radius: 4px;
+  top: -22px;
+  left: 60px;
+  background: white;
+}
+.qr-code-div {
+}
+.qr-code-img {
+  height: 100px;
+  width: 100px;
+  margin-bottom: 1px;
+}
+.qr-code-name {
+  font-size: 14px;
+  font-family: SourceHanSansCN-Medium;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 1);
 }
 </style>

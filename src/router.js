@@ -1,10 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/home'
+//主页
 const HomeView = () => import('./views/home/children/view')
 const HomeOther = () => import('./views/home/children/other')
 const ScenicSpot = () => import('./views/home/children/scenicSpot')
-
+const IimmediatePurchase = () => import('./views/home/children/immediatePurchase')
 
 const Product = () => import('./views/product')
 const ProductView = () => import('./views/product/children')
@@ -48,8 +49,11 @@ export default new Router({
           path: '/home/ScenicSpot',
           name: 'ScenicSpot',
           component: ScenicSpot,
+        },{
+          path: '/home/ScenicSpot/IimmediatePurchase',
+          name: 'IimmediatePurchase',
+          component: IimmediatePurchase,
         }
-
       ]
     },
     //门票
