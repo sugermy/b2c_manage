@@ -123,7 +123,7 @@ export default {
   methods: {
     toScorll(value) {
       const returnEle = document.querySelector('.' + value)
-      if (!!returnEle) {
+      if (returnEle || false) {
         returnEle.scrollIntoView(true)
       }
     }
