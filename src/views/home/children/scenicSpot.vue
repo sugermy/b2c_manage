@@ -10,7 +10,7 @@
           </el-carousel>
         </el-col>
       </el-row>
-      <el-row :gutter="10">
+      <el-row :gutter="10" style="margin-bottom:50px">
         <div class="scenic-spot-content">
           <el-col :span="18">
             <div class="scenic-spot-left">

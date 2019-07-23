@@ -139,7 +139,7 @@ export default {
   background: white;
   padding: 40px;
   box-sizing: border-box;
-  margin-top: 50px;
+  margin: 50px 0;
   text-align: left;
 }
 .details-top {
