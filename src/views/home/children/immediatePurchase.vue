@@ -16,9 +16,7 @@
             <div class="ticket-discount-type">
               <div class="type-div">随时退</div>
             </div>
-            <div
-              class="ticket-explain"
-            >逍遥搏击任飞翔，彩虹绘出真体验，让国人不出国门就可享受到超大型的游乐设施，现在就让我们一起尽情去体验过山车典范的巅峰感受吧</div>
+            <div class="ticket-explain">逍遥搏击任飞翔，彩虹绘出真体验，让国人不出国门就可享受到超大型的游乐设施，现在就让我们一起尽情去体验过山车典范的巅峰感受吧</div>
             <div class="ticket-price">
               <span class="ticket-price-name">门票价格：</span>
               <span class="ticket-price-num">￥299</span>
@@ -35,11 +33,8 @@
             </div>
             <div class="ticket-exchange">
               <span class="ticket-exchange-name">兑换方式：</span>
-              <img
-                class="ticket-exchange-img"
-                src="../../../assets/homeImage/message_img.png"
-                style="padding:0;border:0;"
-              />
+              <img class="ticket-exchange-img" src="../../../assets/homeImage/message_img.png"
+                style="padding:0;border:0;" />
               <span class="ticket-exchange-value">短信</span>
               <img class="ticket-exchange-img" src="../../../assets/homeImage/id_img.png" />
               <span class="ticket-exchange-value">身份证</span>
@@ -76,9 +71,9 @@
               <span>游玩攻略</span>
             </div>
             <div class="details-title">广州长隆度假区 —— 中国一站式综合性旅游度假区</div>
-            <div
-              class="details-text"
-            >广州长隆度假区是长隆集团旗下首个综合性主题旅游度假区，拥有长隆欢乐世界、长隆国际大马戏、长隆水上乐园、长隆野生动物世界、长隆飞鸟乐园和长隆酒店等多家主题公园及酒店，是中国拥有主题公园数量众多和超大规模的综合性主题旅游度假区，先后被评为“文化产业示范基地 ”、“ 科普教育基地 ”、中国首批国家AAAAA 级景区，年接待游客连续多年超过千万人次，位居世界主题景区前列，成为中国在世界旅游业的标杆。</div>
+            <div class="details-text">
+              广州长隆度假区是长隆集团旗下首个综合性主题旅游度假区，拥有长隆欢乐世界、长隆国际大马戏、长隆水上乐园、长隆野生动物世界、长隆飞鸟乐园和长隆酒店等多家主题公园及酒店，是中国拥有主题公园数量众多和超大规模的综合性主题旅游度假区，先后被评为“文化产业示范基地
+              ”、“ 科普教育基地 ”、中国首批国家AAAAA 级景区，年接待游客连续多年超过千万人次，位居世界主题景区前列，成为中国在世界旅游业的标杆。</div>
           </div>
           <!-- 游玩攻略-->
           <div class="play-introduction">
@@ -86,18 +81,18 @@
               <span>地理位置</span>
             </div>
             <div class="details-title">广州长隆度假区 —— 中国一站式综合性旅游度假区</div>
-            <div
-              class="details-text"
-            >长隆欢乐世界是目前国内设备先进、科技含量高、游乐设备众多的超级游乐园，集世界精彩游乐和大型演艺表演为一体，被誉为“中国新一代游乐园的经典之作”。 其拥有顶端落差达80米的垂直过山车；由著名游乐设备提供商INTAMIN提供的十环过山车，全世界仅英国和长隆欢乐世界两台；摩托过山车，0-80公里弹射式加速仅需2.8秒；U型滑板，曾作为挑战项目参与《奔跑吧，兄弟》录制；超级大摆锤是新奇酷炫的大型机动游乐设备，最高时速110公里/小时，最大摆幅240度；国际特技剧场，大型水陆空特效剧场结合爆破、枪战、烟火、声光、机动设备、滑水、高空特技等多种超高难度特效；星际决战，原创360度不规则环形荧幕，模拟实景立体观影效果，是超大型5D探险游乐项目。 ”、“ 科普教育基地 ”、中国首批国家AAAAA 级景区，年接待游客连续多年超过千万人次，位居世界主题景区前列，成为中国在世界旅游业的标杆。</div>
+            <div class="details-text">长隆欢乐世界是目前国内设备先进、科技含量高、游乐设备众多的超级游乐园，集世界精彩游乐和大型演艺表演为一体，被誉为“中国新一代游乐园的经典之作”。
+              其拥有顶端落差达80米的垂直过山车；由著名游乐设备提供商INTAMIN提供的十环过山车，全世界仅英国和长隆欢乐世界两台；摩托过山车，0-80公里弹射式加速仅需2.8秒；U型滑板，曾作为挑战项目参与《奔跑吧，兄弟》录制；超级大摆锤是新奇酷炫的大型机动游乐设备，最高时速110公里/小时，最大摆幅240度；国际特技剧场，大型水陆空特效剧场结合爆破、枪战、烟火、声光、机动设备、滑水、高空特技等多种超高难度特效；星际决战，原创360度不规则环形荧幕，模拟实景立体观影效果，是超大型5D探险游乐项目。
+              ”、“ 科普教育基地 ”、中国首批国家AAAAA 级景区，年接待游客连续多年超过千万人次，位居世界主题景区前列，成为中国在世界旅游业的标杆。</div>
           </div>
           <!-- 购买须知-->
           <div class="play-introduction">
             <div class="navigation-content-title">
               <span>购买须知</span>
             </div>
-            <div
-              class="details-text"
-            >广州长隆度假区是长隆集团旗下首个综合性主题旅游度假区，拥有长隆欢乐世界、长隆国际大马戏、长隆水上乐园、长隆野生动物世界、长隆飞鸟乐园和长隆酒店等多家主题公园及酒店，是中国拥有主题公园数量众多和超大规模的综合性主题旅游度假区，先后被评为“文化产业示范基地 ”、“ 科普教育基地 ”、中国首批国家AAAAA 级景区，年接待游客连续多年超过千万人次，位居世界主题景区前列，成为中国在世界旅游业的标杆。</div>
+            <div class="details-text">
+              广州长隆度假区是长隆集团旗下首个综合性主题旅游度假区，拥有长隆欢乐世界、长隆国际大马戏、长隆水上乐园、长隆野生动物世界、长隆飞鸟乐园和长隆酒店等多家主题公园及酒店，是中国拥有主题公园数量众多和超大规模的综合性主题旅游度假区，先后被评为“文化产业示范基地
+              ”、“ 科普教育基地 ”、中国首批国家AAAAA 级景区，年接待游客连续多年超过千万人次，位居世界主题景区前列，成为中国在世界旅游业的标杆。</div>
           </div>
         </div>
       </div>
@@ -109,15 +104,15 @@
 export default {
   data() {
     return {
-      dateValue: "" //选择的日期
-    };
+      dateValue: '' //选择的日期
+    }
   },
   computed: {
     fullName: function() {
-      return;
+      return ''
     }
   }
-};
+}
 </script>
 <style lang="less" scoped>
 .content {
