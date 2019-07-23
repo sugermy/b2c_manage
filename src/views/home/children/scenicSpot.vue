@@ -10,95 +10,92 @@
           </el-carousel>
         </el-col>
       </el-row>
+      <el-row :gutter="10">
+        <div class="scenic-spot-content">
+          <el-col :span="18">
+            <div class="scenic-spot-left">
+              <el-tabs v-model="activeName" @tab-click="changeTab">
+                <el-tab-pane label="水上世界成人票" name="first">
+                  <div class="list-div" v-for="item in 4" :key="item">
+                    <div class="list-img" :style="{background: 'url('+listImgError+')', backgroundSize:'100%', backgroundRepeat: 'no-repeat',backgroundPosition:'center center'}"></div>
+                    <div class="list-right">
+                      <div class="list-name">长隆欢乐游泳池</div>
+                      <div class="list-discount-type">
+                        <div class="list-type-div">过期自动退</div>
+                      </div>
+                      <div class="list-explain">逍遥搏击任飞翔，彩虹绘出真体验，让国人不出国门就可享受到超大型的游乐设施，现在就让我们一起尽情去体验过山车典范的巅峰感受吧...</div>
+                      <div class="list-price-div">
+                        <div class="price-discount">$300</div>
+                        <div class="price-original">$400</div>
+                      </div>
+                      <div class="list-button">
+                        <button class="subscribe" @click="subscribe()">立即预订</button>
+                        <button class="details">查看详情</button>
+                      </div>
+                    </div>
+                  </div>
+                </el-tab-pane>
+                <el-tab-pane label="水上世界儿童票" name="second">水上世界儿童票</el-tab-pane>
+                <el-tab-pane label="水上世界优惠票" name="third">水上世界优惠票</el-tab-pane>
+              </el-tabs>
+            </div>
+          </el-col>
+          <el-col :span="6">
+            <div class="scenic-spot-right">
+              <div class="scenic-top">
+                <img src="../../../assets/homeImage/scenic_spot_description_bg.png" class="scenic-information-img" />
+                <div class="scenic-name">广州长隆</div>
+                <div class="scenic-introduction">广州长隆度假区是长隆集团旗下首个综合性主题旅游度假区，拥有长隆欢乐世界、长隆国际大马戏、长隆水上乐园、长隆野生动物世界、长隆飞鸟乐园和长隆酒店等多家主题公园及酒店，是中国拥有主题公园数量众多和超大规模的综合性。</div>
+                <div class="scenic-telephone-div">
+                  <div class="scenic-telephone-img-div">
+                    <img class="scenic-telephone-img" src="../../../assets/homeImage/customer_service.png" />
+                  </div>
 
-      <div class="scenic-spot-content">
-        <div class="scenic-spot-left">
-          <div class="list-tabs-div">
-            <span class="list-tab">水上世界成人票</span>
-          </div>
-
-          <div class="list-div" v-for="item in 4" :key="item">
-            <div
-              class="list-img"
-              :style="{background: 'url('+listImgError+')', backgroundSize:'100%', backgroundRepeat: 'no-repeat',backgroundPosition:'center center'}"
-            ></div>
-            <div class="list-right">
-              <div class="list-name">长隆欢乐游泳池</div>
-              <div class="list-discount-type">
-                <div class="list-type-div">过期自动退</div>
+                  <div class="scenic-telephone-value">
+                    <div class="scenic-telephone-name">全国服务热线</div>
+                    <div class="scenic-telephone-num">400-666952</div>
+                  </div>
+                </div>
               </div>
-              <div
-                class="list-explain"
-              >逍遥搏击任飞翔，彩虹绘出真体验，让国人不出国门就可享受到超大型的游乐设施，现在就让我们一起尽情去体验过山车典范的巅峰感受吧...</div>
-              <div class="list-price-div">
-                <div class="price-discount">$300</div>
-                <div class="price-original">$400</div>
-              </div>
-              <div class="list-button">
-                <button class="subscribe" @click="subscribe()">立即预订</button>
-                <button class="details">查看详情</button>
+              <div class="scenic-bottom">
+                <div class="qr-code-div">
+                  <img class="qr-code-img" src="../../../assets/homeImage/subscription_number_qr.png" />
+                  <div class="qr-code-name">订阅号</div>
+                </div>
+                <div class="qr-code-div">
+                  <img class="qr-code-img" src="../../../assets/homeImage/official_website_qr.png" />
+                  <div class="qr-code-name">官网</div>
+                </div>
               </div>
             </div>
-          </div>
+          </el-col>
         </div>
-        <div class="scenic-spot-right">
-          <div class="scenic-top">
-            <img
-              src="../../../assets/homeImage/scenic_spot_description_bg.png"
-              class="scenic-information-img"
-            />
-            <div class="scenic-name">广州长隆</div>
-            <div
-              class="scenic-introduction"
-            >广州长隆度假区是长隆集团旗下首个综合性主题旅游度假区，拥有长隆欢乐世界、长隆国际大马戏、长隆水上乐园、长隆野生动物世界、长隆飞鸟乐园和长隆酒店等多家主题公园及酒店，是中国拥有主题公园数量众多和超大规模的综合性。</div>
-            <div class="scenic-telephone-div">
-              <div class="scenic-telephone-img-div">
-                <img
-                  class="scenic-telephone-img"
-                  src="../../../assets/homeImage/customer_service.png"
-                />
-              </div>
-
-              <div class="scenic-telephone-value">
-                <div class="scenic-telephone-name">全国服务热线</div>
-                <div class="scenic-telephone-num">400-666952</div>
-              </div>
-            </div>
-          </div>
-          <div class="scenic-bottom">
-            <div class="qr-code-div">
-              <img class="qr-code-img" src="../../../assets/homeImage/subscription_number_qr.png" />
-              <div class="qr-code-name">订阅号</div>
-            </div>
-            <div class="qr-code-div">
-              <img class="qr-code-img" src="../../../assets/homeImage/official_website_qr.png" />
-              <div class="qr-code-name">官网</div>
-            </div>
-          </div>
-        </div>
-      </div>
+      </el-row>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "scenicSpot",
+  name: 'scenicSpot',
   data() {
     return {
-      imgSize: "100%",
-      listImgError: require("../../../assets/homeImage/test.png")
-    };
+      activeName: 'first',
+      imgSize: '100%',
+      listImgError: require('../../../assets/homeImage/test.png')
+    }
   },
-  mounted() {
-    console.log("初始化");
-  },
+  mounted() {},
   methods: {
     subscribe() {
-      this.$router.push({ path: "/home/ScenicSpot/IimmediatePurchase" });
+      this.$router.push({ path: '/home/ScenicSpot/IimmediatePurchase' })
+    },
+    //tab切换
+    changeTab(tab, event) {
+      console.log(this.activeName)
     }
   }
-};
+}
 </script>
 
 <style lang="less" scoped>
@@ -110,23 +107,12 @@ export default {
   background: blueviolet;
   margin-top: 50px;
 }
-.middle {
-  text-align: center;
-}
 .scenic-spot-content {
-  width: 1200px;
-  display: inline-block;
-  margin-top: 16px;
-  margin-bottom: 16px;
+  margin: 16px 0;
 }
 .scenic-spot-left {
-  width: 880px;
-  display: inline-block;
-  margin-right: 16px;
   background: white;
-  text-align: left;
   padding: 25px 40px;
-  box-sizing: border-box;
 }
 
 .list-tabs-div {
@@ -244,12 +230,6 @@ export default {
   display: inline-block;
   text-decoration: line-through;
 }
-.scenic-spot-right {
-  width: 300px;
-  display: inline-block;
-
-  vertical-align: top;
-}
 .scenic-top {
   background: rgb(255, 128, 57);
   display: inline-block;
@@ -262,6 +242,7 @@ export default {
   font-size: 24px;
   font-family: SourceHanSansCN-Medium;
   font-weight: 500;
+  text-align: center;
   color: rgba(255, 255, 255, 1);
 }
 .scenic-introduction {
@@ -318,7 +299,7 @@ export default {
   position: relative;
 }
 .scenic-bottom:before {
-  content: "";
+  content: '';
   position: absolute;
   width: 7px;
   height: 31px;
@@ -328,7 +309,7 @@ export default {
   background: white;
 }
 .scenic-bottom:after {
-  content: "";
+  content: '';
   position: absolute;
   width: 7px;
   height: 31px;
@@ -336,8 +317,6 @@ export default {
   top: -22px;
   left: 60px;
   background: white;
-}
-.qr-code-div {
 }
 .qr-code-img {
   height: 100px;

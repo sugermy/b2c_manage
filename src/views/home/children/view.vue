@@ -5,12 +5,7 @@
       <div class="break-row"></div>
       <div class="popup-form-div">
         <el-select v-model="cityValue" class="city-div" placeholder="选择城市">
-          <el-option
-            v-for="item in cityList"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
+          <el-option v-for="item in cityList" :key="item.value" :label="item.label" :value="item.value"></el-option>
         </el-select>
         <button class="submitted" @click="sub">快速预订</button>
       </div>
@@ -28,38 +23,38 @@ export default {
     return {
       cityList: [
         {
-          value: "选项1",
-          label: "北京"
+          value: '选项1',
+          label: '北京'
         },
         {
-          value: "选项2",
-          label: "北京2"
+          value: '选项2',
+          label: '北京2'
         },
         {
-          value: "选项3",
-          label: "北京3"
+          value: '选项3',
+          label: '北京3'
         },
         {
-          value: "选项4",
-          label: "北京4"
+          value: '选项4',
+          label: '北京4'
         },
         {
-          value: "选项5",
-          label: "北京5"
+          value: '选项5',
+          label: '北京5'
         }
       ],
-      cityValue: ""
-    };
+      cityValue: ''
+    }
   },
   methods: {
     sub() {
       this.$router.push({
-        path: "./ScenicSpot",
-        params: { pk_refinfo: "test", value: "test1" }
-      });
+        path: './ScenicSpot',
+        params: { pk_refinfo: 'test', value: 'test1' }
+      })
     }
   }
-};
+}
 </script>
 <style lang="less" scoped>
 .content {

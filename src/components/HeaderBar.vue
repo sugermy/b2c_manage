@@ -5,13 +5,7 @@
     </div>
     <div class="header-right">
       <ul class="menu">
-        <router-link
-          tag="li"
-          v-for="(item,index) in menuList"
-          :key="index"
-          class="menu-item"
-          :to="{ path: item.path }"
-        >{{item.name}}</router-link>
+        <router-link tag="li" v-for="(item,index) in menuList" :key="index" class="menu-item" :to="{ path: item.path }">{{item.name}}</router-link>
       </ul>
       <el-select v-model="cityID" placeholder="请选择城市" @change="changeCity">
         <el-option v-for="item in msg" :key="item.value" :label="item.label" :value="item.value"></el-option>
@@ -22,65 +16,65 @@
 
 <script>
 export default {
-  name: "HeaderBar",
+  name: 'HeaderBar',
   props: {
     msg: Array
   },
   data() {
     return {
-      cityID: "",
-      cityValue: "",
+      cityID: '',
+      cityValue: '',
       cityList: [
         {
-          value: "选项1",
-          label: "北京"
+          value: '选项1',
+          label: '北京'
         },
         {
-          value: "选项2",
-          label: "北京2"
+          value: '选项2',
+          label: '北京2'
         },
         {
-          value: "选项3",
-          label: "北京3"
+          value: '选项3',
+          label: '北京3'
         },
         {
-          value: "选项4",
-          label: "北京4"
+          value: '选项4',
+          label: '北京4'
         },
         {
-          value: "选项5",
-          label: "北京5"
+          value: '选项5',
+          label: '北京5'
         }
       ],
       menuList: [
         {
-          name: "首页",
-          path: "/Home/HomeView"
+          name: '首页',
+          path: '/home'
         },
         {
-          name: "订单信息",
-          path: "/OrderInformation"
+          name: '订单信息',
+          path: '/OrderInformation'
         },
         {
-          name: "个人中心",
-          path: "/PersonalCenter"
+          name: '个人中心',
+          path: '/PersonalCenter'
         },
         {
-          name: "联系我们",
-          path: "/Contactus"
+          name: '联系我们',
+          path: '/Contactus'
         }
       ]
-    };
+    }
   },
   created() {
-    this.cityID = this.msg[0].value;
+    this.cityID = this.msg[0].value
   },
   methods: {
     changeCity(city) {
-      this.$emit("increment", city);
+      this.$emit('increment', city)
     }
   }
-};
+}
 </script>
 
 <style scoped lang="less">

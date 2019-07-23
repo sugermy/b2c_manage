@@ -2,72 +2,76 @@
   <div class="content">
     <div class="middle">
       <div class="details">
-        <div class="details-top">
-          <div class="admission-ticket-img-div">
-            <img class="ticket-img-big" src="../../../assets/homeImage/test.png" />
-            <div class="ticket-img-small-div">
-              <img class="ticket-img-small" src="../../../assets/homeImage/test.png" />
-              <img class="ticket-img-small" src="../../../assets/homeImage/test.png" />
-              <img class="ticket-img-small" src="../../../assets/homeImage/test.png" />
-            </div>
-          </div>
-          <div class="ticket-information-div">
-            <div class="ticket-name">长隆欢乐游泳池</div>
-            <div class="ticket-discount-type">
-              <div class="type-div">随时退</div>
-            </div>
-            <div class="ticket-explain">逍遥搏击任飞翔，彩虹绘出真体验，让国人不出国门就可享受到超大型的游乐设施，现在就让我们一起尽情去体验过山车典范的巅峰感受吧</div>
-            <div class="ticket-price">
-              <span class="ticket-price-name">门票价格：</span>
-              <span class="ticket-price-num">￥299</span>
-            </div>
-            <div class="purchase-date">
-              <span class="purchase-date-name">选择日期：</span>
-              <el-date-picker v-model="dateValue" type="date" placeholder="选择日期"></el-date-picker>
-            </div>
-            <div class="purchase-num">
-              <span class="purchase-num-name">购买数量：</span>
-              <img class="operational" src="../../../assets/homeImage/reduce.png" />
-              <span class="purchase-num-value">1</span>
-              <img class="operational" src="../../../assets/homeImage/plus.png" />
-            </div>
-            <div class="ticket-exchange">
-              <span class="ticket-exchange-name">兑换方式：</span>
-              <img class="ticket-exchange-img" src="../../../assets/homeImage/message_img.png"
-                style="padding:0;border:0;" />
-              <span class="ticket-exchange-value">短信</span>
-              <img class="ticket-exchange-img" src="../../../assets/homeImage/id_img.png" />
-              <span class="ticket-exchange-value">身份证</span>
-              <img class="ticket-exchange-img" src="../../../assets/homeImage/qr_code_img.png" />
-              <span class="ticket-exchange-value">二维码</span>
-            </div>
-            <div class="ticket-total">
-              <div class="ticket-total-price">
-                <div class="total-price-div">
-                  <span class="total-price-name">总计:</span>
-                  <span class="total-price-num">￥1000</span>
-                </div>
-                <div class="price-tips">
-                  <img class="warning-img" src="../../../assets/homeImage/warning_img.png" />
-                  <span class="price-tips-text">温馨提示：购买前请仔细阅读</span>
-                  <span class="price-tips-red">购买须知</span>
-                </div>
-              </div>
-              <div class="immediately-purchase-div">
-                <button class="purchase-button">立即订购</button>
+        <el-row class="details-top">
+          <el-col :span="10">
+            <div class="admission-ticket-img-div">
+              <img class="ticket-img-big" src="../../../assets/homeImage/test.png" />
+              <div class="ticket-img-small-div">
+                <img class="ticket-img-small" src="../../../assets/homeImage/test.png" />
+                <img class="ticket-img-small" src="../../../assets/homeImage/test.png" />
+                <img class="ticket-img-small" src="../../../assets/homeImage/test.png" />
               </div>
             </div>
-          </div>
-        </div>
+          </el-col>
+          <el-col :span="14">
+            <div class="ticket-information-div">
+              <div class="ticket-name">长隆欢乐游泳池</div>
+              <div class="ticket-discount-type">
+                <div class="type-div">随时退</div>
+              </div>
+              <div class="ticket-explain">逍遥搏击任飞翔，彩虹绘出真体验，让国人不出国门就可享受到超大型的游乐设施，现在就让我们一起尽情去体验过山车典范的巅峰感受吧</div>
+              <div class="ticket-price">
+                <span class="ticket-price-name">门票价格：</span>
+                <span class="ticket-price-num">￥299</span>
+              </div>
+              <div class="purchase-date">
+                <span class="purchase-date-name">选择日期：</span>
+                <el-date-picker v-model="dateValue" type="date" placeholder="选择日期"></el-date-picker>
+              </div>
+              <div class="purchase-num">
+                <span class="purchase-num-name">购买数量：</span>
+                <img class="operational" src="../../../assets/homeImage/reduce.png" />
+                <span class="purchase-num-value">1</span>
+                <img class="operational" src="../../../assets/homeImage/plus.png" />
+              </div>
+              <div class="ticket-exchange">
+                <span class="ticket-exchange-name">兑换方式：</span>
+                <img class="ticket-exchange-img" src="../../../assets/homeImage/message_img.png" style="padding:0;border:0;" />
+                <span class="ticket-exchange-value">短信</span>
+                <img class="ticket-exchange-img" src="../../../assets/homeImage/id_img.png" />
+                <span class="ticket-exchange-value">身份证</span>
+                <img class="ticket-exchange-img" src="../../../assets/homeImage/qr_code_img.png" />
+                <span class="ticket-exchange-value">二维码</span>
+              </div>
+              <div class="ticket-total">
+                <div class="ticket-total-price">
+                  <div class="total-price-div">
+                    <span class="total-price-name">总计:</span>
+                    <span class="total-price-num">￥1000</span>
+                  </div>
+                  <div class="price-tips">
+                    <img class="warning-img" src="../../../assets/homeImage/warning_img.png" />
+                    <span class="price-tips-text">温馨提示：购买前请仔细阅读</span>
+                    <span class="price-tips-red">购买须知</span>
+                  </div>
+                </div>
+                <div class="immediately-purchase-div">
+                  <button class="purchase-button">立即订购</button>
+                </div>
+              </div>
+            </div>
+          </el-col>
+        </el-row>
         <div class="bread_crumb_navigation">
-          <div class="navigation-div navigation-div-active">游玩攻略</div>
-          <div class="navigation-div">地理位置</div>
-          <div class="navigation-div">购买须知</div>
+          <div class="navigation-to navigation-to-active" @click="toScorll('play')">游玩攻略</div>
+          <div class="navigation-to" @click="toScorll('position')">地理位置</div>
+          <div class="navigation-to" @click="toScorll('explain')">购买须知</div>
+
         </div>
         <div class="navigation-content">
           <!-- 游玩攻略-->
           <div class="play-introduction">
-            <div class="navigation-content-title">
+            <div class="navigation-content-title play">
               <span>游玩攻略</span>
             </div>
             <div class="details-title">广州长隆度假区 —— 中国一站式综合性旅游度假区</div>
@@ -77,7 +81,7 @@
           </div>
           <!-- 游玩攻略-->
           <div class="play-introduction">
-            <div class="navigation-content-title">
+            <div class="navigation-content-title position">
               <span>地理位置</span>
             </div>
             <div class="details-title">广州长隆度假区 —— 中国一站式综合性旅游度假区</div>
@@ -87,7 +91,7 @@
           </div>
           <!-- 购买须知-->
           <div class="play-introduction">
-            <div class="navigation-content-title">
+            <div class="navigation-content-title explain">
               <span>购买须知</span>
             </div>
             <div class="details-text">
@@ -107,24 +111,31 @@ export default {
       dateValue: '' //选择的日期
     }
   },
+  created() {
+    var today = new Date()
+    this.dateValue = new Date(today.getTime() + 24 * 60 * 60 * 1000)
+  },
   computed: {
     fullName: function() {
       return ''
+    }
+  },
+  methods: {
+    toScorll(value) {
+      const returnEle = document.querySelector('.' + value)
+      if (!!returnEle) {
+        returnEle.scrollIntoView(true)
+      }
     }
   }
 }
 </script>
 <style lang="less" scoped>
 .content {
+  width: 100%;
   height: 100%;
-  overflow: auto;
-}
-.middle {
-  text-align: center;
 }
 .details {
-  width: 1200px;
-  display: inline-block;
   background: white;
   padding: 40px;
   box-sizing: border-box;
@@ -132,28 +143,24 @@ export default {
   text-align: left;
 }
 .details-top {
-  display: inline-block;
-}
-.admission-ticket-img-div {
-  width: 600px;
-  display: inline-block;
+  width: 100%;
+  height: 100%;
 }
 .ticket-img-big {
   height: 340px;
-  width: 600px;
+  width: 100%;
   margin-bottom: 4px;
 }
 .ticket-img-small-div {
+  width: 100%;
   display: flex;
   justify-content: space-between;
 }
 .ticket-img-small {
   height: 110px;
-  width: 32.5%;
+  width: calc(100% / 3 - 5px);
 }
 .ticket-information-div {
-  width: 520px;
-  display: inline-block;
   vertical-align: top;
   padding-left: 45px;
   box-sizing: border-box;
@@ -276,12 +283,18 @@ export default {
 .ticket-total-price {
   margin-right: 20px;
 }
+.total-price-div {
+  margin-bottom: 10px;
+  height: 30px;
+  line-height: 30px;
+  display: flex;
+  align-items: center;
+}
 .total-price-name {
   font-size: 16px;
   font-family: SourceHanSansCN-Regular;
   font-weight: 400;
   color: rgba(103, 119, 142, 1);
-  margin-left: 32px;
 }
 .total-price-num {
   font-size: 24px;
@@ -289,8 +302,6 @@ export default {
   font-weight: 500;
   color: rgba(255, 82, 82, 1);
   margin-left: 3px;
-}
-.price-tips {
 }
 .warning-img {
   width: 14px;
@@ -335,7 +346,7 @@ export default {
   margin: 32px 0;
   box-sizing: border-box;
 }
-.navigation-div {
+.navigation-to {
   font-size: 14px;
   font-family: SourceHanSansCN-Regular;
   font-weight: 400;
@@ -344,8 +355,12 @@ export default {
   padding: 0 32px;
   display: inline-block;
   border-right: 1px dotted #959595;
+  cursor: pointer;
 }
-.navigation-div-active {
+.navigation-to:last-child {
+  border-right: none;
+}
+.navigation-to-active {
   color: rgba(255, 128, 57, 1);
   font-family: SourceHanSansCN-Medium;
   font-weight: 500;

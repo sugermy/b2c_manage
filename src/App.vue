@@ -72,9 +72,7 @@ export default {
 .main-con {
   width: 100%;
   height: 100%;
-  text-align: center;
 }
-
 .bg {
   width: 100%;
   background: url(./assets/home_bg.png) no-repeat center;

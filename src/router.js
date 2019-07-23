@@ -1,49 +1,49 @@
-import Vue from 'vue';
-import Router from 'vue-router';
-import Home from './views/home';
+import Vue from "vue";
+import Router from "vue-router";
+import Home from "./views/home";
 //主页
-const HomeView = () => import('./views/home/children/view');
-const ScenicSpot = () => import('./views/home/children/scenicSpot');
+const HomeView = () => import("./views/home/children/view");
+const ScenicSpot = () => import("./views/home/children/scenicSpot");
 const IimmediatePurchase = () =>
-  import('./views/home/children/immediatePurchase');
+  import("./views/home/children/immediatePurchase");
 
 //订单信息
-const OrderInformation = () => import('./views/orderInformation');
+const OrderInformation = () => import("./views/orderInformation");
 
 //个人中心
-const PersonalCenter = () => import('./views/personalCenter');
+const PersonalCenter = () => import("./views/personalCenter");
 //联系我们
-const Contactus = () => import('./views/contactus');
+const Contactus = () => import("./views/contactus");
 Vue.use(Router);
 
 export default new Router({
   routes: [
     //无路由默认跳转
     {
-      path: '/',
-      name: '',
-      redirect: '/home/HomeView'
+      path: "/",
+      name: "",
+      redirect: "/home/HomeView"
     },
     //首页
     {
-      path: '/home',
-      name: 'Home',
+      path: "/home",
+      name: "Home",
       component: Home,
-      redirect: '/home/HomeView',
+      redirect: "/home/HomeView",
       children: [
         {
-          path: '/home/HomeView',
-          name: 'HomeView',
+          path: "HomeView",
+          name: "HomeView",
           component: HomeView
         },
         {
-          path: '/home/ScenicSpot',
-          name: 'ScenicSpot',
+          path: "ScenicSpot",
+          name: "ScenicSpot",
           component: ScenicSpot
         },
         {
-          path: '/home/ScenicSpot/IimmediatePurchase',
-          name: 'IimmediatePurchase',
+          path: "ScenicSpot/IimmediatePurchase",
+          name: "IimmediatePurchase",
           component: IimmediatePurchase
         }
       ]
@@ -51,20 +51,20 @@ export default new Router({
 
     //订单信息
     {
-      path: '/OrderInformation',
-      name: 'OrderInformation',
+      path: "/OrderInformation",
+      name: "OrderInformation",
       component: OrderInformation
     },
     //个人中心
     {
-      path: '/PersonalCenter',
-      name: 'PersonalCenter',
+      path: "/PersonalCenter",
+      name: "PersonalCenter",
       component: PersonalCenter
     },
     //联系我们
     {
-      path: '/Contactus',
-      name: 'Contactus',
+      path: "/Contactus",
+      name: "Contactus",
       component: Contactus
     }
   ]
