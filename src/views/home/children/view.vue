@@ -1,6 +1,5 @@
 <template>
   <div class="content">
-    <div class="bg"></div>
     <div class="popup-div">
       <div class="popup-text">快速预定道控主题乐园门票</div>
       <div class="break-row"></div>
@@ -50,12 +49,15 @@ export default {
         }
       ],
       cityValue: ""
-    }
+    };
   },
-  methods:{
-   sub(){
-       this.$router.push({path:'./ScenicSpot',params:{pk_refinfo:'test',value:'test1'}});
-   }
+  methods: {
+    sub() {
+      this.$router.push({
+        path: "./ScenicSpot",
+        params: { pk_refinfo: "test", value: "test1" }
+      });
+    }
   }
 };
 </script>
@@ -63,12 +65,8 @@ export default {
 .content {
   height: 100%;
   overflow: hidden;
-  background: url(../../../assets/home_bg.png) no-repeat center;
 }
-.bg {
-  height: 100%;
-  background: rgba(0, 0, 0, 0.2);
-}
+
 .popup-div {
   height: 457px;
   width: 808px;

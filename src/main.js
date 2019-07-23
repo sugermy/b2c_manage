@@ -5,6 +5,8 @@ import router from './router';
 import store from './store';
 import './plugins/element.js';
 import Ajax from './utils/ajax.js';
+import './style/reset.less';
+import './style/ele_reset.less';
 
 Vue.config.productionTip = false;
 Vue.prototype.$ajax = Ajax.$ajax;

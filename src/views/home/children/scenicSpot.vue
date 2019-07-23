@@ -1,23 +1,26 @@
 <template>
   <div class="content">
     <div class="middle">
-      <div class="carousel-div">
-        <el-carousel height="150px">
-          <el-carousel-item v-for="item in 4" :key="item">
-            <h3 class="small">{{ item }}</h3>
-          </el-carousel-item>
-        </el-carousel>
-      </div>
+      <el-row type="flex" justify="center">
+        <el-col :span="20" class="carousel-div">
+          <el-carousel height="150px">
+            <el-carousel-item v-for="item in 4" :key="item">
+              <h3 class="small">{{ item }}</h3>
+            </el-carousel-item>
+          </el-carousel>
+        </el-col>
+      </el-row>
+
       <div class="scenic-spot-content">
         <div class="scenic-spot-left">
           <div class="list-tabs-div">
             <span class="list-tab">水上世界成人票</span>
           </div>
 
-          <div class="list-div" v-for="item in 4" :key="item">           
+          <div class="list-div" v-for="item in 4" :key="item">
             <div
               class="list-img"
-           :style="{background: 'url('+listImgError+')', backgroundSize:'100%', backgroundRepeat: 'no-repeat',backgroundPosition:'center center'}"
+              :style="{background: 'url('+listImgError+')', backgroundSize:'100%', backgroundRepeat: 'no-repeat',backgroundPosition:'center center'}"
             ></div>
             <div class="list-right">
               <div class="list-name">长隆欢乐游泳池</div>
@@ -83,15 +86,16 @@ export default {
   name: "scenicSpot",
   data() {
     return {
-      imgSize:"100%",
-      listImgError:require("../../../assets/homeImage/test.png")
-    }
-  },mounted () {
+      imgSize: "100%",
+      listImgError: require("../../../assets/homeImage/test.png")
+    };
+  },
+  mounted() {
     console.log("初始化");
   },
-  methods:{
-    subscribe(){
-      this.$router.push({path:'/home/ScenicSpot/IimmediatePurchase'});
+  methods: {
+    subscribe() {
+      this.$router.push({ path: "/home/ScenicSpot/IimmediatePurchase" });
     }
   }
 };
@@ -100,12 +104,9 @@ export default {
 <style lang="less" scoped>
 .content {
   height: 100%;
-  overflow: auto;
-  background: url(../../../assets/home_bg.png) no-repeat center;
 }
 .carousel-div {
-  width: 1200px;
-  display: inline-block;
+  display: flex;
   background: blueviolet;
   margin-top: 50px;
 }
@@ -115,8 +116,8 @@ export default {
 .scenic-spot-content {
   width: 1200px;
   display: inline-block;
-
   margin-top: 16px;
+  margin-bottom: 16px;
 }
 .scenic-spot-left {
   width: 880px;
@@ -130,25 +131,25 @@ export default {
 
 .list-tabs-div {
   box-sizing: border-box;
-  background:rgba(235,244,247,1);
+  background: rgba(235, 244, 247, 1);
 }
 
 .list-tab {
-font-size:20px;
-font-family:SourceHanSansCN-Medium;
-font-weight:500;
-color:rgba(54,128,255,1);
-padding:14px 30px;
-    display: inline-block;
+  font-size: 20px;
+  font-family: SourceHanSansCN-Medium;
+  font-weight: 500;
+  color: rgba(54, 128, 255, 1);
+  padding: 14px 30px;
+  display: inline-block;
 }
-.list-tab-active{
-font-size:20px;
-font-family:SourceHanSansCN-Medium;
-font-weight:500;
-color:rgba(255,255,255,1);
-padding:14px 30px;
-    display: inline-block;
-    background:rgba(255,128,57,1);
+.list-tab-active {
+  font-size: 20px;
+  font-family: SourceHanSansCN-Medium;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 1);
+  padding: 14px 30px;
+  display: inline-block;
+  background: rgba(255, 128, 57, 1);
 }
 .list-div {
   padding: 25px 0;
@@ -161,8 +162,8 @@ padding:14px 30px;
   display: inline-block;
   transition: background-size 1s;
 }
-.list-img:hover{
-  background-size:140% !important;
+.list-img:hover {
+  background-size: 140% !important;
 }
 .list-right {
   display: inline-block;
@@ -217,7 +218,7 @@ padding:14px 30px;
   color: rgba(54, 128, 255, 1);
   padding: 8px 15px;
   margin: 0 8px;
-  cursor:pointer;
+  cursor: pointer;
 }
 .list-button button:hover {
   background: rgba(54, 128, 255, 1);
