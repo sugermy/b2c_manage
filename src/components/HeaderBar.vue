@@ -5,7 +5,8 @@
     </div>
     <div class="header-right">
       <ul class="menu">
-        <router-link tag="li" v-for="(item,index) in menuList" :key="index" class="menu-item" :to="{ path: item.path }">{{item.name}}</router-link>
+        <router-link tag="li" v-for="(item,index) in menuList" :key="index" class="menu-item" :to="{ path: item.path }">
+          {{item.name}}</router-link>
       </ul>
       <el-select v-model="cityID" placeholder="请选择城市" @change="changeCity">
         <el-option v-for="item in msg" :key="item.value" :label="item.label" :value="item.value"></el-option>
@@ -49,15 +50,15 @@ export default {
       menuList: [
         {
           name: '首页',
-          path: '/home'
-        },
-        {
-          name: '订单信息',
-          path: '/OrderInformation'
+          path: '/Home'
         },
         {
           name: '个人中心',
           path: '/PersonalCenter'
+        },
+        {
+          name: '游客须知',
+          path: '/TouristRules'
         },
         {
           name: '联系我们',

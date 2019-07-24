@@ -49,8 +49,8 @@ export default {
   methods: {
     sub() {
       this.$router.push({
-        path: './ScenicSpot',
-        params: { pk_refinfo: 'test', value: 'test1' }
+        path: './Product',
+        query: { pk_refinfo: 'test', value: 'test1' }
       })
     }
   }

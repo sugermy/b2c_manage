@@ -1,70 +1,76 @@
-import Vue from "vue";
-import Router from "vue-router";
-import Home from "./views/home";
+import Vue from 'vue';
+import Router from 'vue-router';
+import Home from './views/Home';
 //主页
-const HomeView = () => import("./views/home/children/view");
-const ScenicSpot = () => import("./views/home/children/scenicSpot");
-const IimmediatePurchase = () =>
-  import("./views/home/children/immediatePurchase");
-
-//订单信息
-const OrderInformation = () => import("./views/orderInformation");
+const HomeView = () => import('./views/Home/children/view');
+const Product = () => import('./views/Home/children/ProductList'); //产品列表
+const ProductDetail = () => import('./views/Home/children/ProductDetail');
+const OrderForm = () => import('./views/Home/children/OrderForm.vue'); //提交订单
 
 //个人中心
-const PersonalCenter = () => import("./views/personalCenter");
+const PersonalCenter = () => import('./views/Personal');
+
+//游客须知
+const TouristRules = () => import('./views/TouristRules');
+
 //联系我们
-const Contactus = () => import("./views/contactus");
+const Contactus = () => import('./views/Contactus');
 Vue.use(Router);
 
 export default new Router({
   routes: [
     //无路由默认跳转
     {
-      path: "/",
-      name: "",
-      redirect: "/home/HomeView"
+      path: '/',
+      name: '',
+      redirect: '/Home/HomeView'
     },
     //首页
     {
-      path: "/home",
-      name: "Home",
+      path: '/Home',
+      name: 'Home',
       component: Home,
-      redirect: "/home/HomeView",
+      redirect: '/Home/HomeView',
       children: [
         {
-          path: "HomeView",
-          name: "HomeView",
+          path: 'HomeView',
+          name: 'HomeView',
           component: HomeView
         },
         {
-          path: "ScenicSpot",
-          name: "ScenicSpot",
-          component: ScenicSpot
+          path: 'Product',
+          name: 'Product',
+          component: Product
         },
         {
-          path: "ScenicSpot/IimmediatePurchase",
-          name: "IimmediatePurchase",
-          component: IimmediatePurchase
+          path: 'Product/Detail',
+          name: 'ProductDetail',
+          component: ProductDetail
+        },
+        {
+          path: 'Product/OrderForm',
+          name: 'OrderForm',
+          component: OrderForm
         }
       ]
     },
 
-    //订单信息
-    {
-      path: "/OrderInformation",
-      name: "OrderInformation",
-      component: OrderInformation
-    },
     //个人中心
     {
-      path: "/PersonalCenter",
-      name: "PersonalCenter",
+      path: '/PersonalCenter',
+      name: 'PersonalCenter',
       component: PersonalCenter
+    },
+    //游客须知
+    {
+      path: '/TouristRules',
+      name: 'TouristRules',
+      component: TouristRules
     },
     //联系我们
     {
-      path: "/Contactus",
-      name: "Contactus",
+      path: '/Contactus',
+      name: 'Contactus',
       component: Contactus
     }
   ]

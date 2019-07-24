@@ -4,3 +4,52 @@
 .el-scrollbar__thumb {
   background-color: #00a0e9;
 }
+
+//定义购买须知弹窗宽度
+.ready-explain {
+  border-radius: 4px;
+  .el-dialog__title {
+    color: #fff;
+  }
+  .el-dialog__header {
+    text-align: center;
+    border-radius: 4px 4px 0 0;
+    background: linear-gradient(
+      134deg,
+      rgba(255, 128, 57, 1) 0%,
+      rgba(255, 193, 65, 1) 100%
+    );
+    padding-bottom: 15px;
+  }
+  .el-dialog__footer {
+    button {
+      margin: 0 5px;
+      width: 120px;
+    }
+  }
+  .sail-explain {
+    display: flex;
+    margin: 10px 0;
+    line-height: 24px;
+    span {
+      margin: 0 10px;
+    }
+    p {
+      margin: 0;
+    }
+  }
+}
+//购买须知  复选框样式
+.article-check {
+  margin-left: 10px;
+  .el-checkbox__input.is-checked .el-checkbox__inner {
+    border-color: #ff5a5a !important;
+    background-color: #ff5a5a !important;
+  }
+  .el-checkbox__inner:hover {
+    border-color: #ff5a5a !important;
+  }
+  .el-checkbox__input.is-checked + .el-checkbox__label {
+    color: #ff5a5a;
+  }
+}

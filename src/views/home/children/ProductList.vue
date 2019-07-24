@@ -12,12 +12,14 @@
       </el-row>
       <el-row :gutter="10" style="margin-bottom:50px">
         <div class="scenic-spot-content">
-          <el-col :span="18">
+          <el-col :span="16">
             <div class="scenic-spot-left">
               <el-tabs v-model="activeName" @tab-click="changeTab">
                 <el-tab-pane label="水上世界成人票" name="first">
                   <div class="list-div" v-for="item in 4" :key="item">
-                    <div class="list-img" :style="{background: 'url('+listImgError+')', backgroundSize:'100%', backgroundRepeat: 'no-repeat',backgroundPosition:'center center'}"></div>
+                    <div class="list-img"
+                      :style="{background: 'url('+listImgError+')', backgroundSize:'100%', backgroundRepeat: 'no-repeat',backgroundPosition:'center center'}">
+                    </div>
                     <div class="list-right">
                       <div class="list-name">长隆欢乐游泳池</div>
                       <div class="list-discount-type">
@@ -29,8 +31,9 @@
                         <div class="price-original">$400</div>
                       </div>
                       <div class="list-button">
-                        <button class="subscribe" @click="subscribe()">立即预订</button>
-                        <button class="details">查看详情</button>
+                        <!-- <button class="subscribe" @click="subscribe()">立即预订</button> -->
+                        <el-button type="primary" plain @click="subscribe()">立即预订</el-button>
+                        <el-button type="primary" class="to-detail">查看详情</el-button>
                       </div>
                     </div>
                   </div>
@@ -40,12 +43,14 @@
               </el-tabs>
             </div>
           </el-col>
-          <el-col :span="6">
+          <el-col :span="4">
             <div class="scenic-spot-right">
               <div class="scenic-top">
                 <img src="../../../assets/homeImage/scenic_spot_description_bg.png" class="scenic-information-img" />
                 <div class="scenic-name">广州长隆</div>
-                <div class="scenic-introduction">广州长隆度假区是长隆集团旗下首个综合性主题旅游度假区，拥有长隆欢乐世界、长隆国际大马戏、长隆水上乐园、长隆野生动物世界、长隆飞鸟乐园和长隆酒店等多家主题公园及酒店，是中国拥有主题公园数量众多和超大规模的综合性。</div>
+                <div class="scenic-introduction">
+                  广州长隆度假区是长隆集团旗下首个综合性主题旅游度假区，拥有长隆欢乐世界、长隆国际大马戏、长隆水上乐园、长隆野生动物世界、长隆飞鸟乐园和长隆酒店等多家主题公园及酒店，是中国拥有主题公园数量众多和超大规模的综合性。
+                </div>
                 <div class="scenic-telephone-div">
                   <div class="scenic-telephone-img-div">
                     <img class="scenic-telephone-img" src="../../../assets/homeImage/customer_service.png" />
@@ -88,7 +93,7 @@ export default {
   mounted() {},
   methods: {
     subscribe() {
-      this.$router.push({ path: '/home/ScenicSpot/IimmediatePurchase' })
+      this.$router.push({ path: '/Home/Product/Detail' })
     },
     //tab切换
     changeTab(tab, event) {
@@ -109,6 +114,8 @@ export default {
 }
 .scenic-spot-content {
   margin: 16px 0;
+  display: flex;
+  justify-content: center;
 }
 .scenic-spot-left {
   background: white;
@@ -166,8 +173,7 @@ export default {
 }
 .list-discount-type {
   width: 100%;
-  margin-top: 16px;
-  margin-bottom: 2px;
+  margin: 8px 0;
 }
 .list-type-div {
   background: rgba(245, 255, 238, 1);
@@ -193,23 +199,36 @@ export default {
 .list-button {
   text-align: right;
   margin: 10px 0;
+  .el-button--primary.is-plain {
+    background-color: #fff;
+    color: #5b94f8;
+    border-color: #5b94f8;
+  }
+  .el-button--primary.is-plain:hover {
+    background-color: #5b94f8;
+    color: #fff;
+    border-color: #5b94f8;
+  }
+  .el-button--primary.is-plain:active {
+    background-color: #1364ef;
+    border-color: #1364ef;
+  }
+  .el-button--primary {
+    background-color: #3680ff;
+    border-color: #3680ff;
+    color: #fff;
+  }
+  .el-button--primary.to-detail:hover {
+    background-color: #5b94f8;
+    border-color: #5b94f8;
+    color: #fff;
+  }
+  .el-button--primary.to-detail:active {
+    background-color: #1364ef;
+    border-color: #1364ef;
+  }
 }
-.list-button button {
-  background: rgba(234, 242, 255, 1);
-  border-radius: 2px;
-  border: 1px solid rgba(128, 175, 255, 1);
-  font-size: 14px;
-  font-family: SourceHanSansCN-Medium;
-  font-weight: 500;
-  color: rgba(54, 128, 255, 1);
-  padding: 8px 15px;
-  margin: 0 8px;
-  cursor: pointer;
-}
-.list-button button:hover {
-  background: rgba(54, 128, 255, 1);
-  color: white;
-}
+
 .list-price-div {
   position: absolute;
   padding-top: 10px;

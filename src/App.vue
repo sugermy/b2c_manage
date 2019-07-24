@@ -71,7 +71,7 @@ export default {
 }
 .main-con {
   width: 100%;
-  height: 100%;
+  height: calc(100% - 100px);
 }
 .bg {
   width: 100%;

@@ -36,7 +36,8 @@
               </div>
               <div class="ticket-exchange">
                 <span class="ticket-exchange-name">兑换方式：</span>
-                <img class="ticket-exchange-img" src="../../../assets/homeImage/message_img.png" style="padding:0;border:0;" />
+                <img class="ticket-exchange-img" src="../../../assets/homeImage/message_img.png"
+                  style="padding:0;border:0;" />
                 <span class="ticket-exchange-value">短信</span>
                 <img class="ticket-exchange-img" src="../../../assets/homeImage/id_img.png" />
                 <span class="ticket-exchange-value">身份证</span>
@@ -56,12 +57,29 @@
                   </div>
                 </div>
                 <div class="immediately-purchase-div">
-                  <button class="purchase-button">立即订购</button>
+                  <el-button type="primary" plain @click="readyPay">立即订购</el-button>
                 </div>
               </div>
             </div>
           </el-col>
         </el-row>
+
+        <!-- 弹窗条款start -->
+        <el-dialog title="购买须知" center :visible.sync="readyPayVisible" width="50%" custom-class="ready-explain"
+          :show-close="false">
+          <div class="sail-explain" v-for="(item,index) in sailTxt" :key="index">
+            <span>{{index+1}}</span>
+            <p>{{item.name}}</p>
+          </div>
+          <el-checkbox class="article-check" v-model="articleChecked">我已阅读并同意上述条款</el-checkbox>
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="readyPayVisible = false">取 消</el-button>
+            <el-button type="primary" :class="articleChecked?'':'disabled'" @click="goPay">确 定
+            </el-button>
+          </span>
+        </el-dialog>
+        <!-- 弹窗条款end -->
+
         <div class="bread_crumb_navigation">
           <div class="navigation-to navigation-to-active" @click="toScorll('play')">游玩攻略</div>
           <div class="navigation-to" @click="toScorll('position')">地理位置</div>
@@ -108,7 +126,46 @@
 export default {
   data() {
     return {
-      dateValue: '' //选择的日期
+      dateValue: '', //选择的日期
+      readyPayVisible: false,
+      articleChecked: true, //同意条款
+      sailTxt: [
+        {
+          name:
+            '主题乐园门票一经预定成功后购票订单一经确认即时成交，有关退改规定，请详见门票《预订须知》对应的退票和改期规则。请务必确认信息无误再进行购买',
+          id: 1
+        },
+        {
+          name:
+            '主题乐园的所有门票均为指定日票，游客购买门票需指定入园日期，日期选择以购票页面可选日期为准。',
+          id: 2
+        },
+        {
+          name:
+            '同一订单下的所有游客需同时入园，购票时登记的有效证件持有人本人必须在场，同行游客无需出示证件。',
+          id: 3
+        },
+        {
+          name:
+            '购买成功的门票仅限选择的入园日期当日有效，仅限使用一次，出园后再次入园需重新购买。',
+          id: 4
+        },
+        {
+          name:
+            '购票后如遇园区推出优惠促销活动，恕不另行通知，也不能享受该优惠。',
+          id: 5
+        },
+        {
+          name:
+            '购票信息请注意保密，因游客个人原因泄露该信息而造成的损失由游客自行承担。',
+          id: 6
+        },
+        {
+          name:
+            '购买儿小童或长老人票的游客，如儿童身高超过标准或老人游客入园时未能出示有效的身份证明文件，游客须按门市价自行重新购票。',
+          id: 7
+        }
+      ]
     }
   },
   created() {
@@ -118,6 +175,21 @@ export default {
   computed: {
     fullName: function() {
       return ''
+    },
+    sailExplain: function() {
+      var temp = ''
+      this.sailTxt.forEach((el, i) => {
+        temp +=
+          '<div class="sail-explain"><span>' +
+          (i + 1) +
+          '.' +
+          '</span>' +
+          '<p>' +
+          el.name +
+          '</p></div>'
+      })
+      temp += '<el-checkbox v-model="checked">备选项</el-checkbox>'
+      return temp
     }
   },
   methods: {
@@ -126,8 +198,20 @@ export default {
       if (returnEle || false) {
         returnEle.scrollIntoView(true)
       }
+    },
+    //立即订购调用弹窗
+    readyPay() {
+      this.readyPayVisible = true
+    },
+    //确定购买
+    goPay() {
+      this.$router.push({
+        path: 'OrderForm',
+        query: { id: 1 }
+      })
     }
-  }
+  },
+  watch: {}
 }
 </script>
 <style lang="less" scoped>
@@ -141,6 +225,10 @@ export default {
   box-sizing: border-box;
   margin: 50px 0;
   text-align: left;
+}
+.disabled {
+  pointer-events: none;
+  opacity: 0.5;
 }
 .details-top {
   width: 100%;
@@ -326,6 +414,16 @@ export default {
 .immediately-purchase-div {
   display: flex;
   align-items: center;
+  // .el-button--primary {
+  //   background: rgba(255, 236, 226, 1);
+  //   border-radius: 2px;
+  //   color: #ff8039;
+  //   border: 1px solid rgba(255, 128, 57, 1);
+  // }
+  // .el-button--primary:hover {
+  // }
+  // .el-button--primary:active {
+  // }
 }
 .purchase-button {
   background: rgba(255, 236, 226, 1);
