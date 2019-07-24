@@ -64,9 +64,9 @@
     </el-row>
     <el-row class="main-form" v-if="activeTab==2" type="flex" justify="center" align="middle">
       <el-col :span="6" class="main-pay">
-        <h3>商品名称：长隆水上乐园</h3>
-        <p>￥10086</p>
-        <div style="height:300px;background:#ccc;margin-bottom:20px;width:70%"></div>
+        <h3 class="pay-name">商品名称：长隆水上乐园</h3>
+        <p class="pay-num">￥10086</p>
+        <div class="pay-img"></div>
         <div>
           <el-button type="primary" plain>取消</el-button>
           <el-button type="primary" :loading="true">等待支付</el-button>
@@ -79,7 +79,7 @@
 export default {
   data() {
     return {
-      activeTab: 2, //当前step
+      activeTab: 1, //当前step
       TicketForm: {
         ticketNum: '',
         date: new Date()
@@ -134,7 +134,7 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           //验证成功
-          alert('submit!')
+          this.activeTab = 2
         } else {
           //非空验证失败
           return false
@@ -144,6 +144,11 @@ export default {
     //取消
     resetForm(formName) {
       this.$refs[formName].resetFields()
+    }
+  },
+  watch: {
+    activeTab: function(val) {
+      console.log(val)
     }
   }
 }
@@ -233,17 +238,37 @@ export default {
     text-align: center;
     .el-form-item__content {
       margin-left: 0;
-      .el-button {
-        margin: 0 10px;
-        width: 120px;
-      }
     }
+  }
+  .el-button {
+    margin: 0 10px;
+    width: 120px;
   }
   .main-pay {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    .pay-name {
+      font-size: 16px;
+      font-weight: 500;
+      color: rgba(51, 51, 51, 1);
+      margin: 0;
+    }
+    .pay-num {
+      font-size: 30px;
+      font-weight: 600;
+      color: rgba(255, 102, 0, 1);
+      margin: 20px 0;
+    }
+    .pay-img {
+      width: 232px;
+      height: 288px;
+      background: rgba(255, 255, 255, 1);
+      box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.26);
+      margin-bottom: 60px;
+      padding: 16px;
+    }
   }
 }
 </style>
