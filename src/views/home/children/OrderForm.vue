@@ -2,15 +2,11 @@
   <el-row class="content">
     <el-row type="flex" justify="space-between" class="step-list">
       <el-col :span="8" class="step first-step" :class="(activeTab==1||activeTab==2||activeTab==3?'step-active':'')">
-        1、填写订单<span
-          :class="(activeTab==1||activeTab==2||activeTab==3?'sx-arrow-right arrow-active':'sx-arrow-right arrow-normal')"></span>
+        1、填写订单<span :class="(activeTab==1||activeTab==2||activeTab==3?'sx-arrow-right arrow-active':'sx-arrow-right arrow-normal')"></span>
       </el-col>
-      <el-col :span="8" class="step second-step" :class="(activeTab==2||activeTab==3?'step-active':'')">2、在线支付<span
-          class="sx-arrow-left"></span><span
-          :class="(activeTab==2||activeTab==3?'sx-arrow-right arrow-active':'sx-arrow-right arrow-normal')"></span>
+      <el-col :span="8" class="step second-step" :class="(activeTab==2||activeTab==3?'step-active':'')">2、在线支付<span class="sx-arrow-left"></span><span :class="(activeTab==2||activeTab==3?'sx-arrow-right arrow-active':'sx-arrow-right arrow-normal')"></span>
       </el-col>
-      <el-col :span="8" class="step three-step" :class="(activeTab==3?'step-active':'')">3、支付完成<span
-          class="sx-arrow-left"></span></el-col>
+      <el-col :span="8" class="step three-step" :class="(activeTab==3?'step-active':'')">3、支付完成<span class="sx-arrow-left"></span></el-col>
     </el-row>
 
     <el-row class="main-form" v-if="activeTab==1">
@@ -22,16 +18,14 @@
               <span>长隆水上乐园</span>
             </el-form-item>
             <el-form-item label="门票单价：">
-              <span>￥{{sailPrice}}/张</span>
+              <span>￥{{TicketForm.sailPrice}}/张</span>
             </el-form-item>
             <el-form-item label="门票数量：">
-              <el-input-number class="form-control" v-model="TicketForm.ticketNum" controls-position="right"
-                @change="handleChange" :min="1" :max="999">
+              <el-input-number class="form-control" v-model="TicketForm.ticketNum" controls-position="right" @change="handleChange" :min="1" :max="999">
               </el-input-number>
             </el-form-item>
             <el-form-item label="选择日期：">
-              <el-date-picker type="date" placeholder="选择日期" :clearable="false" v-model="TicketForm.date"
-                class="form-control">
+              <el-date-picker type="date" placeholder="选择日期" :clearable="false" v-model="TicketForm.palyData" class="form-control">
               </el-date-picker>
             </el-form-item>
             <el-form-item label="订单总额：">
@@ -43,8 +37,7 @@
       <h3 class="form-title">联系人信息</h3>
       <el-row>
         <el-col :span="12">
-          <el-form ref="UserForm" class="UserForm" :model="UserForm" :rules="rules" label-width="100px"
-            label-position="left">
+          <el-form ref="UserForm" class="UserForm" :model="UserForm" :rules="rules" label-width="100px" label-position="left">
             <el-form-item label="游客姓名：" prop="touristName">
               <el-input v-model="UserForm.touristName" class="form-user"></el-input>
             </el-form-item>
@@ -82,15 +75,14 @@ export default {
       activeTab: 1, //当前step
       TicketForm: {
         ticketNum: '',
-        date: new Date()
+        palyData: '',
+        sailPrice: 0
       }, //订单提交表单数据
       UserForm: {
         touristName: '',
         touristIdCard: '',
         touristPhone: ''
       }, //联系人提交表单数据
-      sailPrice: 1, //单价
-      ticketNum: 1,
       rules: {
         //验证规则
         touristName: [
@@ -117,12 +109,14 @@ export default {
     }
   },
   created() {
-    this.sailPrice = 200
+    if (this.$route.query) {
+      this.TicketForm = { ...this.$route.query }
+    }
   },
   computed: {
     //当前总价
     totalMoney() {
-      var totalN = this.TicketForm.ticketNum * this.sailPrice
+      var totalN = this.TicketForm.ticketNum * this.TicketForm.sailPrice
       return '￥' + totalN
     }
   },

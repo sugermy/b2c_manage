@@ -17,8 +17,7 @@
               <el-tabs v-model="activeName" @tab-click="changeTab">
                 <el-tab-pane label="水上世界成人票" name="first">
                   <div class="list-div" v-for="item in 4" :key="item">
-                    <div class="list-img"
-                      :style="{background: 'url('+listImgError+')', backgroundSize:'100%', backgroundRepeat: 'no-repeat',backgroundPosition:'center center'}">
+                    <div class="list-img" :style="{background: 'url('+listImgError+')', backgroundSize:'100%', backgroundRepeat: 'no-repeat',backgroundPosition:'center center'}">
                     </div>
                     <div class="list-right">
                       <div class="list-name">长隆欢乐游泳池</div>
@@ -126,7 +125,10 @@ export default {
   box-sizing: border-box;
   background: rgba(235, 244, 247, 1);
 }
-
+.qr-code-div {
+  text-align: center;
+  margin: 0 5px;
+}
 .list-tab {
   font-size: 20px;
   font-family: SourceHanSansCN-Medium;
@@ -153,10 +155,11 @@ export default {
   height: 170px;
   width: 300px;
   display: inline-block;
-  transition: background-size 1s;
+  transition: background-size 300ms;
 }
 .list-img:hover {
   background-size: 140% !important;
+  transition: 300ms;
 }
 .list-right {
   display: inline-block;
@@ -289,7 +292,7 @@ export default {
   width: 36px;
 }
 .scenic-telephone-value {
-  margin-left: 15px;
+  margin-left: 5px;
   text-align: left;
 }
 .scenic-telephone-name {
@@ -312,9 +315,10 @@ export default {
   background: rgb(255, 128, 57);
   display: inline-block;
   display: flex;
-  padding: 26px 36px;
+  height: 160px;
   margin-top: 13px;
-  justify-content: space-between;
+  justify-content: space-around;
+  align-items: center;
   position: relative;
 }
 .scenic-bottom:before {

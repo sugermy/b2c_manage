@@ -5,7 +5,6 @@
         <header-bar @increment="increment" :msg="cityList"></header-bar>
       </el-col>
     </el-row>
-
     <el-row class="bg">
       <el-scrollbar style="height:calc(100vh - 90px);">
         <el-col :span="20" class="main-con">
@@ -13,6 +12,13 @@
         </el-col>
       </el-scrollbar>
     </el-row>
+    <el-dialog title="登录状态" :visible.sync="loginStatus" width="30%">
+      <span>这是一段信息</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="cancel">取 消</el-button>
+        <el-button type="primary" @click="reday">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -50,10 +56,29 @@ export default {
   components: {
     HeaderBar
   },
+  created() {
+    // console.log(this.$store.state)
+  },
+  computed: {
+    loginStatus: function() {
+      return this.$store.state.loginStatus
+    }
+  },
   methods: {
     //监听子组件切换城市
     increment(msg) {
       console.log(msg, '父组件')
+    },
+    reday() {
+      this.$store.dispatch('changeAppStatus', false)
+    },
+    cancel() {
+      this.$store.dispatch('changeAppStatus', false)
+    }
+  },
+  watch: {
+    loginStatus: function(v) {
+      console.log(v)
     }
   }
 }

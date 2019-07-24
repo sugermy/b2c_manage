@@ -22,22 +22,21 @@
               <div class="ticket-explain">逍遥搏击任飞翔，彩虹绘出真体验，让国人不出国门就可享受到超大型的游乐设施，现在就让我们一起尽情去体验过山车典范的巅峰感受吧</div>
               <div class="ticket-price">
                 <span class="ticket-price-name">门票价格：</span>
-                <span class="ticket-price-num">￥299</span>
+                <span class="ticket-price-num">￥{{sailPrice}}</span>
               </div>
               <div class="purchase-date">
                 <span class="purchase-date-name">选择日期：</span>
-                <el-date-picker v-model="dateValue" type="date" placeholder="选择日期"></el-date-picker>
+                <el-date-picker v-model="dateValue" type="date" placeholder="选择日期" :clearable="false" value-format="yyyy-MM-dd" @change="changeData"></el-date-picker>
               </div>
               <div class="purchase-num">
                 <span class="purchase-num-name">购买数量：</span>
-                <img class="operational" src="../../../assets/homeImage/reduce.png" />
-                <span class="purchase-num-value">1</span>
-                <img class="operational" src="../../../assets/homeImage/plus.png" />
+                <img class="operational" src="../../../assets/homeImage/reduce.png" @click="changeNum('-')" />
+                <span class="purchase-num-value">{{sailNum}}</span>
+                <img class="operational" src="../../../assets/homeImage/plus.png" @click="changeNum('+')" />
               </div>
               <div class="ticket-exchange">
                 <span class="ticket-exchange-name">兑换方式：</span>
-                <img class="ticket-exchange-img" src="../../../assets/homeImage/message_img.png"
-                  style="padding:0;border:0;" />
+                <img class="ticket-exchange-img" src="../../../assets/homeImage/message_img.png" style="padding:0;border:0;" />
                 <span class="ticket-exchange-value">短信</span>
                 <img class="ticket-exchange-img" src="../../../assets/homeImage/id_img.png" />
                 <span class="ticket-exchange-value">身份证</span>
@@ -48,12 +47,12 @@
                 <div class="ticket-total-price">
                   <div class="total-price-div">
                     <span class="total-price-name">总计:</span>
-                    <span class="total-price-num">￥1000</span>
+                    <span class="total-price-num">￥{{totalMoney}}</span>
                   </div>
                   <div class="price-tips">
                     <img class="warning-img" src="../../../assets/homeImage/warning_img.png" />
                     <span class="price-tips-text">温馨提示：购买前请仔细阅读</span>
-                    <span class="price-tips-red">购买须知</span>
+                    <span class="price-tips-red" @click="lookExplain">购买须知</span>
                   </div>
                 </div>
                 <div class="immediately-purchase-div">
@@ -65,14 +64,13 @@
         </el-row>
 
         <!-- 弹窗条款start -->
-        <el-dialog title="购买须知" center :visible.sync="readyPayVisible" width="50%" custom-class="ready-explain"
-          :show-close="false">
+        <el-dialog title="购买须知" center :visible.sync="readyPayVisible" width="50%" custom-class="ready-explain" :show-close="false">
           <div class="sail-explain" v-for="(item,index) in sailTxt" :key="index">
             <span>{{index+1}}</span>
             <p>{{item.name}}</p>
           </div>
-          <el-checkbox class="article-check" v-model="articleChecked">我已阅读并同意上述条款</el-checkbox>
-          <span slot="footer" class="dialog-footer">
+          <el-checkbox v-if="checkVisible" class="article-check" v-model="articleChecked">我已阅读并同意上述条款</el-checkbox>
+          <span slot="footer" v-if="checkVisible" class="dialog-footer">
             <el-button @click="readyPayVisible = false">取 消</el-button>
             <el-button type="primary" :class="articleChecked?'':'disabled'" @click="goPay">确 定
             </el-button>
@@ -81,9 +79,9 @@
         <!-- 弹窗条款end -->
 
         <div class="bread_crumb_navigation">
-          <div class="navigation-to navigation-to-active" @click="toScorll('play')">游玩攻略</div>
-          <div class="navigation-to" @click="toScorll('position')">地理位置</div>
-          <div class="navigation-to" @click="toScorll('explain')">购买须知</div>
+          <div class="navigation-to" :class="navigationActive==1?'navigation-to-active':''" @click="toScorll('play',1)">游玩攻略</div>
+          <div class="navigation-to" :class="navigationActive==2?'navigation-to-active':''" @click="toScorll('position',2)">地理位置</div>
+          <div class="navigation-to" :class="navigationActive==3?'navigation-to-active':''" @click="toScorll('explain',3)">购买须知</div>
 
         </div>
         <div class="navigation-content">
@@ -127,7 +125,11 @@ export default {
   data() {
     return {
       dateValue: '', //选择的日期
-      readyPayVisible: false,
+      sailNum: 1, //当前数量
+      sailPrice: 200, //单价
+      readyPayVisible: false, //立即购买弹窗
+      checkVisible: true, //弹窗提交相关
+      navigationActive: 1, //锚点链接
       articleChecked: true, //同意条款
       sailTxt: [
         {
@@ -170,12 +172,24 @@ export default {
   },
   created() {
     var today = new Date()
-    this.dateValue = new Date(today.getTime() + 24 * 60 * 60 * 1000)
+    var ydate = today.getFullYear()
+    var mdate =
+      today.getMonth() + 1 > 10
+        ? today.getMonth() + 1
+        : '0' + (today.getMonth() + 1)
+    var ddate =
+      today.getDate() + 1 > 10
+        ? today.getDate() + 1
+        : '0' + (today.getDate() + 1)
+    var todayDate = ydate + '-' + mdate + '-' + ddate
+    this.dateValue = todayDate
   },
   computed: {
-    fullName: function() {
-      return ''
+    //总计
+    totalMoney: function() {
+      return this.sailNum * this.sailPrice
     },
+    //购买须知
     sailExplain: function() {
       var temp = ''
       this.sailTxt.forEach((el, i) => {
@@ -193,21 +207,48 @@ export default {
     }
   },
   methods: {
-    toScorll(value) {
-      const returnEle = document.querySelector('.' + value)
+    //日期切换获取当日价格
+    changeData(v) {
+      console.log(v)
+    },
+    //数量加减
+    changeNum(v) {
+      if (v == '+') {
+        this.sailNum++
+      } else {
+        if (this.sailNum > 1) {
+          this.sailNum--
+        }
+      }
+    },
+    //锚点链接
+    toScorll(v, n) {
+      const returnEle = document.querySelector('.' + v)
+      this.navigationActive = n
       if (returnEle || false) {
         returnEle.scrollIntoView(true)
       }
     },
+    //点击购买须知弹窗
+    lookExplain() {
+      this.checkVisible = false
+      this.readyPayVisible = true
+    },
     //立即订购调用弹窗
     readyPay() {
+      this.checkVisible = true
       this.readyPayVisible = true
     },
     //确定购买
     goPay() {
       this.$router.push({
         path: 'OrderForm',
-        query: { id: 1 }
+        query: {
+          id: 1,
+          ticketNum: this.sailNum,
+          sailPrice: this.sailPrice,
+          palyData: this.dateValue
+        }
       })
     }
   },
@@ -406,24 +447,14 @@ export default {
 }
 .price-tips-red {
   font-size: 14px;
-  font-family: SourceHanSansCN-Regular;
   font-weight: 400;
   color: #ff5151;
+  cursor: pointer;
   vertical-align: middle;
 }
 .immediately-purchase-div {
   display: flex;
   align-items: center;
-  // .el-button--primary {
-  //   background: rgba(255, 236, 226, 1);
-  //   border-radius: 2px;
-  //   color: #ff8039;
-  //   border: 1px solid rgba(255, 128, 57, 1);
-  // }
-  // .el-button--primary:hover {
-  // }
-  // .el-button--primary:active {
-  // }
 }
 .purchase-button {
   background: rgba(255, 236, 226, 1);

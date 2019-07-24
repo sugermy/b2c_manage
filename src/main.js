@@ -11,8 +11,19 @@ import "./style/ele_reset.less";
 
 Vue.config.productionTip = false;
 Vue.prototype.$ajax = Ajax.$ajax;
+
 new Vue({
   router,
   store,
   render: h => h(App)
 }).$mount("#app");
+
+//路由跳转守卫判断是否是登录态
+router.beforeEach((to, from, next) => {
+  if (to.name == "ProductDetail") {
+    store.dispatch("changeAppStatus", false);
+  } else {
+    store.dispatch("changeAppStatus", false);
+  }
+  next();
+});
