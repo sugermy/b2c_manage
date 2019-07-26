@@ -9,10 +9,11 @@
       <el-scrollbar style="height:calc(100vh - 90px);">
         <el-col :span="20" class="main-con">
           <router-view></router-view>
+
         </el-col>
       </el-scrollbar>
     </el-row>
-    <el-dialog title="登录状态" :visible.sync="loginStatus" width="30%">
+    <el-dialog title="登录状态" :visible.sync="loginStatus" width="30%" @close="yetClose">
       <span>这是一段信息</span>
       <span slot="footer" class="dialog-footer">
         <el-button @click="cancel">取 消</el-button>
@@ -73,7 +74,14 @@ export default {
       this.$store.dispatch('changeAppStatus', false)
     },
     cancel() {
-      this.$store.dispatch('changeAppStatus', false)
+      // this.$store.dispatch('changeAppStatus', false)
+    },
+    //关闭弹窗自动执行进入阻塞前记录的路由
+    yetClose() {
+      var enterPath = this.$store.state.toRouter
+      this.$router.push({
+        path: enterPath
+      })
     }
   },
   watch: {

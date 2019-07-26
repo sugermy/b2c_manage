@@ -17,7 +17,8 @@
               <el-tabs v-model="activeName" @tab-click="changeTab">
                 <el-tab-pane label="水上世界成人票" name="first">
                   <div class="list-div" v-for="item in 4" :key="item">
-                    <div class="list-img" :style="{background: 'url('+listImgError+')', backgroundSize:'100%', backgroundRepeat: 'no-repeat',backgroundPosition:'center center'}">
+                    <div class="list-img"
+                      :style="{background: 'url('+listImgError+')', backgroundSize:'100%', backgroundRepeat: 'no-repeat',backgroundPosition:'center center'}">
                     </div>
                     <div class="list-right">
                       <div class="list-name">长隆欢乐游泳池</div>

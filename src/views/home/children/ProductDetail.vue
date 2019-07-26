@@ -1,121 +1,133 @@
 <template>
   <div class="content">
     <div class="middle">
-      <div class="details">
-        <el-row class="details-top">
-          <el-col :span="10">
-            <div class="admission-ticket-img-div">
-              <img class="ticket-img-big" src="../../../assets/homeImage/test.png" />
-              <div class="ticket-img-small-div">
-                <img class="ticket-img-small" src="../../../assets/homeImage/test.png" />
-                <img class="ticket-img-small" src="../../../assets/homeImage/test.png" />
-                <img class="ticket-img-small" src="../../../assets/homeImage/test.png" />
-              </div>
-            </div>
-          </el-col>
-          <el-col :span="14">
-            <div class="ticket-information-div">
-              <div class="ticket-name">长隆欢乐游泳池</div>
-              <div class="ticket-discount-type">
-                <div class="type-div">随时退</div>
-              </div>
-              <div class="ticket-explain">逍遥搏击任飞翔，彩虹绘出真体验，让国人不出国门就可享受到超大型的游乐设施，现在就让我们一起尽情去体验过山车典范的巅峰感受吧</div>
-              <div class="ticket-price">
-                <span class="ticket-price-name">门票价格：</span>
-                <span class="ticket-price-num">￥{{sailPrice}}</span>
-              </div>
-              <div class="purchase-date">
-                <span class="purchase-date-name">选择日期：</span>
-                <el-date-picker v-model="dateValue" type="date" placeholder="选择日期" :clearable="false" value-format="yyyy-MM-dd" @change="changeData"></el-date-picker>
-              </div>
-              <div class="purchase-num">
-                <span class="purchase-num-name">购买数量：</span>
-                <img class="operational" src="../../../assets/homeImage/reduce.png" @click="changeNum('-')" />
-                <span class="purchase-num-value">{{sailNum}}</span>
-                <img class="operational" src="../../../assets/homeImage/plus.png" @click="changeNum('+')" />
-              </div>
-              <div class="ticket-exchange">
-                <span class="ticket-exchange-name">兑换方式：</span>
-                <img class="ticket-exchange-img" src="../../../assets/homeImage/message_img.png" style="padding:0;border:0;" />
-                <span class="ticket-exchange-value">短信</span>
-                <img class="ticket-exchange-img" src="../../../assets/homeImage/id_img.png" />
-                <span class="ticket-exchange-value">身份证</span>
-                <img class="ticket-exchange-img" src="../../../assets/homeImage/qr_code_img.png" />
-                <span class="ticket-exchange-value">二维码</span>
-              </div>
-              <div class="ticket-total">
-                <div class="ticket-total-price">
-                  <div class="total-price-div">
-                    <span class="total-price-name">总计:</span>
-                    <span class="total-price-num">￥{{totalMoney}}</span>
-                  </div>
-                  <div class="price-tips">
-                    <img class="warning-img" src="../../../assets/homeImage/warning_img.png" />
-                    <span class="price-tips-text">温馨提示：购买前请仔细阅读</span>
-                    <span class="price-tips-red" @click="lookExplain">购买须知</span>
+      <el-row type="flex" justify="center">
+        <el-col :span="20">
+          <div class="details">
+            <el-row class="details-top">
+              <el-col :span="10">
+                <div class="admission-ticket-img-div">
+                  <img class="ticket-img-big" src="../../../assets/homeImage/test.png" />
+                  <div class="ticket-img-small-div">
+                    <img class="ticket-img-small" src="../../../assets/homeImage/test.png" />
+                    <img class="ticket-img-small" src="../../../assets/homeImage/test.png" />
+                    <img class="ticket-img-small" src="../../../assets/homeImage/test.png" />
                   </div>
                 </div>
-                <div class="immediately-purchase-div">
-                  <el-button type="primary" plain @click="readyPay">立即订购</el-button>
+              </el-col>
+              <el-col :span="14">
+                <div class="ticket-information-div">
+                  <div class="ticket-name">长隆欢乐游泳池</div>
+                  <div class="ticket-discount-type">
+                    <div class="type-div">随时退</div>
+                  </div>
+                  <div class="ticket-explain">逍遥搏击任飞翔，彩虹绘出真体验，让国人不出国门就可享受到超大型的游乐设施，现在就让我们一起尽情去体验过山车典范的巅峰感受吧</div>
+                  <div class="ticket-price">
+                    <span class="ticket-price-name">门票价格：</span>
+                    <span class="ticket-price-num">￥{{sailPrice}}</span>
+                  </div>
+                  <div class="purchase-date">
+                    <span class="purchase-date-name">选择日期：</span>
+                    <el-date-picker v-model="dateValue" type="date" placeholder="选择日期" :clearable="false"
+                      value-format="yyyy-MM-dd" @change="changeData"></el-date-picker>
+                  </div>
+                  <div class="purchase-num">
+                    <span class="purchase-num-name">购买数量：</span>
+                    <img class="operational" src="../../../assets/homeImage/reduce.png" @click="changeNum('-')" />
+                    <span class="purchase-num-value">{{sailNum}}</span>
+                    <img class="operational" src="../../../assets/homeImage/plus.png" @click="changeNum('+')" />
+                  </div>
+                  <div class="ticket-exchange">
+                    <span class="ticket-exchange-name">兑换方式：</span>
+                    <img class="ticket-exchange-img" src="../../../assets/homeImage/message_img.png"
+                      style="padding:0;border:0;" />
+                    <span class="ticket-exchange-value">短信</span>
+                    <img class="ticket-exchange-img" src="../../../assets/homeImage/id_img.png" />
+                    <span class="ticket-exchange-value">身份证</span>
+                    <img class="ticket-exchange-img" src="../../../assets/homeImage/qr_code_img.png" />
+                    <span class="ticket-exchange-value">二维码</span>
+                  </div>
+                  <div class="ticket-total">
+                    <div class="ticket-total-price">
+                      <div class="total-price-div">
+                        <span class="total-price-name">总计:</span>
+                        <span class="total-price-num">￥{{totalMoney}}</span>
+                      </div>
+                      <div class="price-tips">
+                        <img class="warning-img" src="../../../assets/homeImage/warning_img.png" />
+                        <span class="price-tips-text">温馨提示：购买前请仔细阅读</span>
+                        <span class="price-tips-red" @click="lookExplain">购买须知</span>
+                      </div>
+                    </div>
+                    <div class="immediately-purchase-div">
+                      <el-button type="primary" plain @click="readyPay">立即订购</el-button>
+                    </div>
+                  </div>
                 </div>
+              </el-col>
+            </el-row>
+
+            <!-- 弹窗条款start -->
+            <el-dialog title="购买须知" center :visible.sync="readyPayVisible" width="30%" custom-class="ready-explain"
+              :show-close="false">
+              <div class="sail-explain" v-for="(item,index) in sailTxt" :key="index">
+                <span>{{index+1}}</span>
+                <p>{{item.name}}</p>
+              </div>
+              <el-checkbox v-if="checkVisible" class="article-check" v-model="articleChecked">我已阅读并同意上述条款</el-checkbox>
+              <span slot="footer" v-if="checkVisible" class="dialog-footer">
+                <el-button @click="readyPayVisible = false">取 消</el-button>
+                <el-button type="primary" :class="articleChecked?'':'disabled'" @click="goPay">确 定
+                </el-button>
+              </span>
+            </el-dialog>
+            <!-- 弹窗条款end -->
+
+            <div class="bread_crumb_navigation">
+              <div class="navigation-to" :class="navigationActive==1?'navigation-to-active':''"
+                @click="toScorll('play',1)">
+                游玩攻略</div>
+              <div class="navigation-to" :class="navigationActive==2?'navigation-to-active':''"
+                @click="toScorll('position',2)">地理位置</div>
+              <div class="navigation-to" :class="navigationActive==3?'navigation-to-active':''"
+                @click="toScorll('explain',3)">购买须知</div>
+
+            </div>
+            <div class="navigation-content">
+              <!-- 游玩攻略-->
+              <div class="play-introduction">
+                <div class="navigation-content-title play">
+                  <span>游玩攻略</span>
+                </div>
+                <div class="details-title">广州长隆度假区 —— 中国一站式综合性旅游度假区</div>
+                <div class="details-text">
+                  广州长隆度假区是长隆集团旗下首个综合性主题旅游度假区，拥有长隆欢乐世界、长隆国际大马戏、长隆水上乐园、长隆野生动物世界、长隆飞鸟乐园和长隆酒店等多家主题公园及酒店，是中国拥有主题公园数量众多和超大规模的综合性主题旅游度假区，先后被评为“文化产业示范基地
+                  ”、“ 科普教育基地 ”、中国首批国家AAAAA 级景区，年接待游客连续多年超过千万人次，位居世界主题景区前列，成为中国在世界旅游业的标杆。</div>
+              </div>
+              <!-- 游玩攻略-->
+              <div class="play-introduction">
+                <div class="navigation-content-title position">
+                  <span>地理位置</span>
+                </div>
+                <div class="details-title">广州长隆度假区 —— 中国一站式综合性旅游度假区</div>
+                <div class="details-text">长隆欢乐世界是目前国内设备先进、科技含量高、游乐设备众多的超级游乐园，集世界精彩游乐和大型演艺表演为一体，被誉为“中国新一代游乐园的经典之作”。
+                  其拥有顶端落差达80米的垂直过山车；由著名游乐设备提供商INTAMIN提供的十环过山车，全世界仅英国和长隆欢乐世界两台；摩托过山车，0-80公里弹射式加速仅需2.8秒；U型滑板，曾作为挑战项目参与《奔跑吧，兄弟》录制；超级大摆锤是新奇酷炫的大型机动游乐设备，最高时速110公里/小时，最大摆幅240度；国际特技剧场，大型水陆空特效剧场结合爆破、枪战、烟火、声光、机动设备、滑水、高空特技等多种超高难度特效；星际决战，原创360度不规则环形荧幕，模拟实景立体观影效果，是超大型5D探险游乐项目。
+                  ”、“ 科普教育基地 ”、中国首批国家AAAAA 级景区，年接待游客连续多年超过千万人次，位居世界主题景区前列，成为中国在世界旅游业的标杆。</div>
+              </div>
+              <!-- 购买须知-->
+              <div class="play-introduction">
+                <div class="navigation-content-title explain">
+                  <span>购买须知</span>
+                </div>
+                <div class="details-text">
+                  广州长隆度假区是长隆集团旗下首个综合性主题旅游度假区，拥有长隆欢乐世界、长隆国际大马戏、长隆水上乐园、长隆野生动物世界、长隆飞鸟乐园和长隆酒店等多家主题公园及酒店，是中国拥有主题公园数量众多和超大规模的综合性主题旅游度假区，先后被评为“文化产业示范基地
+                  ”、“ 科普教育基地 ”、中国首批国家AAAAA 级景区，年接待游客连续多年超过千万人次，位居世界主题景区前列，成为中国在世界旅游业的标杆。</div>
               </div>
             </div>
-          </el-col>
-        </el-row>
+          </div>
+        </el-col>
+      </el-row>
 
-        <!-- 弹窗条款start -->
-        <el-dialog title="购买须知" center :visible.sync="readyPayVisible" width="50%" custom-class="ready-explain" :show-close="false">
-          <div class="sail-explain" v-for="(item,index) in sailTxt" :key="index">
-            <span>{{index+1}}</span>
-            <p>{{item.name}}</p>
-          </div>
-          <el-checkbox v-if="checkVisible" class="article-check" v-model="articleChecked">我已阅读并同意上述条款</el-checkbox>
-          <span slot="footer" v-if="checkVisible" class="dialog-footer">
-            <el-button @click="readyPayVisible = false">取 消</el-button>
-            <el-button type="primary" :class="articleChecked?'':'disabled'" @click="goPay">确 定
-            </el-button>
-          </span>
-        </el-dialog>
-        <!-- 弹窗条款end -->
-
-        <div class="bread_crumb_navigation">
-          <div class="navigation-to" :class="navigationActive==1?'navigation-to-active':''" @click="toScorll('play',1)">游玩攻略</div>
-          <div class="navigation-to" :class="navigationActive==2?'navigation-to-active':''" @click="toScorll('position',2)">地理位置</div>
-          <div class="navigation-to" :class="navigationActive==3?'navigation-to-active':''" @click="toScorll('explain',3)">购买须知</div>
-
-        </div>
-        <div class="navigation-content">
-          <!-- 游玩攻略-->
-          <div class="play-introduction">
-            <div class="navigation-content-title play">
-              <span>游玩攻略</span>
-            </div>
-            <div class="details-title">广州长隆度假区 —— 中国一站式综合性旅游度假区</div>
-            <div class="details-text">
-              广州长隆度假区是长隆集团旗下首个综合性主题旅游度假区，拥有长隆欢乐世界、长隆国际大马戏、长隆水上乐园、长隆野生动物世界、长隆飞鸟乐园和长隆酒店等多家主题公园及酒店，是中国拥有主题公园数量众多和超大规模的综合性主题旅游度假区，先后被评为“文化产业示范基地
-              ”、“ 科普教育基地 ”、中国首批国家AAAAA 级景区，年接待游客连续多年超过千万人次，位居世界主题景区前列，成为中国在世界旅游业的标杆。</div>
-          </div>
-          <!-- 游玩攻略-->
-          <div class="play-introduction">
-            <div class="navigation-content-title position">
-              <span>地理位置</span>
-            </div>
-            <div class="details-title">广州长隆度假区 —— 中国一站式综合性旅游度假区</div>
-            <div class="details-text">长隆欢乐世界是目前国内设备先进、科技含量高、游乐设备众多的超级游乐园，集世界精彩游乐和大型演艺表演为一体，被誉为“中国新一代游乐园的经典之作”。
-              其拥有顶端落差达80米的垂直过山车；由著名游乐设备提供商INTAMIN提供的十环过山车，全世界仅英国和长隆欢乐世界两台；摩托过山车，0-80公里弹射式加速仅需2.8秒；U型滑板，曾作为挑战项目参与《奔跑吧，兄弟》录制；超级大摆锤是新奇酷炫的大型机动游乐设备，最高时速110公里/小时，最大摆幅240度；国际特技剧场，大型水陆空特效剧场结合爆破、枪战、烟火、声光、机动设备、滑水、高空特技等多种超高难度特效；星际决战，原创360度不规则环形荧幕，模拟实景立体观影效果，是超大型5D探险游乐项目。
-              ”、“ 科普教育基地 ”、中国首批国家AAAAA 级景区，年接待游客连续多年超过千万人次，位居世界主题景区前列，成为中国在世界旅游业的标杆。</div>
-          </div>
-          <!-- 购买须知-->
-          <div class="play-introduction">
-            <div class="navigation-content-title explain">
-              <span>购买须知</span>
-            </div>
-            <div class="details-text">
-              广州长隆度假区是长隆集团旗下首个综合性主题旅游度假区，拥有长隆欢乐世界、长隆国际大马戏、长隆水上乐园、长隆野生动物世界、长隆飞鸟乐园和长隆酒店等多家主题公园及酒店，是中国拥有主题公园数量众多和超大规模的综合性主题旅游度假区，先后被评为“文化产业示范基地
-              ”、“ 科普教育基地 ”、中国首批国家AAAAA 级景区，年接待游客连续多年超过千万人次，位居世界主题景区前列，成为中国在世界旅游业的标杆。</div>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 </template>
