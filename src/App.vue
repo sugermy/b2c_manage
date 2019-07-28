@@ -87,7 +87,8 @@ export default {
   watch: {
     loginStatus: function(v) {
       console.log(v)
-    }
+    },
+    $route: function(v) {}
   }
 }
 </script>
