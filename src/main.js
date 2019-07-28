@@ -21,6 +21,10 @@ new Vue({
 //路由跳转守卫判断是否是登录态
 router.beforeEach((to, from, next) => {
   store.dispatch('enterRouter', to.path);
+  if (to.meta.title) {
+    //跳转前动态设置当前title
+    document.title = to.meta.title;
+  }
   if (store.state.readyOne == 1) {
     store.dispatch('changeAppStatus', true);
   } else {

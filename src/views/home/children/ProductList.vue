@@ -90,7 +90,9 @@ export default {
       listImgError: require('../../../assets/homeImage/test.png')
     }
   },
-  mounted() {},
+  mounted() {
+    console.log(this.$route)
+  },
   methods: {
     subscribe() {
       this.$router.push({ path: '/Home/Product/Detail' })
