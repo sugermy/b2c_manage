@@ -1,8 +1,7 @@
 <template>
   <el-row class="form-content">
     <el-col v-if="showTab==1" :span="10" class="form-main">
-      <el-form :model="ruleForm" label-position="right" :rules="rules" ref="ruleForm" label-width="100px"
-        class="ruleForm">
+      <el-form :model="ruleForm" label-position="right" :rules="rules" ref="ruleForm" label-width="100px" class="ruleForm">
         <el-form-item class="label-form" label="昵称：" prop="name">
           <el-input class="form-control" v-model="ruleForm.name"></el-input>
           <el-button class="form-btn" @click.prevent="modifyItem(ruleForm.name)">修改</el-button>
@@ -25,8 +24,7 @@
       </el-form>
     </el-col>
     <el-col v-if="showTab==2" :span="10" class="form-main">
-      <el-form :model="passFrom" label-position="right" :rules="rules" ref="passForm" label-width="100px"
-        class="ruleForm">
+      <el-form :model="passFrom" label-position="right" :rules="rules" ref="passForm" label-width="100px" class="ruleForm">
         <el-form-item class="label-form" label="旧密码：" prop="oldPass">
           <el-input class="form-control" v-model="passFrom.oldPass"></el-input>
         </el-form-item>
@@ -46,7 +44,7 @@
 </template>
 <script>
 export default {
-  data() {
+  data () {
     return {
       showTab: 1,
       ruleForm: {},
@@ -79,7 +77,7 @@ export default {
     }
   },
   methods: {
-    postPassWord(formName) {
+    postPassWord (formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
           alert('submit!')
@@ -89,15 +87,15 @@ export default {
         }
       })
     },
-    cancelPassWord() {
+    cancelPassWord () {
       this.showTab = 1
     },
     //修改密码
-    modifyPassWord() {
+    modifyPassWord () {
       this.showTab = 2
     },
     //修改单条数据
-    modifyItem(v) {
+    modifyItem (v) {
       console.log(v)
     }
   }
