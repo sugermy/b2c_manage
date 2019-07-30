@@ -4,7 +4,31 @@
 .el-scrollbar__thumb {
   background-color: #00a0e9;
 }
-
+.el-select-dropdown__item.selected {
+  color: #fff;
+  background: #ff8039;
+}
+.table-header {
+  background-color: #f2f2f2 !important;
+  > th {
+    color: #333333;
+    background-color: #f2f2f2 !important;
+  }
+}
+//个人中心 修改密码btn
+.el-form-item__content {
+  display: flex;
+  button {
+    margin-left: 5px;
+  }
+}
+.modify-btn {
+  .el-form-item__content {
+    margin-left: 0 !important;
+    margin-top: 30px;
+    justify-content: center;
+  }
+}
 //定义购买须知弹窗宽度
 .ready-explain {
   border-radius: 4px;
@@ -14,11 +38,7 @@
   .el-dialog__header {
     text-align: center;
     border-radius: 4px 4px 0 0;
-    background: linear-gradient(
-      134deg,
-      rgba(255, 128, 57, 1) 0%,
-      rgba(255, 193, 65, 1) 100%
-    );
+    background: linear-gradient(134deg, rgba(255, 128, 57, 1) 0%, rgba(255, 193, 65, 1) 100%);
     // padding-bottom: 15px;
     padding: 10px 0;
   }

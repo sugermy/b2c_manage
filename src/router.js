@@ -8,7 +8,11 @@ const ProductDetail = () => import('./views/Home/children/ProductDetail');
 const OrderForm = () => import('./views/Home/children/OrderForm.vue'); //提交订单
 
 //个人中心
-const PersonalCenter = () => import('./views/Personal');
+const Personal = () => import('./views/Personal');
+const PersonalCenter = () =>
+  import('./views/Personal/children/PersonalCenter.vue');
+const PersonalOrder = () =>
+  import('./views/Personal/children/PersonalOrder.vue');
 
 //游客须知
 const TouristRules = () => import('./views/TouristRules');
@@ -69,9 +73,22 @@ export default new Router({
 
     //个人中心
     {
-      path: '/PersonalCenter',
-      name: 'PersonalCenter',
-      component: PersonalCenter
+      path: '/Personal',
+      name: 'Personal',
+      component: Personal,
+      redirect: '/Personal/PersonalCenter',
+      children: [
+        {
+          path: 'PersonalCenter',
+          name: 'PersonalCenter',
+          component: PersonalCenter
+        },
+        {
+          path: 'PersonalOrder',
+          name: 'PersonalOrder',
+          component: PersonalOrder
+        }
+      ]
     },
     //游客须知
     {

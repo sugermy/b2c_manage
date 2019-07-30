@@ -1,6 +1,6 @@
 <template>
   <div class="header-nav">
-    <div class="logo">
+    <div class="logo" @click="goHome">
       <img src="../assets/headerImage/header_logo.png" class="logo-img" />
     </div>
     <div class="header-right">
@@ -54,7 +54,7 @@ export default {
         },
         {
           name: '个人中心',
-          path: '/PersonalCenter'
+          path: '/Personal'
         },
         {
           name: '游客须知',
@@ -73,6 +73,9 @@ export default {
   methods: {
     changeCity(city) {
       this.$emit('increment', city)
+    },
+    goHome() {
+      this.$router.push({ path: '/Home' })
     }
   }
 }
@@ -89,6 +92,7 @@ export default {
 .logo {
   display: flex;
   align-items: center;
+  cursor: pointer;
 }
 .logo-img {
   height: 44px;
