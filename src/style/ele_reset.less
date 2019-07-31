@@ -24,10 +24,12 @@
   .el-dialog__header {
     display: none;
   }
-  .el-dialog__footer {
-    padding: 20px 50px 30px 50px;
-    button {
-      width: 100%;
+  .dialog-footer {
+    .el-form-item__content {
+      button {
+        width: 100%;
+        margin-left: 0;
+      }
     }
   }
 }
@@ -54,7 +56,11 @@
   .el-dialog__header {
     text-align: center;
     border-radius: 4px 4px 0 0;
-    background: linear-gradient(134deg, rgba(255, 128, 57, 1) 0%, rgba(255, 193, 65, 1) 100%);
+    background: linear-gradient(
+      134deg,
+      rgba(255, 128, 57, 1) 0%,
+      rgba(255, 193, 65, 1) 100%
+    );
     // padding-bottom: 15px;
     padding: 10px 0;
   }

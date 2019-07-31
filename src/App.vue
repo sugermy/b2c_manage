@@ -14,21 +14,30 @@
     </el-row>
     <el-dialog title="" class="dialog-longin" :visible.sync="loginStatus" width="30%" :show-close="false" @close="yetClose" center>
       <el-row class="login-head">
-        <el-col :span="12" class="login-t" @click="changeTab(1)"><span :class="activeTab==1?'login-active':''">普通登录</span></el-col>
-        <el-col :span="12" class="login-t" @click="changeTab(2)"><span :class="activeTab==2?'login-active':''">短信验证码登录</span></el-col>
+        <el-col :span="12" class="login-t">
+          <div @click="changeTab(1)"><span :class="activeTab==1?'login-active':''">普通登录</span></div>
+        </el-col>
+        <el-col :span="12" class="login-t">
+          <div @click="changeTab(2)"><span :class="activeTab==2?'login-active':''">短信验证码登录</span></div>
+        </el-col>
       </el-row>
       <el-row class="login-form">
-        <el-col :span="24" class="login-f-i">
-          <el-input placeholder="请输入用户名" prefix-icon="el-icon-user-solid" v-model="loginForm.name"></el-input>
-        </el-col>
-        <el-col :span="24" class="login-f-i">
-          <el-input placeholder="请输入密码" prefix-icon="el-icon-unlock" v-model="loginForm.passWord"></el-input>
-        </el-col>
+        <el-form :model="loginForm" :rules="rules" ref="ruleForm">
+          <el-form-item prop="name">
+            <el-input type="text" placeholder="请输入用户名" prefix-icon="el-icon-user-solid" v-model="loginForm.name" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item prop="postWord">
+            <el-input type="password" placeholder="请输入密码" prefix-icon="el-icon-unlock" v-model="loginForm.postWord" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item class="ormemery-pass">
+            <el-checkbox v-model="loginForm.checked">记住密码</el-checkbox>
+          </el-form-item>
+          <el-form-item class="dialog-footer">
+            <el-button type="primary" @click="reday('ruleForm')">登 陆</el-button>
+          </el-form-item>
+          <el-row class="sigin-ready">立即注册</el-row>
+        </el-form>
       </el-row>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="reday">登 陆</el-button>
-        <el-row class="sigin-ready">立即注册</el-row>
-      </span>
     </el-dialog>
   </div>
 </template>
@@ -38,10 +47,24 @@ import HeaderBar from './components/HeaderBar'
 
 export default {
   name: 'app',
-  data () {
+  data() {
+    var checkName = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error('请输入用户名'))
+      } else {
+        callback()
+      }
+    }
+    var checkPass = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error('请输入密码'))
+      } else {
+        callback()
+      }
+    }
     return {
       activeTab: 1,
-      loginForm: {},
+      loginForm: { name: '', postWord: '', checked: true },
       cityList: [
         {
           value: '选项1',
@@ -63,68 +86,73 @@ export default {
           value: '选项5',
           label: '北京5'
         }
-      ]
+      ],
+      rules: {
+        name: [{ validator: checkName, trigger: 'blur' }],
+        postWord: [{ validator: checkPass, trigger: 'blur' }]
+      }
     }
   },
   components: {
     HeaderBar
   },
-  created () {
+  created() {
     //刷新不丢失store状态
     //在页面加载时,读取sessionStorage里的状态信息
     if (sessionStorage.getItem('userinfo')) {
-      this.$store.replaceState(Object.assign({}, this.$store.state, JSON.parse(sessionStorage.getItem('userinfo'))));
+      this.$store.replaceState(
+        Object.assign(
+          {},
+          this.$store.state,
+          JSON.parse(sessionStorage.getItem('userinfo'))
+        )
+      )
     }
     //在页面刷新时,将vuex里的信息保存到sessionStorage里
     window.addEventListener('beforeunload', () => {
-      sessionStorage.setItem('userinfo', JSON.stringify(this.$store.state));
-    });
+      sessionStorage.setItem('userinfo', JSON.stringify(this.$store.state))
+    })
   },
   computed: {
     loginStatus: {
-      get () {
+      get() {
         return this.$store.state.loginStatus
       },
-      set (v) {
+      set(v) {
         this.$store.dispatch('changeAppStatus', v)
       }
     }
   },
   methods: {
     //监听子组件切换城市
-    increment (msg) {
+    increment(msg) {
       console.log(msg, '父组件')
     },
     //切换登录方式
-    changeTab (v) {
+    changeTab(v) {
       this.activeTab = v
     },
     //登录存登录信息
-    reday () {
-      if (!this.loginForm.name) {
-        this.$message({ type: 'error', message: '请输入用户名', center: true })
-        return
-      }
-      if (!this.loginForm.passWord) {
-        this.$message({ type: 'error', message: '请输入密码', center: true })
-        return
-      }
-      this.loginForm.loginStatus = true
-      this.$store.dispatch('setLonginMaster', this.loginForm)
-      this.$store.dispatch('changeAppStatus', false)
-
-      var enterPath = this.$store.state.toRouter
-      this.$router.push({
-        path: enterPath
+    reday(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          //保存实体
+          this.loginForm.loginStatus = true
+          this.$store.dispatch('setLonginMaster', this.loginForm)
+          this.$store.dispatch('changeAppStatus', false)
+          var enterPath = this.$store.state.toRouter
+          this.$router.push({
+            path: enterPath
+          })
+        } else {
+          return false
+        }
       })
     },
     //关闭弹窗自动执行进入阻塞前记录的路由
-    yetClose () {
+    yetClose() {
       this.$store.dispatch('changeAppStatus', false)
     }
-  },
-  watch: {
-    $route: function (v) { }
   }
 }
 </script>
@@ -145,10 +173,6 @@ export default {
   height: calc(100% - 100px);
 }
 .dialog-longin {
-  .el-dialog__body {
-    padding: 50px !important;
-    padding-bottom: 0px !important;
-  }
   .login-head {
     .login-t {
       text-align: center;
@@ -167,6 +191,14 @@ export default {
     margin-top: 20px;
     .login-f-i {
       margin-bottom: 20px;
+    }
+    .ormemery-pass {
+      height: 20px;
+      line-height: 20px;
+      margin-bottom: 10px;
+      .el-form-item__content {
+        line-height: 20px !important;
+      }
     }
   }
   .sigin-ready {
