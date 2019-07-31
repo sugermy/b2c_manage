@@ -1,6 +1,6 @@
 <template>
   <el-row class="content">
-    <el-col :span="24" class="contactus-us">
+    <el-col :span="20" class="contactus-us">
       <el-col :span="6" class="contactus-bus contactus-l">
         <div class="contactus-i" v-for="(item,index) in contactusList" :key="index">
           <img :src="item.imgUrl" class="contactus-img">
@@ -21,7 +21,7 @@
 <script>
 export default {
   name: 'Contactus',
-  data() {
+  data () {
     return {
       contactusList: [
         {
@@ -40,7 +40,7 @@ export default {
           main: '010-7898990、7873879'
         },
         {
-          imgUrl: require('../../assets/contactus/msg.png'),
+          imgUrl: require('../../assets/contactus/realmsg.png'),
           name: '传真',
           main: '010-8787899'
         },
@@ -58,6 +58,9 @@ export default {
 .content {
   height: 100%;
   margin-top: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   .contactus-us {
     height: 100%;
     background: #fff;

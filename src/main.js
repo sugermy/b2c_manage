@@ -25,7 +25,7 @@ router.beforeEach((to, from, next) => {
     //跳转前动态设置当前title
     document.title = to.meta.title;
   }
-  if (store.state.readyOne == 1) {
+  if (!store.state.loginInfo.loginStatus && to.name != 'HomeView' && to.name != 'Contactus' && to.name != 'TouristRules') {
     store.dispatch('changeAppStatus', true);
   } else {
     next();

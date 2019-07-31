@@ -1,17 +1,17 @@
 <template>
   <el-row class="content">
-    <el-col :span="24" class="personal">
-      <el-col :span="6" class="personal-bus personal-l">
+    <el-col :span="20" class="personal">
+      <el-col :span="3" class="personal-bus personal-l">
         <div class="personal-head">
           <img src="../../assets/personal/baseImg.png">
-          <p class="personal-name">优雅的饺子</p>
+          <p class="personal-name">{{loginName}}</p>
         </div>
         <router-link class="link-menu" tag="div" :to="{path:'PersonalCenter'}"><i class="link-per"></i>个人中心
         </router-link>
         <router-link class="link-menu" tag="div" :to="{path:'PersonalOrder'}"><i class="link-order"></i>订单管理
         </router-link>
       </el-col>
-      <el-col :span="18" class="personal-bus personal-r">
+      <el-col :span="21" class="personal-bus personal-r">
         <router-view></router-view>
       </el-col>
     </el-col>
@@ -21,8 +21,13 @@
 <script>
 export default {
   name: 'personalCenter',
-  data() {
-    return {}
+  data () {
+    return {
+      loginName: ''
+    }
+  },
+  created () {
+    this.loginName = this.$store.state.loginInfo.name
   }
 }
 </script>
@@ -31,9 +36,12 @@ export default {
 .content {
   height: 100%;
   margin-top: 50px;
-  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   .personal {
     height: 100%;
+    background: #fff;
     .personal-bus {
       height: 100%;
     }
@@ -53,8 +61,8 @@ export default {
         }
       }
       .link-menu {
-        height: 80px;
-        line-height: 80px;
+        height: 60px;
+        line-height: 60px;
         text-align: center;
         border-bottom: 1px solid #ccc;
         font-size: 16px;
@@ -62,6 +70,7 @@ export default {
         color: rgba(153, 153, 153, 1);
         display: flex;
         align-items: center;
+        cursor: pointer;
         .link-per {
           width: 14px;
           height: 14px;

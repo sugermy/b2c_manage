@@ -9,10 +9,8 @@ const OrderForm = () => import('./views/Home/children/OrderForm.vue'); //提交�
 
 //个人中心
 const Personal = () => import('./views/Personal');
-const PersonalCenter = () =>
-  import('./views/Personal/children/PersonalCenter.vue');
-const PersonalOrder = () =>
-  import('./views/Personal/children/PersonalOrder.vue');
+const PersonalCenter = () => import('./views/Personal/children/PersonalCenter.vue');
+const PersonalOrder = () => import('./views/Personal/children/PersonalOrder.vue');
 
 //游客须知
 const TouristRules = () => import('./views/TouristRules');

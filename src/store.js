@@ -5,14 +5,16 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    readyOne: 1,
+    loginInfo: { loginStatus: false },
     loginStatus: false,
     toRouter: ''
   },
   mutations: {
     changeStatus: function(state, data) {
       state.loginStatus = data;
-      state.readyOne = 2;
+    },
+    setLoginIofn: function(state, data) {
+      state.loginInfo = data;
     },
     setRouterPath: function(state, data) {
       state.toRouter = data;
@@ -21,6 +23,9 @@ export default new Vuex.Store({
   actions: {
     changeAppStatus({ commit }, data) {
       commit('changeStatus', data);
+    },
+    setLonginMaster({ commit }, data) {
+      commit('setLoginIofn', data);
     },
     enterRouter({ commit }, data) {
       commit('setRouterPath', data);

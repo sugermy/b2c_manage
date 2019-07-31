@@ -17,8 +17,7 @@
               <el-tabs v-model="activeName" @tab-click="changeTab">
                 <el-tab-pane label="水上世界成人票" name="first">
                   <div class="list-div" v-for="item in 4" :key="item">
-                    <div class="list-img"
-                      :style="{background: 'url('+listImgError+')', backgroundSize:'100%', backgroundRepeat: 'no-repeat',backgroundPosition:'center center'}">
+                    <div class="list-img" :style="{background: 'url('+listImgError+')', backgroundSize:'100%', backgroundRepeat: 'no-repeat',backgroundPosition:'center center'}">
                     </div>
                     <div class="list-right">
                       <div class="list-name">长隆欢乐游泳池</div>
@@ -44,7 +43,7 @@
             </div>
           </el-col>
           <el-col :span="4">
-            <div class="scenic-spot-right">
+            <div class="scenic-spot-right" style="width:100%">
               <div class="scenic-top">
                 <img src="../../../assets/homeImage/scenic_spot_description_bg.png" class="scenic-information-img" />
                 <div class="scenic-name">广州长隆</div>
@@ -83,22 +82,21 @@
 <script>
 export default {
   name: 'scenicSpot',
-  data() {
+  data () {
     return {
       activeName: 'first',
       imgSize: '100%',
       listImgError: require('../../../assets/homeImage/test.png')
     }
   },
-  mounted() {
-    console.log(this.$route)
+  mounted () {
   },
   methods: {
-    subscribe() {
+    subscribe () {
       this.$router.push({ path: '/Home/Product/Detail' })
     },
     //tab切换
-    changeTab(tab, event) {
+    changeTab (tab, event) {
       console.log(this.activeName)
     }
   }
@@ -261,7 +259,7 @@ export default {
 }
 .scenic-information-img {
   height: 160px;
-  width: 100%;
+  max-width: 100%;
 }
 .scenic-name {
   font-size: 24px;
@@ -271,7 +269,8 @@ export default {
   color: rgba(255, 255, 255, 1);
 }
 .scenic-introduction {
-  padding: 10px 22px;
+  // padding: 10px 22px;
+  margin: 0 20px;
   font-size: 14px;
   font-family: SourceHanSansCN-Regular;
   font-weight: 400;
@@ -281,7 +280,7 @@ export default {
   text-indent: 28px;
 }
 .scenic-telephone-div {
-  margin: 22px;
+  // margin: 22px;
   background: white;
   display: flex;
   padding: 15px;
@@ -315,6 +314,7 @@ export default {
   text-align: left;
 }
 .scenic-bottom {
+  width: 100%;
   background: rgb(255, 128, 57);
   display: inline-block;
   display: flex;
@@ -345,8 +345,8 @@ export default {
   background: white;
 }
 .qr-code-img {
-  height: 100px;
-  width: 100px;
+  max-height: 100%;
+  max-width: 100%;
   margin-bottom: 1px;
 }
 .qr-code-name {
