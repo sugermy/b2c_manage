@@ -4,9 +4,9 @@
       <div class="popup-text">快速预定道控主题乐园门票</div>
       <div class="break-row"></div>
       <div class="popup-form-div">
-        <el-select v-model="cityValue" class="city-div" placeholder="选择城市">
+        <!-- <el-select v-model="cityValue" class="city-div" placeholder="选择城市">
           <el-option v-for="item in cityList" :key="item.value" :label="item.label" :value="item.value"></el-option>
-        </el-select>
+        </el-select> -->
         <button class="submitted" @click="sub">快速预订</button>
       </div>
       <div class="tips-div">
@@ -19,12 +19,12 @@
 </template>
 <script>
 export default {
-  data() {
+  data () {
     return {
       cityList: [
         {
           value: '选项1',
-          label: '北京'
+          label: '北京1'
         },
         {
           value: '选项2',
@@ -46,8 +46,16 @@ export default {
       cityValue: ''
     }
   },
+  computed: {
+    // cityValue () {
+    //   return this.$store.state.cityID
+    // }
+  },
+  mounted () {
+    // this.cityValue = this.$store.state.cityID
+  },
   methods: {
-    sub() {
+    sub () {
       this.$router.push({
         path: './Product',
         query: { pk_refinfo: 'test', value: 'test1' }

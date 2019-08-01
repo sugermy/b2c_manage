@@ -28,7 +28,7 @@ export default {
   },
   created () {
     this.loginName = this.$store.state.loginInfo.name
-  }
+  },
 }
 </script>
 

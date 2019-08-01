@@ -61,7 +61,7 @@
       <el-row class="info-i">
         <h3><i class="info-icon"></i>游客信息</h3>
         <div class="info-toturs">
-          <div class="info-s-i">姓名：优雅的饺子</div>
+          <div class="info-s-i">姓名：{{loginInfo.name}}</div>
           <div class="info-s-i">身份证号：278827823728</div>
           <div class="info-s-i">手机号：1872847282</div>
         </div>
@@ -122,13 +122,12 @@ export default {
   },
   computed: {
     ...mapState({//结构store仓库数据
-      loginInfo: state => state
+      loginInfo: state => state.loginInfo
     })
   },
   methods: {
     //单条查看详情
     lookDetail (i, r) {
-      console.log(i, r)
       console.log(this.loginInfo)
       this.changeOrder = 2
     },

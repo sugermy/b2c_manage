@@ -1,8 +1,8 @@
 <template>
-  <div id="app">
+  <div id="app" @click="recordLogin">
     <el-row type="flex" justify="center">
       <el-col :span="20">
-        <header-bar @increment="increment" :msg="cityList"></header-bar>
+        <header-bar :msg="cityList" ref="headerBar"></header-bar>
       </el-col>
     </el-row>
     <el-row class="bg">
@@ -47,7 +47,7 @@ import HeaderBar from './components/HeaderBar'
 
 export default {
   name: 'app',
-  data() {
+  data () {
     var checkName = (rule, value, callback) => {
       if (!value) {
         return callback(new Error('请输入用户名'))
@@ -63,6 +63,7 @@ export default {
       }
     }
     return {
+      recordTime: 1,//记录当前时间
       activeTab: 1,
       loginForm: { name: '', postWord: '', checked: true },
       cityList: [
@@ -90,13 +91,14 @@ export default {
       rules: {
         name: [{ validator: checkName, trigger: 'blur' }],
         postWord: [{ validator: checkPass, trigger: 'blur' }]
-      }
+      },
+      cityID: ''
     }
   },
   components: {
     HeaderBar
   },
-  created() {
+  created () {
     //刷新不丢失store状态
     //在页面加载时,读取sessionStorage里的状态信息
     if (sessionStorage.getItem('userinfo')) {
@@ -112,28 +114,38 @@ export default {
     window.addEventListener('beforeunload', () => {
       sessionStorage.setItem('userinfo', JSON.stringify(this.$store.state))
     })
+    this.setTimer()//加载定时器
+  },
+  mounted () {
+    this.cityID = this.$refs.headerBar.cityID
   },
   computed: {
-    loginStatus: {
-      get() {
+    loginStatus: {//根据登录状态改变弹出层是否显示
+      get () {
         return this.$store.state.loginStatus
       },
-      set(v) {
+      set (v) {
         this.$store.dispatch('changeAppStatus', v)
       }
     }
   },
   methods: {
-    //监听子组件切换城市
-    increment(msg) {
-      console.log(msg, '父组件')
+    //定时器记录当前是否点击dom  点击重置
+    setTimer () {
+      setInterval(() => {
+        this.recordTime++
+      }, 1000);
+    },
+    //记录点击事件  超时半小时退出登录
+    recordLogin () {
+      this.recordTime = 1
     },
     //切换登录方式
-    changeTab(v) {
+    changeTab (v) {
       this.activeTab = v
     },
     //登录存登录信息
-    reday(formName) {
+    reday (formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
           //保存实体
@@ -150,9 +162,24 @@ export default {
       })
     },
     //关闭弹窗自动执行进入阻塞前记录的路由
-    yetClose() {
+    yetClose () {
       this.$store.dispatch('changeAppStatus', false)
     }
+  },
+
+  watch: {
+    recordTime (v) {//监听当前记录时间 超过30分钟未执行js操作退出登录
+      if (v == 1800) {
+        this.$notify({
+          title: '提醒',
+          message: '登陆态已超时，请重新登陆',
+          showClose: false,
+          type: 'warning'
+        });
+        let nologin = { loginStatus: false }
+        this.$store.dispatch('setLonginMaster', nologin)
+      }
+    },
   }
 }
 </script>

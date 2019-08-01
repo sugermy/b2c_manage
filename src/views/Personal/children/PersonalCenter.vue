@@ -1,6 +1,6 @@
 <template>
   <el-row class="form-content">
-    <el-col v-if="showTab==1" :span="10" class="form-main">
+    <el-col v-show="showTab==1" :span="10" class="form-main">
       <el-form :model="ruleForm" label-position="right" :rules="rules" ref="ruleForm" label-width="100px" class="ruleForm">
         <el-form-item class="label-form" label="昵称：" prop="name">
           <el-input class="form-control" v-model="ruleForm.name"></el-input>
@@ -23,8 +23,8 @@
         </el-form-item>
       </el-form>
     </el-col>
-    <el-col v-if="showTab==2" :span="10" class="form-main">
-      <el-form :model="passFrom" label-position="right" :rules="rules" ref="passForm" label-width="100px" class="ruleForm">
+    <el-col v-show="showTab==2" :span="10" class="form-main">
+      <el-form :model="passFrom" label-position="right" :rules="rules" ref="passForm" label-width="100px" class="passForm">
         <el-form-item class="label-form" label="旧密码：" prop="oldPass">
           <el-input class="form-control" v-model="passFrom.oldPass"></el-input>
         </el-form-item>
@@ -77,6 +77,7 @@ export default {
     }
   },
   methods: {
+    //提交密码修改
     postPassWord (formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
@@ -87,12 +88,15 @@ export default {
         }
       })
     },
+    //取消密码修改
     cancelPassWord () {
       this.showTab = 1
+      this.$refs['passForm'].clearValidate();//重置当前表单验证信息
     },
     //修改密码
     modifyPassWord () {
       this.showTab = 2
+      this.$refs['ruleForm'].clearValidate();//重置当前表单验证信息
     },
     //修改单条数据
     modifyItem (v) {

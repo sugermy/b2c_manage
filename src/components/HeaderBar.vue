@@ -21,33 +21,10 @@ export default {
   props: {
     msg: Array
   },
-  data() {
+  data () {
     return {
       cityID: '',
-      cityValue: '',
-      cityList: [
-        {
-          value: '选项1',
-          label: '北京'
-        },
-        {
-          value: '选项2',
-          label: '北京2'
-        },
-        {
-          value: '选项3',
-          label: '北京3'
-        },
-        {
-          value: '选项4',
-          label: '北京4'
-        },
-        {
-          value: '选项5',
-          label: '北京5'
-        }
-      ],
-      menuList: [
+      menuList: [//首页菜单路由
         {
           name: '首页',
           path: '/Home'
@@ -67,14 +44,22 @@ export default {
       ]
     }
   },
-  created() {
-    this.cityID = this.msg[0].value
+  created () {
+    this.cityID = this.msg[0].value//初始赋值
+  },
+  mounted () {
+    //页面回调完成之后派发设置城市ID事件
+    this.$nextTick(() => {
+      this.$store.dispatch('toSetCity', this.cityID)
+    })
   },
   methods: {
-    changeCity(city) {
-      this.$emit('increment', city)
+    //切换城市---派发设置城市ID事件
+    changeCity (city) {
+      this.$store.dispatch('toSetCity', city)
     },
-    goHome() {
+    //点击logo---回到首页
+    goHome () {
       this.$router.push({ path: '/Home' })
     }
   }
