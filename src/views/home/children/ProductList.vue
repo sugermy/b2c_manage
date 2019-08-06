@@ -32,7 +32,6 @@
                       <div class="list-button">
                         <!-- <button class="subscribe" @click="subscribe()">立即预订</button> -->
                         <el-button type="primary" plain @click="subscribe()">立即预订</el-button>
-                        <el-button type="primary" class="to-detail">查看详情</el-button>
                       </div>
                     </div>
                   </div>

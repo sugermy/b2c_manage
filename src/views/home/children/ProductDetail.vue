@@ -28,8 +28,7 @@
                   </div>
                   <div class="purchase-date">
                     <span class="purchase-date-name">选择日期：</span>
-                    <el-date-picker v-model="dateValue" type="date" placeholder="选择日期" :clearable="false"
-                      value-format="yyyy-MM-dd" @change="changeData"></el-date-picker>
+                    <el-date-picker v-model="dateValue" type="date" placeholder="选择日期" :clearable="false" value-format="yyyy-MM-dd" @change="changeData"></el-date-picker>
                   </div>
                   <div class="purchase-num">
                     <span class="purchase-num-name">购买数量：</span>
@@ -39,8 +38,7 @@
                   </div>
                   <div class="ticket-exchange">
                     <span class="ticket-exchange-name">兑换方式：</span>
-                    <img class="ticket-exchange-img" src="../../../assets/homeImage/message_img.png"
-                      style="padding:0;border:0;" />
+                    <img class="ticket-exchange-img" src="../../../assets/homeImage/message_img.png" style="padding:0;border:0;" />
                     <span class="ticket-exchange-value">短信</span>
                     <img class="ticket-exchange-img" src="../../../assets/homeImage/id_img.png" />
                     <span class="ticket-exchange-value">身份证</span>
@@ -68,8 +66,7 @@
             </el-row>
 
             <!-- 弹窗条款start -->
-            <el-dialog title="购买须知" center :visible.sync="readyPayVisible" width="30%" custom-class="ready-explain"
-              :show-close="false">
+            <el-dialog title="购买须知" center :visible.sync="readyPayVisible" width="30%" custom-class="ready-explain" :show-close="false">
               <div class="sail-explain" v-for="(item,index) in sailTxt" :key="index">
                 <span>{{index+1}}</span>
                 <p>{{item.name}}</p>
@@ -84,13 +81,10 @@
             <!-- 弹窗条款end -->
 
             <div class="bread_crumb_navigation">
-              <div class="navigation-to" :class="navigationActive==1?'navigation-to-active':''"
-                @click="toScorll('play',1)">
+              <div class="navigation-to" :class="navigationActive==1?'navigation-to-active':''" @click="toScorll('play',1)">
                 游玩攻略</div>
-              <div class="navigation-to" :class="navigationActive==2?'navigation-to-active':''"
-                @click="toScorll('position',2)">地理位置</div>
-              <div class="navigation-to" :class="navigationActive==3?'navigation-to-active':''"
-                @click="toScorll('explain',3)">购买须知</div>
+              <div class="navigation-to" :class="navigationActive==2?'navigation-to-active':''" @click="toScorll('position',2)">地理位置</div>
+              <div class="navigation-to" :class="navigationActive==3?'navigation-to-active':''" @click="toScorll('explain',3)">购买须知</div>
 
             </div>
             <div class="navigation-content">
@@ -200,22 +194,6 @@ export default {
     //总计
     totalMoney: function() {
       return this.sailNum * this.sailPrice
-    },
-    //购买须知
-    sailExplain: function() {
-      var temp = ''
-      this.sailTxt.forEach((el, i) => {
-        temp +=
-          '<div class="sail-explain"><span>' +
-          (i + 1) +
-          '.' +
-          '</span>' +
-          '<p>' +
-          el.name +
-          '</p></div>'
-      })
-      temp += '<el-checkbox v-model="checked">备选项</el-checkbox>'
-      return temp
     }
   },
   methods: {
