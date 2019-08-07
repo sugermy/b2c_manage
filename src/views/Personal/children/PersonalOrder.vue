@@ -1,6 +1,6 @@
 <template>
   <el-row class="info-content">
-    <el-table :data="tableData" style="width: 100%" header-row-class-name="table-header" height="100%" v-show="changeOrder==1">
+    <el-table :data="tableData" style="width: 100%" header-row-class-name="table-header" height="calc(100% - 60px)" v-show="changeOrder==1">
       <el-table-column type="index" width="50" label="序号" header-align="center" align="center">
       </el-table-column>
       <el-table-column prop="card" label="订单号" min-width="180" header-align="center" align="center"></el-table-column>
@@ -23,6 +23,10 @@
         </template>
       </el-table-column>
     </el-table>
+    <section class="pagination-wrapper" v-show="changeOrder==1">
+      <el-pagination background layout=" total, prev, pager, next, jumper" :total="tableParams.totalNum" :current-page="tableParams.pageNum" @current-change="changePage">
+      </el-pagination>
+    </section>
     <el-row v-show="changeOrder==2" class="info-main">
       <el-row class="info-i">
         <h3><i class="info-icon"></i>产品信息</h3>
@@ -76,7 +80,7 @@
 import { mapState } from 'vuex'
 
 export default {
-  data () {
+  data() {
     return {
       changeOrder: 1,
       tableData: [
@@ -118,27 +122,36 @@ export default {
         }
       ],
       infoStatus: ['未付款', '已付款', '已使用', '已过期'],
+      tableParams: {
+        totalNum: 1,
+        pageNum: 1
+      }
     }
   },
   computed: {
-    ...mapState({//结构store仓库数据
+    ...mapState({
+      //结构store仓库数据
       loginInfo: state => state.loginInfo
     })
   },
   methods: {
     //单条查看详情
-    lookDetail (i, r) {
+    lookDetail(i, r) {
       console.log(this.loginInfo)
       this.changeOrder = 2
     },
-    handleEdit (index, row) {
+    handleEdit(index, row) {
       console.log(index, row)
     },
-    handleDelete (index, row) {
+    handleDelete(index, row) {
       console.log(index, row)
     },
-    goBack () {
+    goBack() {
       this.changeOrder = 1
+    },
+    //切换分页
+    changePage(pageNum) {
+      console.log(pageNum)
     }
   }
 }
@@ -152,7 +165,7 @@ export default {
 .info-content {
   height: 100%;
   background: #fff;
-  padding: 16px;
+  padding: 16px 16px 0 16px;
 }
 .info-main {
   .info-i {
@@ -219,6 +232,10 @@ export default {
       }
     }
   }
+}
+.pagination-wrapper {
+  text-align: center;
+  padding: 15px 0;
 }
 </style>
 

@@ -12,7 +12,7 @@
         </el-col>
       </el-scrollbar>
     </el-row>
-    <el-dialog title="" class="dialog-longin" :visible.sync="loginStatus" width="30%" :show-close="false" @close="yetClose" center>
+    <el-dialog title="" class="dialog-longin" :visible.sync="loginStatus" width="25%" :show-close="false" @close="yetClose" center>
       <el-row class="login-head">
         <el-col :span="12" class="login-t">
           <div @click="changeTab(1)"><span :class="activeTab==1?'login-active':''">普通登录</span></div>

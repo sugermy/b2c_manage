@@ -28,7 +28,7 @@
                 </el-input-number>
               </el-form-item>
               <el-form-item label="选择日期：">
-                <el-date-picker type="date" placeholder="选择日期" :clearable="false" v-model="TicketForm.palyData" :value="TicketInit.palyData" class="form-control">
+                <el-date-picker type="date" placeholder="选择日期" readonly :clearable="false" v-model="TicketForm.palyData" :value="TicketInit.palyData" class="form-control">
                 </el-date-picker>
               </el-form-item>
               <el-form-item label="订单总额：">
@@ -74,7 +74,7 @@
 </template>
 <script>
 export default {
-  data () {
+  data() {
     return {
       activeTab: 1, //当前step
       TicketInit: {},
@@ -113,24 +113,25 @@ export default {
       }
     }
   },
-  created () {
+  created() {
     if (this.$route.query) {
       this.TicketInit = { ...this.$route.query }
       this.TicketForm.ticketNum = this.TicketInit.ticketNum
+      this.TicketForm.palyData = this.TicketInit.palyData
     }
   },
   computed: {
     //当前总价
-    totalMoney () {
+    totalMoney() {
       var totalN = this.TicketForm.ticketNum * this.TicketInit.sailPrice
       return '￥' + totalN
     }
   },
   methods: {
     //门票数量切换
-    handleChange () { },
+    handleChange() {},
     //提交订单信息
-    submitForm (formName) {
+    submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
           //验证成功
@@ -142,12 +143,12 @@ export default {
       })
     },
     //取消
-    resetForm (formName) {
+    resetForm(formName) {
       this.$refs[formName].resetFields()
     }
   },
   watch: {
-    activeTab: function (val) {
+    activeTab: function(val) {
       console.log(val)
     }
   }
