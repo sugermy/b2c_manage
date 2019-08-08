@@ -1,30 +1,25 @@
 <template>
   <div class="header-nav">
     <div class="logo" @click="goHome">
-      <img src="../assets/headerImage/header_logo.png" class="logo-img" />
+      <img :src="imgSrc" class="logo-img" />
     </div>
     <div class="header-right">
       <ul class="menu">
         <router-link tag="li" v-for="(item,index) in menuList" :key="index" class="menu-item" :to="{ path: item.path }">
           {{item.name}}</router-link>
       </ul>
-      <el-select v-model="cityID" placeholder="请选择城市" @change="changeCity">
-        <el-option v-for="item in msg" :key="item.value" :label="item.label" :value="item.value"></el-option>
-      </el-select>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   name: 'HeaderBar',
-  props: {
-    msg: Array
-  },
-  data () {
+  data() {
     return {
-      cityID: '',
-      menuList: [//首页菜单路由
+      menuList: [
+        //首页菜单路由
         {
           name: '首页',
           path: '/Home'
@@ -41,25 +36,25 @@ export default {
           name: '联系我们',
           path: '/Contactus'
         }
-      ]
+      ],
+      imgSrc: ''
     }
   },
-  created () {
-    this.cityID = this.msg[0].value//初始赋值
+  computed: {
+    ...mapState({
+      //结构store仓库数据
+      merchantInfo: state => state.merchantInfo
+    })
   },
-  mounted () {
+  mounted() {
     //页面回调完成之后派发设置城市ID事件
     this.$nextTick(() => {
-      this.$store.dispatch('toSetCity', this.cityID)
+      this.imgSrc = this.merchantInfo.LogoImg
     })
   },
   methods: {
-    //切换城市---派发设置城市ID事件
-    changeCity (city) {
-      this.$store.dispatch('toSetCity', city)
-    },
     //点击logo---回到首页
-    goHome () {
+    goHome() {
       this.$router.push({ path: '/Home' })
     }
   }

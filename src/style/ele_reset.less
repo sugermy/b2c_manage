@@ -56,11 +56,7 @@
   .el-dialog__header {
     text-align: center;
     border-radius: 4px 4px 0 0;
-    background: linear-gradient(
-      134deg,
-      rgba(255, 128, 57, 1) 0%,
-      rgba(255, 193, 65, 1) 100%
-    );
+    background: linear-gradient(134deg, rgba(255, 128, 57, 1) 0%, rgba(255, 193, 65, 1) 100%);
     // padding-bottom: 15px;
     padding: 10px 0;
   }
@@ -94,5 +90,29 @@
   }
   .el-checkbox__input.is-checked + .el-checkbox__label {
     color: #ff5a5a;
+  }
+}
+//产品列表单选按钮
+.scenic-spot-l {
+  .el-radio-group {
+    .el-radio-button {
+      width: 120px;
+      .el-radio-button__inner {
+        width: 100%;
+        font-size: 16px;
+        border: none;
+      }
+    }
+    .el-radio-button:not(.is-active) {
+      .el-radio-button__inner {
+        background: #ebf4f7;
+        color: #3680ff;
+      }
+    }
+    .el-radio-button:first-child {
+      .el-radio-button__inner {
+        border-left: none !important;
+      }
+    }
   }
 }

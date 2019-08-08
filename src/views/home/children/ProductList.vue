@@ -1,73 +1,77 @@
 <template>
   <div class="content">
     <div class="middle">
-      <el-row type="flex" justify="center">
-        <el-col :span="20" class="carousel-div">
-          <el-carousel height="150px">
-            <el-carousel-item v-for="item in 4" :key="item">
-              <h3 class="small">{{ item }}</h3>
-            </el-carousel-item>
-          </el-carousel>
+      <el-row type="flex" justify="center" v-if="merchantInfo.IsStartBannel">
+        <el-col :span="20" class="carousel-d" ref="carouseldom">
+          <div style="width:100%" @click="targetLink">
+            <vue-seamless-scroll :data="bannelList" :class-option="optionLeft" class="seamless-warp">
+              <ul class="scroll-list" :style="`width:${seamWidth}px`">
+                <li v-for="(item,index) in bannelList" :key="index">
+                  <img :src="item.ImgUrl" :data-url="item.LinkUrl" :data-product="item.LinkProduct">
+                </li>
+              </ul>
+            </vue-seamless-scroll>
+          </div>
         </el-col>
       </el-row>
       <el-row :gutter="10" style="margin-bottom:50px">
         <div class="scenic-spot-content">
           <el-col :span="16">
-            <div class="scenic-spot-left">
-              <el-tabs v-model="activeName" @tab-click="changeTab">
-                <el-tab-pane label="水上世界成人票" name="first">
-                  <div class="list-div" v-for="item in 4" :key="item">
-                    <div class="list-img" :style="{background: 'url('+listImgError+')', backgroundSize:'100%', backgroundRepeat: 'no-repeat',backgroundPosition:'center center'}">
-                    </div>
-                    <div class="list-right">
-                      <div class="list-name">长隆欢乐游泳池</div>
-                      <div class="list-discount-type">
-                        <div class="list-type-div">过期自动退</div>
-                      </div>
-                      <div class="list-explain">逍遥搏击任飞翔，彩虹绘出真体验，让国人不出国门就可享受到超大型的游乐设施，现在就让我们一起尽情去体验过山车典范的巅峰感受吧...</div>
-                      <div class="list-price-div">
-                        <div class="price-discount">$300</div>
-                        <div class="price-original">$400</div>
-                      </div>
-                      <div class="list-button">
-                        <!-- <button class="subscribe" @click="subscribe()">立即预订</button> -->
-                        <el-button type="primary" plain @click="subscribe()">立即预订</el-button>
-                      </div>
-                    </div>
+            <div class="scenic-spot-l">
+              <el-radio-group v-model="activeTypeName">
+                <el-radio-button :label="item.TitleCode" v-for="(item,index) in typeList" :key="index">{{item.TitleName}}</el-radio-button>
+              </el-radio-group>
+              <div class="pro-list" v-for="(item,index) in productList" :key="index">
+                <div class="list-img">
+                  <img :src="item.ImgUrl">
+                </div>
+                <div class="list-right">
+                  <div class="list-name">{{item.ProductName}}</div>
+                  <div class="list-discount-type">
+                    <div class="list-type list-type-g">{{item.IsRundAnyTime?'随时退':'规则退'}}</div>
+                    <div class="list-type list-type-r" v-if="item.IsDateLine">延时入园</div>
+                    <div class="list-type list-type-b" v-if="item.IsCheckPerson">身份证入园</div>
                   </div>
-                </el-tab-pane>
-                <el-tab-pane label="水上世界儿童票" name="second">水上世界儿童票</el-tab-pane>
-                <el-tab-pane label="水上世界优惠票" name="third">水上世界优惠票</el-tab-pane>
-              </el-tabs>
+                  <div class="list-explain">{{item.ProductIntroduce!=''?item.ProductIntroduce:'暂无详情'}}</div>
+                  <div class="list-price">
+                    <div class="price-discount">￥{{item.ProductSellPrice}}</div>
+                    <div class="price-original">￥{{item.TicketPrice}}</div>
+                  </div>
+                  <div class="list-button">
+                    <el-button type="primary" plain @click="subscribe(item.ProductID)">立即预订</el-button>
+                  </div>
+                </div>
+              </div>
+              <section class="pagination-wrapper">
+                <el-pagination background layout="total, prev, pager, next, jumper" hide-on-single-page :total="count" :current-page="pageNum" @current-change="changePage">
+                </el-pagination>
+              </section>
             </div>
+
           </el-col>
           <el-col :span="4">
-            <div class="scenic-spot-right" style="width:100%">
+            <div class="scenic-spot-r">
               <div class="scenic-top">
-                <img src="../../../assets/homeImage/scenic_spot_description_bg.png" class="scenic-information-img" />
-                <div class="scenic-name">广州长隆</div>
+                <img :src="merchantInfo.BackgroundImg" class="scenic-information-img" />
+                <div class="scenic-name">{{merchantInfo.B2CName}}</div>
                 <div class="scenic-introduction">
-                  广州长隆度假区是长隆集团旗下首个综合性主题旅游度假区，拥有长隆欢乐世界、长隆国际大马戏、长隆水上乐园、长隆野生动物世界、长隆飞鸟乐园和长隆酒店等多家主题公园及酒店，是中国拥有主题公园数量众多和超大规模的综合性。
+                  {{merchantInfo.Remark}}
                 </div>
-                <div class="scenic-telephone-div">
-                  <div class="scenic-telephone-img-div">
+                <div class="scenic-telephone-d">
+                  <div class="scenic-telephone-img-d">
                     <img class="scenic-telephone-img" src="../../../assets/homeImage/customer_service.png" />
                   </div>
 
                   <div class="scenic-telephone-value">
                     <div class="scenic-telephone-name">全国服务热线</div>
-                    <div class="scenic-telephone-num">400-666952</div>
+                    <div class="scenic-telephone-num">{{merchantInfo.CustomerPhone}}</div>
                   </div>
                 </div>
               </div>
               <div class="scenic-bottom">
-                <div class="qr-code-div">
+                <div class="qr-code">
                   <img class="qr-code-img" src="../../../assets/homeImage/subscription_number_qr.png" />
-                  <div class="qr-code-name">订阅号</div>
-                </div>
-                <div class="qr-code-div">
-                  <img class="qr-code-img" src="../../../assets/homeImage/official_website_qr.png" />
-                  <div class="qr-code-name">官网</div>
+                  <div class="qr-code-name">订阅号：{{merchantInfo.WxName}}</div>
                 </div>
               </div>
             </div>
@@ -79,36 +83,123 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
-  name: 'scenicSpot',
-  data () {
+  data() {
     return {
-      activeName: 'first',
-      imgSize: '100%',
-      listImgError: require('../../../assets/homeImage/test.png')
+      activeTypeName: 1, //当前激活的类型
+      typeList: [], //产品类型
+      listImgError: require('../../../assets/homeImage/test.png'), //产品图---无用  v-for对接可删掉
+      productList: [], //产品列表
+      count: 1, //产品总数
+      pageNum: 1, //当前页码
+      bannelList: [
+        {
+          title: require('../../../assets/homeImage/test.png')
+        },
+        {
+          title: require('../../../assets/homeImage/scenic_spot_description_bg.png')
+        }
+      ], //轮播图循环
+      seamWidth: 0 //根据生成的外层dom元素宽度赋值
     }
   },
-  mounted () {
+  computed: {
+    ...mapState({
+      //解构store仓库数据
+      merchantInfo: state => state.merchantInfo
+    }),
+    //无缝轮播插件配置
+    optionLeft() {
+      return {
+        direction: 2,
+        limitMoveNum: 2
+      }
+    }
+  },
+  mounted() {
+    this.getType()
+    this.seamWidth = this.$refs.carouseldom.$el.clientWidth
+    this.bannelList = this.merchantInfo.BannelList
   },
   methods: {
-    subscribe () {
-      this.$router.push({ path: '/Home/Product/Detail' })
+    //获取类型
+    getType() {
+      this.$ajax.get('Product/TypeList', {}).then(res => {
+        this.typeList = res.Data || []
+        this.activeTypeName = this.typeList[0].TitleCode //存在监听事件---因此不必在此调用获取产品
+      })
     },
-    //tab切换
-    changeTab (tab, event) {
-      console.log(this.activeName)
+    //获取当前类型下的产品
+    getProduct(TitleCode, pageNum) {
+      this.$ajax
+        .get('Product/ProductList', {
+          ProdutType: TitleCode,
+          Page: pageNum,
+          Rows: 10
+        })
+        .then(res => {
+          this.count = res.RowsCount
+          this.productList = res.Data.Result_Data || []
+        })
+    },
+    //立即购买
+    subscribe(proId) {
+      this.$router.push({ path: '/Home/Product/Detail', query: { id: proId } })
+    },
+    //切换页码
+    changePage(pageNum) {
+      this.pageNum = pageNum
+      this.getProduct(this.activeTypeName, this.pageNum)
+    },
+    //点击轮播跳转---获取点击对象实现监听
+    targetLink(e) {
+      if (e.target.localName == 'img') {
+        let productId = e.target.dataset.product
+        let url = e.target.dataset.url
+        console.log(productId, url)
+      }
+    }
+  },
+  watch: {
+    //监听类型切换
+    activeTypeName(v) {
+      this.getProduct(v, this.pageNum)
     }
   }
 }
 </script>
 
 <style lang="less" scoped>
+.seamless-warp {
+  overflow: hidden;
+  height: 200px;
+  width: 100%;
+  > div {
+    width: 100% !important;
+  }
+  ul.scroll-list {
+    display: flex;
+    li {
+      width: 25%;
+      height: 200px;
+      margin-right: 10px;
+      cursor: pointer;
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+    li:first-child {
+      margin-left: 10px;
+    }
+  }
+}
 .content {
   height: 100%;
 }
-.carousel-div {
+.carousel-d {
   display: flex;
-  background: blueviolet;
   margin-top: 50px;
 }
 .scenic-spot-content {
@@ -116,37 +207,19 @@ export default {
   display: flex;
   justify-content: center;
 }
-.scenic-spot-left {
+.scenic-spot-l {
   background: white;
   padding: 25px 40px;
+  .el-radio-group {
+    width: 100%;
+    background: #ebf4f7;
+  }
 }
-
-.list-tabs-div {
-  box-sizing: border-box;
-  background: rgba(235, 244, 247, 1);
-}
-.qr-code-div {
+.qr-code {
   text-align: center;
   margin: 0 5px;
 }
-.list-tab {
-  font-size: 20px;
-  font-family: SourceHanSansCN-Medium;
-  font-weight: 500;
-  color: rgba(54, 128, 255, 1);
-  padding: 14px 30px;
-  display: inline-block;
-}
-.list-tab-active {
-  font-size: 20px;
-  font-family: SourceHanSansCN-Medium;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 1);
-  padding: 14px 30px;
-  display: inline-block;
-  background: rgba(255, 128, 57, 1);
-}
-.list-div {
+.pro-list {
   padding: 25px 0;
   border-bottom: 1px dashed rgb(197, 197, 197);
   position: relative;
@@ -155,11 +228,17 @@ export default {
   height: 170px;
   width: 300px;
   display: inline-block;
-  transition: background-size 300ms;
-}
-.list-img:hover {
-  background-size: 140% !important;
-  transition: 300ms;
+  transition: all 300ms;
+  overflow: hidden;
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    transition: all 0.3s;
+  }
+  img:hover {
+    transform: scale(1.4); //放大 倍数随意
+  }
 }
 .list-right {
   display: inline-block;
@@ -178,19 +257,30 @@ export default {
   width: 100%;
   margin: 8px 0;
 }
-.list-type-div {
+.list-type {
   background: rgba(245, 255, 238, 1);
-  border: 1px solid rgba(141, 216, 158, 1);
   font-size: 12px;
   font-family: SourceHanSansCN-Medium;
   font-weight: 500;
-  color: rgba(54, 181, 83, 1);
   display: inline-block;
   padding: 3px;
   margin-right: 8px;
 }
+.list-type-g {
+  color: #5dc775;
+  border: 1px solid #5dc775;
+}
+.list-type-r {
+  color: #ff6666;
+  border: 1px solid #ff6666;
+}
+.list-type-b {
+  color: #5e99ff;
+  border: 1px solid #5e99ff;
+}
 .list-explain {
   font-size: 14px;
+  min-height: 30px;
   font-family: SourceHanSansCN-Medium;
   font-weight: 500;
   color: rgba(153, 153, 153, 1);
@@ -231,13 +321,16 @@ export default {
     border-color: #1364ef;
   }
 }
-
-.list-price-div {
+.pagination-wrapper {
+  text-align: center;
+  padding: 15px 0 0 0;
+}
+.list-price {
   position: absolute;
   padding-top: 10px;
 }
 .price-discount {
-  font-size: 30px;
+  font-size: 28px;
   font-family: Roboto-Medium;
   font-weight: 500;
   color: rgba(255, 82, 82, 1);
@@ -252,13 +345,18 @@ export default {
   display: inline-block;
   text-decoration: line-through;
 }
+.scenic-spot-r {
+  width: 100%;
+  height: 100%;
+}
 .scenic-top {
   background: rgb(255, 128, 57);
   display: inline-block;
+  width: 100%;
 }
 .scenic-information-img {
-  height: 160px;
-  max-width: 100%;
+  width: 100%;
+  height: auto;
 }
 .scenic-name {
   font-size: 24px;
@@ -267,10 +365,11 @@ export default {
   text-align: center;
   color: rgba(255, 255, 255, 1);
 }
+
 .scenic-introduction {
-  // padding: 10px 22px;
   margin: 0 20px;
   font-size: 14px;
+  min-height: 80px;
   font-family: SourceHanSansCN-Regular;
   font-weight: 400;
   color: rgba(255, 255, 255, 1);
@@ -278,13 +377,13 @@ export default {
   text-align: left;
   text-indent: 28px;
 }
-.scenic-telephone-div {
+.scenic-telephone-d {
   // margin: 22px;
   background: white;
   display: flex;
   padding: 15px;
 }
-.scenic-telephone-img-div {
+.scenic-telephone-img-d {
   align-items: center;
   display: flex;
 }
@@ -353,5 +452,23 @@ export default {
   font-family: SourceHanSansCN-Medium;
   font-weight: 500;
   color: rgba(255, 255, 255, 1);
+}
+@media screen and (max-width: 1680px) and (min-width: 1381px) {
+  .scenic-name {
+    font-size: 20px;
+  }
+  .scenic-telephone-num {
+    font-size: 14px;
+    letter-spacing: 1px;
+  }
+}
+@media screen and (max-width: 1380px) {
+  .scenic-name {
+    font-size: 18px;
+  }
+  .scenic-telephone-num {
+    font-size: 12px;
+    letter-spacing: 0px;
+  }
 }
 </style>

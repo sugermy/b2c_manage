@@ -2,7 +2,7 @@
   <div id="app" @click="recordLogin">
     <el-row type="flex" justify="center">
       <el-col :span="20">
-        <header-bar :msg="cityList" ref="headerBar"></header-bar>
+        <header-bar ref="headerBar"></header-bar>
       </el-col>
     </el-row>
     <el-row class="bg">
@@ -12,7 +12,7 @@
         </el-col>
       </el-scrollbar>
     </el-row>
-    <el-dialog title="" class="dialog-longin" :visible.sync="loginStatus" width="25%" :show-close="false" @close="yetClose" center>
+    <el-dialog title="" class="dialog-longin" :visible.sync="showLogin" width="400px" :show-close="false" @close="loginClose" center>
       <el-row class="login-head">
         <el-col :span="12" class="login-t">
           <div @click="changeTab(1)"><span :class="activeTab==1?'login-active':''">普通登录</span></div>
@@ -22,7 +22,7 @@
         </el-col>
       </el-row>
       <el-row class="login-form">
-        <el-form :model="loginForm" :rules="rules" ref="ruleForm">
+        <el-form :model="loginForm" :rules="loginRules" ref="ruleForm">
           <el-form-item prop="name">
             <el-input type="text" placeholder="请输入用户名" prefix-icon="el-icon-user-solid" v-model="loginForm.name" autocomplete="off"></el-input>
           </el-form-item>
@@ -35,7 +35,49 @@
           <el-form-item class="dialog-footer">
             <el-button type="primary" @click="reday('ruleForm')">登 陆</el-button>
           </el-form-item>
-          <el-row class="sigin-ready">立即注册</el-row>
+          <el-row class="sigin-ready"><span @click="signIn">立即注册</span></el-row>
+        </el-form>
+      </el-row>
+    </el-dialog>
+    <!-- 注册页 -->
+    <el-dialog title="" class="dialog-longin" :visible.sync="signShow" width="400px" :show-close="false" @close="signClose('signRuleForm')" center>
+      <el-row class="login-head">
+        <el-col :span="24" class="login-top">
+          <div><span class="login-active">注册</span></div>
+        </el-col>
+      </el-row>
+      <el-row class="login-form">
+        <el-form :model="signForm" :rules="signRules" ref="signRuleForm" label-width="80px" label-position="left">
+          <el-form-item prop="NickName" label="昵称">
+            <el-input type="text" placeholder="请输入用户昵称" prefix-icon="el-icon-user-solid" v-model="signForm.NickName" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item prop="UserName" label="用户名">
+            <el-input type="text" placeholder="请输入用户姓名" prefix-icon="el-icon-user-solid" v-model="signForm.UserName" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item prop="Gender" label="性别" required>
+            <div>
+              <el-radio v-model="signForm.Gender" label="男">男</el-radio>
+              <el-radio v-model="signForm.Gender" label="女">女</el-radio>
+            </div>
+          </el-form-item>
+          <el-form-item prop="UserPhone" label="手机号">
+            <el-input type="text" placeholder="请输入手机号用于登录使用" prefix-icon="el-icon-phone" v-model="signForm.UserPhone" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item prop="UserIdCard" label="身份证号">
+            <el-input type="text" placeholder="请输入身份证号" prefix-icon="el-icon-postcard" v-model="signForm.UserIdCard" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item prop="Password" label="密码">
+            <el-input type="password" placeholder="请输入密码" prefix-icon="el-icon-unlock" show-password v-model="signForm.Password" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item prop="enPassword" label="确认密码">
+            <el-input type="password" placeholder="确认密码" prefix-icon="el-icon-unlock" show-password v-model="signForm.enPassword" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item prop="passCode" label="验证码">
+            <el-input type="text" placeholder="请输入验证码" prefix-icon="el-icon-key" v-model="signForm.passCode" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item class="dialog-footer">
+            <el-button class="sign-btn" type="primary" @click="signAction('signRuleForm')">提 交</el-button>
+          </el-form-item>
         </el-form>
       </el-row>
     </el-dialog>
@@ -62,37 +104,55 @@ export default {
         callback()
       }
     }
+    var checkEnPassword = (rule, value, callback) => {
+      if (value == '') {
+        callback(new Error('请再次输入密码'))
+      } else if (value != this.signForm.Password) {
+        callback(new Error('两次输入密码不一致!'))
+      } else {
+        callback()
+      }
+    }
     return {
-      recordTime: 1, //记录当前时间
-      activeTab: 1,
+      recordTime: 1, //记录当前时间---作为30分钟无操作记录
+      activeTab: 1, //默认登录方式---账号登录
       loginForm: { name: '', postWord: '', checked: true },
-      cityList: [
-        {
-          value: '选项1',
-          label: '北京1'
-        },
-        {
-          value: '选项2',
-          label: '北京2'
-        },
-        {
-          value: '选项3',
-          label: '北京3'
-        },
-        {
-          value: '选项4',
-          label: '北京4'
-        },
-        {
-          value: '选项5',
-          label: '北京5'
-        }
-      ],
-      rules: {
+      signForm: { Gender: '男' },
+      loginRules: {
         name: [{ validator: checkName, trigger: 'blur' }],
         postWord: [{ validator: checkPass, trigger: 'blur' }]
       },
-      cityID: ''
+      signRules: {
+        //验证规则
+        NickName: [
+          { required: true, message: '请输入用户昵称姓名', trigger: 'blur' }
+        ],
+        UserName: [
+          { required: true, message: '请输入用户姓名', trigger: 'blur' },
+          { min: 2, max: 6, message: '用户姓名格式不正确', trigger: 'blur' }
+        ],
+        UserPhone: [
+          { required: false, message: '请输入联系电话', trigger: 'blur' },
+          {
+            pattern: /^[1][3,4,5,7,8][0-9]{9}$/,
+            message: '联系电话格式不正确',
+            trigger: 'blur'
+          }
+        ],
+        UserIdCard: [
+          { required: false, message: '请输入身份证号', trigger: 'blur' },
+          {
+            pattern: /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/,
+            message: '身份证号格式不正确',
+            trigger: 'blur'
+          }
+        ],
+        Password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+        enPassword: [
+          { required: true, validator: checkEnPassword, trigger: 'blur' }
+        ]
+      },
+      signShow: false
     }
   },
   components: {
@@ -116,19 +176,12 @@ export default {
     })
     this.setTimer() //加载定时器
   },
-  mounted() {
-    this.cityID = this.$refs.headerBar.cityID
-    this.$nextTick(() => {
-      this.$ajax.get('/Park/Info').then(res => {
-        console.log(res)
-      })
-    })
-  },
+  mounted() {},
   computed: {
-    loginStatus: {
+    showLogin: {
       //根据登录状态改变弹出层是否显示
       get() {
-        return this.$store.state.loginStatus
+        return this.$store.state.showLogin
       },
       set(v) {
         this.$store.dispatch('changeAppStatus', v)
@@ -155,9 +208,9 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           //保存实体
-          this.loginForm.loginStatus = true
-          this.$store.dispatch('setLonginMaster', this.loginForm)
-          this.$store.dispatch('changeAppStatus', false)
+          this.loginForm.loginStatus = true //登录状态为true
+          this.$store.dispatch('setLonginInfo', this.loginForm)
+          this.$store.dispatch('changeAppStatus', false) //隐藏登录窗口
           var enterPath = this.$store.state.toRouter
           this.$router.push({
             path: enterPath
@@ -167,9 +220,35 @@ export default {
         }
       })
     },
-    //关闭弹窗自动执行进入阻塞前记录的路由
-    yetClose() {
+    //关闭弹窗回调
+    loginClose() {
       this.$store.dispatch('changeAppStatus', false)
+    },
+    //注册显示
+    signIn() {
+      this.showLogin = false
+      this.signShow = true
+    },
+    //注册页关闭---重置已输入的表单内容
+    signClose(formName) {
+      this.$refs[formName].resetFields()
+    },
+    //注册提交
+    signAction(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.$ajax
+            .post(
+              'User/Register',
+              this.$qs.stringify({ ReqModel: this.signForm })
+            )
+            .then(res => {
+              console.log(res)
+            })
+        } else {
+          return false
+        }
+      })
     }
   },
 
@@ -184,7 +263,7 @@ export default {
           type: 'warning'
         })
         let nologin = { loginStatus: false }
-        this.$store.dispatch('setLonginMaster', nologin)
+        this.$store.dispatch('setLonginInfo', nologin)
       }
     }
   }
@@ -220,6 +299,15 @@ export default {
     .login-t:nth-of-type(1) {
       border-right: 1px solid #dddddd;
     }
+    .login-top {
+      text-align: center;
+      cursor: pointer;
+      span {
+        display: inline-block;
+        height: 30px;
+        line-height: 30px;
+      }
+    }
   }
   .login-form {
     margin-top: 20px;
@@ -248,6 +336,9 @@ export default {
     color: rgba(255, 128, 57, 1);
     border-bottom: 1px solid #ff8039;
   }
+}
+.sign-btn {
+  margin-left: -40px;
 }
 .bg {
   width: 100%;

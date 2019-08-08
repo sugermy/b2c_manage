@@ -16,7 +16,7 @@ export default class Ajax {
       params: {
         MerchantCode: MerchantCode
       },
-      headers: { Token }
+      headers: { Token, }
     });
     this._axios.interceptors.request.use(
       config => {
@@ -51,10 +51,21 @@ export default class Ajax {
     );
   }
   // 请求方式优化
-  get(url, params = {}) {
+  get (url, params = {}) {
     return this._axios({ method: 'get', url, params });
   }
-  post(url, params = {}, data = {}) {
-    return this._axios({ method: 'post', url, params, data });
+  post (url, data = {}, params = {}) {
+    return this._axios({
+
+      // transformRequest: [function (data, headers) {
+      //   // 可以对data做任何操作
+      //   let ret = ''
+      //   for (let it in data) {
+      //     ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      //   }
+      //   return ret
+      // }],
+      method: 'post', headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' }, url, data, params
+    });
   }
 }

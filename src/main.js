@@ -8,85 +8,77 @@ import './theme/index.css';
 import Ajax from './utils/ajax.js';
 import './style/reset.less';
 import './style/ele_reset.less';
-import { resolve } from 'url';
-import { reject } from 'q';
-import { Notification } from 'element-ui';
 import CryptoJS from "crypto-js";
+import { Notification } from 'element-ui';
+import scroll from 'vue-seamless-scroll'
+import '@babel/polyfill'
+import qs from 'qs'
+Vue.prototype.$qs = qs; //post请求转换数据
 
+Vue.use(scroll)
 Vue.config.productionTip = false;
 
 const baseURL = 'http://192.168.33.154:61780/official/'; //基础服务地址
-
-// let Token = ''; //验证标识符
+// const baseURL = 'http://192.168.33.154:8025/official/'; //基础服务地址
 let Token = localStorage.getItem('Token');
-
 let MerchantCode = 'S190304885'; //景区商户号
-
 let baseAjax = new Ajax(baseURL, '', MerchantCode);
 let BTCAjax = new Ajax(baseURL, Token, MerchantCode);
 
-if (Token) {
-  // Decrypt 解密
-  let bytes = CryptoJS.AES.decrypt(Token, "ACCESS_TOKEN");
-  let decodeToken = bytes.toString(CryptoJS.enc.Utf8);
-  BTCAjax._axios.defaults.headers.Token = decodeToken;
-  new Vue({
-    router,
-    store,
-    render: h => h(App)
-  }).$mount('#app');
-} else {
-  initToken().then(res => {
-    BTCAjax._axios.defaults.headers.Token = res;
-    // Encrypt 加密 
-    let resToken = CryptoJS.AES.encrypt(res, "ACCESS_TOKEN").toString();
+refrushTokenGet()
+
+//刷新token的方法--get
+function refrushTokenGet () {
+  baseAjax.get('/Token', {}).then(res => {
+    Token = res.Data;
+    BTCAjax._axios.defaults.headers.Token = Token;
+    //加密处理
+    let resToken = CryptoJS.AES.encrypt(res.Data, "ACCESS_TOKEN").toString();
     localStorage.setItem('Token', resToken)
-    new Vue({
-      router,
-      store,
-      render: h => h(App)
-    }).$mount('#app');
+    if (!store.state.merchantInfo.B2CName) {
+      //若不存在商户信息则根据当前token重新获取商户信息
+      getMerchantInfo()
+    }
   }).catch(err => {
     Notification({
-      title: '通行证获取失败',
-      message: '请重新加载当前页面',
+      title: '网络通行证获取失败',
+      message: '请重新加载页面获取最新的通行证信息',
       type: 'error',
       showClose: false,
       duration: 0
     });
+  });
+}
+//获取商户信息
+function getMerchantInfo () {
+  BTCAjax.get('/Park/Info').then(res => {
+    if (res.Code == '200') {
+      store.dispatch('setMerchantData', res.Data)
+      new Vue({
+        router,
+        store,
+        render: h => h(App)
+      }).$mount('#app');
+      router.push('/Home')
+    } else {
+      Notification({
+        title: '商户获取失败',
+        message: res.Content,
+        type: 'error',
+        showClose: false,
+        duration: 0
+      });
+    }
   })
 }
+/* 30分钟默认刷新token  为了方便使用29分钟时刷新赋值 */
+setInterval(() => {
+  refrushTokenGet();
+}, 1740000); //1740000
 
 /* vue原型拓展ajax */
 Vue.prototype.$baseAjax = baseAjax; //登录请求接口
 Vue.prototype.$ajax = BTCAjax; //基于token的请求接口
-
-//请求初始化接口换取token
-function initToken () {
-  var p = new Promise((resolve, reject) => {
-    baseAjax.get('/Token', {}).then(res => {
-      Token = res.Data;
-      resolve(Token)
-    }).catch(err => {
-      reject(err)
-    })
-  })
-  return p
-}
-
-//刷新token的方法
-function refrushToken () {
-  baseAjax.post('/Token', {}).then(res => {
-    Token = res.Data;
-    BTCAjax._axios.defaults.headers.Token = Token;
-    let resToken = CryptoJS.AES.encrypt(res.Data, "ACCESS_TOKEN").toString();
-    localStorage.setItem('Token', resToken)
-  });
-}
-/* 30分钟默认刷新token  为了方便使用29分钟时刷新赋值 */
-setInterval(() => {
-  refrushToken();
-}, 1740000); //1740000
 
 //路由跳转守卫判断是否是登录态
 router.beforeEach((to, from, next) => {

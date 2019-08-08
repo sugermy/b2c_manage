@@ -11,7 +11,7 @@
         </div>
       </el-col>
       <el-col :span="18" class="contactus-bus contactus-r">
-        <img class="contactus-map" src="../../assets/contactus/map.png" />
+        <img class="contactus-map" :src="mapImg" />
       </el-col>
     </el-col>
   </el-row>
@@ -19,38 +19,50 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   name: 'Contactus',
-  data () {
+  data() {
     return {
-      contactusList: [
-        {
-          imgUrl: require('../../assets/contactus/hoteline.png'),
-          name: '全国服务热线',
-          main: '400-666952'
-        },
-        {
-          imgUrl: require('../../assets/contactus/adress.png'),
-          name: '地址',
-          main: '广东省深圳市宝安区西乡泰华梧桐岛'
-        },
-        {
-          imgUrl: require('../../assets/contactus/phone.png'),
-          name: '电话',
-          main: '010-7898990、7873879'
-        },
-        {
-          imgUrl: require('../../assets/contactus/realmsg.png'),
-          name: '传真',
-          main: '010-8787899'
-        },
-        {
-          imgUrl: require('../../assets/contactus/msg.png'),
-          name: '邮编',
-          main: '100023'
-        }
-      ]
+      contactusList: [], //关于实体信息
+      mapImg: '' //地图
     }
+  },
+  computed: {
+    ...mapState({
+      //解构store仓库数据
+      merchantInfo: state => state.merchantInfo
+    })
+  },
+  created() {
+    this.contactusList = [
+      {
+        imgUrl: require('../../assets/contactus/hoteline.png'),
+        name: '全国服务热线',
+        main: this.merchantInfo.CustomerPhone
+      },
+      {
+        imgUrl: require('../../assets/contactus/adress.png'),
+        name: '地址',
+        main: this.merchantInfo.ContactAddress
+      },
+      {
+        imgUrl: require('../../assets/contactus/phone.png'),
+        name: '电话',
+        main: this.merchantInfo.ContactPhone
+      },
+      {
+        imgUrl: require('../../assets/contactus/realmsg.png'),
+        name: '传真',
+        main: this.merchantInfo.ContactFax
+      },
+      {
+        imgUrl: require('../../assets/contactus/msg.png'),
+        name: '邮编',
+        main: this.merchantInfo.ContactZipCode
+      }
+    ]
+    this.mapImg = this.merchantInfo.ContactMap || ''
   }
 }
 </script>
@@ -71,7 +83,7 @@ export default {
       .contactus-i {
         display: flex;
         align-items: center;
-        min-height: 90px;
+        min-height: 15%;
         box-sizing: border-box;
         border-bottom: 1px dashed #ccc;
         padding: 0 12px;
@@ -109,12 +121,26 @@ export default {
           color: rgba(255, 128, 57, 1);
           letter-spacing: 4px;
         }
+        @media screen and (max-width: 1680px) and (min-width: 1381px) {
+          .hote-line {
+            font-size: 20px;
+            letter-spacing: 2px;
+          }
+        }
+        @media screen and (max-width: 1380px) {
+          .hote-line {
+            font-size: 18px;
+            letter-spacing: 1px;
+          }
+        }
       }
     }
     .contactus-r {
       height: 100%;
-      text-align: center;
       padding-left: 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       .contactus-map {
         max-width: 100%;
         max-height: 100%;

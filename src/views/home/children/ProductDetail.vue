@@ -7,24 +7,26 @@
             <el-row class="details-top">
               <el-col :span="10">
                 <div class="admission-ticket-img-div">
-                  <img class="ticket-img-big" src="../../../assets/homeImage/test.png" />
+                  <img class="ticket-img-big" :src="productInfo.PicImgBig" />
                   <div class="ticket-img-small-div">
-                    <img class="ticket-img-small" src="../../../assets/homeImage/test.png" />
-                    <img class="ticket-img-small" src="../../../assets/homeImage/test.png" />
-                    <img class="ticket-img-small" src="../../../assets/homeImage/test.png" />
+                    <img class="ticket-img-small" :src="productInfo.PicImgSmallOne" />
+                    <img class="ticket-img-small" :src="productInfo.PicImgSmallTwo" />
+                    <img class="ticket-img-small" :src="productInfo.PicImgSmallThree" />
                   </div>
                 </div>
               </el-col>
               <el-col :span="14">
                 <div class="ticket-information-div">
-                  <div class="ticket-name">长隆欢乐游泳池</div>
+                  <div class="ticket-name">{{productInfo.ProductName}}</div>
                   <div class="ticket-discount-type">
-                    <div class="type-div">随时退</div>
+                    <div class="type-i type-g">{{productInfo.IsRundAnyTime?'随时退':'规则退'}}</div>
+                    <div class="type-i type-r" v-if="productInfo.IsDateLine">延时入园</div>
+                    <div class="type-i type-b" v-if="productInfo.IsCheckPerson">身份证入园</div>
                   </div>
-                  <div class="ticket-explain">逍遥搏击任飞翔，彩虹绘出真体验，让国人不出国门就可享受到超大型的游乐设施，现在就让我们一起尽情去体验过山车典范的巅峰感受吧</div>
+                  <div class="ticket-explain">{{productInfo.ProductIntroduce}}</div>
                   <div class="ticket-price">
                     <span class="ticket-price-name">门票价格：</span>
-                    <span class="ticket-price-num">￥{{sailPrice}}</span>
+                    <span class="ticket-price-num">￥{{productInfo.ProductSellPrice}}</span>
                   </div>
                   <div class="purchase-date">
                     <span class="purchase-date-name">选择日期：</span>
@@ -130,9 +132,10 @@
 export default {
   data() {
     return {
+      productID: '', //当前详情的产品id
+      productInfo: {}, //当前产品信息
       dateValue: '', //选择的日期
       sailNum: 1, //当前数量
-      sailPrice: 200, //单价
       readyPayVisible: false, //立即购买弹窗
       checkVisible: true, //弹窗提交相关
       navigationActive: 1, //锚点链接
@@ -177,26 +180,35 @@ export default {
     }
   },
   created() {
-    var today = new Date()
-    var ydate = today.getFullYear()
-    var mdate =
+    let today = new Date()
+    let ydate = today.getFullYear()
+    let mdate =
       today.getMonth() + 1 > 10
         ? today.getMonth() + 1
         : '0' + (today.getMonth() + 1)
-    var ddate =
+    let ddate =
       today.getDate() + 1 > 10
         ? today.getDate() + 1
         : '0' + (today.getDate() + 1)
-    var todayDate = ydate + '-' + mdate + '-' + ddate
-    this.dateValue = todayDate
+    let nextDate = ydate + '-' + mdate + '-' + ddate
+    this.dateValue = nextDate
+    this.productID = this.$route.query.id || ''
+    this.getProInfo(this.productID)
   },
   computed: {
     //总计
     totalMoney: function() {
-      return this.sailNum * this.sailPrice
+      return this.sailNum * this.productInfo.ProductSellPrice
     }
   },
   methods: {
+    //获取产品详情
+    getProInfo(pid) {
+      this.$ajax.get('Product/ProductDetail', { ProductID: pid }).then(res => {
+        console.log(res)
+        this.productInfo = res.Data[0] || {}
+      })
+    },
     //日期切换获取当日价格
     changeData(v) {
       console.log(v)
@@ -297,15 +309,26 @@ export default {
   color: rgba(153, 153, 153, 1);
   margin: 14px 0;
 }
-.type-div {
+.type-i {
   background: rgba(245, 255, 238, 1);
-  border: 1px solid rgba(141, 216, 158, 1);
   font-size: 12px;
   font-family: SourceHanSansCN-Medium;
   font-weight: 500;
-  color: rgba(93, 199, 117, 1);
   padding: 2px;
   display: inline-block;
+  margin-right: 5px;
+}
+.type-g {
+  color: #5dc775;
+  border: 1px solid #5dc775;
+}
+.type-r {
+  color: #ff6666;
+  border: 1px solid #ff6666;
+}
+.type-b {
+  color: #5e99ff;
+  border: 1px solid #5e99ff;
 }
 .ticket-explain {
   font-size: 14px;
