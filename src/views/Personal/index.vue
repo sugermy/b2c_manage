@@ -23,12 +23,17 @@ export default {
   name: 'personalCenter',
   data () {
     return {
-      loginName: ''
+      // loginName: ''
+    }
+  },
+  computed: {
+    loginName () {
+      return this.$store.state.loginInfo.NickName
     }
   },
   created () {
-    this.loginName = this.$store.state.loginInfo.name
-  },
+    // this.loginName = this.$store.state.loginInfo.NickName
+  }
 }
 </script>
 

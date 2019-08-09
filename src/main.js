@@ -12,14 +12,14 @@ import CryptoJS from "crypto-js";
 import { Notification } from 'element-ui';
 import scroll from 'vue-seamless-scroll'
 import '@babel/polyfill'
-import qs from 'qs'
-Vue.prototype.$qs = qs; //post请求转换数据
+// import qs from 'qs'
+// Vue.prototype.$qs = qs; //post请求转换数据
 
 Vue.use(scroll)
 Vue.config.productionTip = false;
 
-const baseURL = 'http://192.168.33.154:61780/official/'; //基础服务地址
-// const baseURL = 'http://192.168.33.154:8025/official/'; //基础服务地址
+// const baseURL = 'http://192.168.33.154:61780/official/'; //基础服务地址
+const baseURL = 'http://192.168.33.154:8025/official/'; //基础服务地址
 let Token = localStorage.getItem('Token');
 let MerchantCode = 'S190304885'; //景区商户号
 let baseAjax = new Ajax(baseURL, '', MerchantCode);

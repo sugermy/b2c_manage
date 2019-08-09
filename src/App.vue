@@ -23,11 +23,11 @@
       </el-row>
       <el-row class="login-form">
         <el-form :model="loginForm" :rules="loginRules" ref="ruleForm">
-          <el-form-item prop="name">
-            <el-input type="text" placeholder="请输入用户名" prefix-icon="el-icon-user-solid" v-model="loginForm.name" autocomplete="off"></el-input>
+          <el-form-item prop="Mobile">
+            <el-input type="text" placeholder="请输入用户手机账号" prefix-icon="el-icon-user-solid" v-model="loginForm.Mobile" autocomplete="off"></el-input>
           </el-form-item>
-          <el-form-item prop="postWord">
-            <el-input type="password" placeholder="请输入密码" prefix-icon="el-icon-unlock" v-model="loginForm.postWord" autocomplete="off"></el-input>
+          <el-form-item prop="Pwd">
+            <el-input type="password" placeholder="请输入密码" prefix-icon="el-icon-unlock" v-model="loginForm.Pwd" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item class="ormemery-pass">
             <el-checkbox v-model="loginForm.checked">记住密码</el-checkbox>
@@ -89,14 +89,7 @@ import HeaderBar from './components/HeaderBar'
 
 export default {
   name: 'app',
-  data() {
-    var checkName = (rule, value, callback) => {
-      if (!value) {
-        return callback(new Error('请输入用户名'))
-      } else {
-        callback()
-      }
-    }
+  data () {
     var checkPass = (rule, value, callback) => {
       if (!value) {
         return callback(new Error('请输入密码'))
@@ -116,11 +109,18 @@ export default {
     return {
       recordTime: 1, //记录当前时间---作为30分钟无操作记录
       activeTab: 1, //默认登录方式---账号登录
-      loginForm: { name: '', postWord: '', checked: true },
+      loginForm: { Mobile: '', Pwd: '', checked: true },
       signForm: { Gender: '男' },
       loginRules: {
-        name: [{ validator: checkName, trigger: 'blur' }],
-        postWord: [{ validator: checkPass, trigger: 'blur' }]
+        Mobile: [
+          { required: true, message: '请输入登录账号', trigger: 'blur' },
+          {
+            pattern: /^[1][3,4,5,7,8][0-9]{9}$/,
+            message: '手机格式不正确',
+            trigger: 'blur'
+          }
+        ],
+        Pwd: [{ validator: checkPass, trigger: 'blur' }]
       },
       signRules: {
         //验证规则
@@ -132,7 +132,7 @@ export default {
           { min: 2, max: 6, message: '用户姓名格式不正确', trigger: 'blur' }
         ],
         UserPhone: [
-          { required: false, message: '请输入联系电话', trigger: 'blur' },
+          { required: true, message: '请输入联系电话', trigger: 'blur' },
           {
             pattern: /^[1][3,4,5,7,8][0-9]{9}$/,
             message: '联系电话格式不正确',
@@ -140,7 +140,7 @@ export default {
           }
         ],
         UserIdCard: [
-          { required: false, message: '请输入身份证号', trigger: 'blur' },
+          { required: true, message: '请输入身份证号', trigger: 'blur' },
           {
             pattern: /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/,
             message: '身份证号格式不正确',
@@ -158,7 +158,7 @@ export default {
   components: {
     HeaderBar
   },
-  created() {
+  created () {
     //刷新不丢失store状态
     //在页面加载时,读取sessionStorage里的状态信息
     if (sessionStorage.getItem('userinfo')) {
@@ -176,44 +176,52 @@ export default {
     })
     this.setTimer() //加载定时器
   },
-  mounted() {},
+  mounted () { },
   computed: {
     showLogin: {
       //根据登录状态改变弹出层是否显示
-      get() {
+      get () {
         return this.$store.state.showLogin
       },
-      set(v) {
+      set (v) {
         this.$store.dispatch('changeAppStatus', v)
       }
     }
   },
   methods: {
     //定时器记录当前是否点击dom  点击重置
-    setTimer() {
+    setTimer () {
       setInterval(() => {
         this.recordTime++
       }, 1000)
     },
     //记录点击事件  超时半小时退出登录
-    recordLogin() {
+    recordLogin () {
       this.recordTime = 1
     },
     //切换登录方式
-    changeTab(v) {
+    changeTab (v) {
       this.activeTab = v
     },
     //登录存登录信息
-    reday(formName) {
+    reday (formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
           //保存实体
-          this.loginForm.loginStatus = true //登录状态为true
-          this.$store.dispatch('setLonginInfo', this.loginForm)
-          this.$store.dispatch('changeAppStatus', false) //隐藏登录窗口
-          var enterPath = this.$store.state.toRouter
-          this.$router.push({
-            path: enterPath
+          this.$ajax.post('User/Login/1', this.loginForm).then(res => {
+            if (res.Code == 200) {
+              this.$message({ type: 'success', message: res.Content })
+              let accountForm = res.Data
+              accountForm.loginStatus = true
+              this.$store.dispatch('setLonginInfo', accountForm)
+              this.$store.dispatch('changeAppStatus', false) //隐藏登录窗口
+              let enterPath = this.$store.state.toRouter
+              this.$router.push({
+                path: enterPath
+              })
+            } else {
+              this.$message({ type: 'error', message: res.Content })
+            }
           })
         } else {
           return false
@@ -221,29 +229,32 @@ export default {
       })
     },
     //关闭弹窗回调
-    loginClose() {
+    loginClose () {
       this.$store.dispatch('changeAppStatus', false)
     },
     //注册显示
-    signIn() {
+    signIn () {
       this.showLogin = false
       this.signShow = true
     },
     //注册页关闭---重置已输入的表单内容
-    signClose(formName) {
+    signClose (formName) {
       this.$refs[formName].resetFields()
     },
     //注册提交
-    signAction(formName) {
+    signAction (formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.$ajax
-            .post(
-              'User/Register',
-              this.$qs.stringify({ ReqModel: this.signForm })
-            )
+            .post('User/Register', { ReqParam: JSON.stringify(this.signForm) })
             .then(res => {
-              console.log(res)
+              if (res.Code == 200) {
+                this.$message({ type: 'success', message: '注册成功' })
+                this.signShow = false
+              } else {
+                this.$message({ type: 'warning', message: res.Content })
+                this.signShow = false
+              }
             })
         } else {
           return false
@@ -253,7 +264,7 @@ export default {
   },
 
   watch: {
-    recordTime(v) {
+    recordTime (v) {
       //监听当前记录时间 超过30分钟未执行js操作退出登录
       if (v == 1800) {
         this.$notify({
@@ -338,7 +349,7 @@ export default {
   }
 }
 .sign-btn {
-  margin-left: -40px;
+  margin-left: -40px !important;
 }
 .bg {
   width: 100%;

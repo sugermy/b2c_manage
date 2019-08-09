@@ -30,7 +30,8 @@
                   </div>
                   <div class="purchase-date">
                     <span class="purchase-date-name">选择日期：</span>
-                    <el-date-picker v-model="dateValue" type="date" placeholder="选择日期" :clearable="false" value-format="yyyy-MM-dd" @change="changeData"></el-date-picker>
+                    <el-date-picker v-model="dateValue" :picker-options="datePicker" type="date" placeholder="选择日期" :clearable="false" value-format="yyyy-MM-dd"
+                      @change="changeData"></el-date-picker>
                   </div>
                   <div class="purchase-num">
                     <span class="purchase-num-name">购买数量：</span>
@@ -59,20 +60,16 @@
                         <span class="price-tips-red" @click="lookExplain">购买须知</span>
                       </div>
                     </div>
-                    <div class="immediately-purchase-div">
+                    <div class="immediately-purchase-btn">
                       <el-button type="primary" plain @click="readyPay">立即订购</el-button>
                     </div>
                   </div>
                 </div>
               </el-col>
             </el-row>
-
             <!-- 弹窗条款start -->
             <el-dialog title="购买须知" center :visible.sync="readyPayVisible" width="30%" custom-class="ready-explain" :show-close="false">
-              <div class="sail-explain" v-for="(item,index) in sailTxt" :key="index">
-                <span>{{index+1}}</span>
-                <p>{{item.name}}</p>
-              </div>
+              <pre class="buy-read">{{productInfo.UseIntroduce}}</pre>
               <el-checkbox v-if="checkVisible" class="article-check" v-model="articleChecked">我已阅读并同意上述条款</el-checkbox>
               <span slot="footer" v-if="checkVisible" class="dialog-footer">
                 <el-button @click="readyPayVisible = false">取 消</el-button>
@@ -80,44 +77,13 @@
                 </el-button>
               </span>
             </el-dialog>
-            <!-- 弹窗条款end -->
-
-            <div class="bread_crumb_navigation">
-              <div class="navigation-to" :class="navigationActive==1?'navigation-to-active':''" @click="toScorll('play',1)">
-                游玩攻略</div>
-              <div class="navigation-to" :class="navigationActive==2?'navigation-to-active':''" @click="toScorll('position',2)">地理位置</div>
-              <div class="navigation-to" :class="navigationActive==3?'navigation-to-active':''" @click="toScorll('explain',3)">购买须知</div>
-
-            </div>
+            <!-- 游玩攻略 -->
             <div class="navigation-content">
-              <!-- 游玩攻略-->
               <div class="play-introduction">
                 <div class="navigation-content-title play">
                   <span>游玩攻略</span>
                 </div>
-                <div class="details-title">广州长隆度假区 —— 中国一站式综合性旅游度假区</div>
-                <div class="details-text">
-                  广州长隆度假区是长隆集团旗下首个综合性主题旅游度假区，拥有长隆欢乐世界、长隆国际大马戏、长隆水上乐园、长隆野生动物世界、长隆飞鸟乐园和长隆酒店等多家主题公园及酒店，是中国拥有主题公园数量众多和超大规模的综合性主题旅游度假区，先后被评为“文化产业示范基地
-                  ”、“ 科普教育基地 ”、中国首批国家AAAAA 级景区，年接待游客连续多年超过千万人次，位居世界主题景区前列，成为中国在世界旅游业的标杆。</div>
-              </div>
-              <!-- 游玩攻略-->
-              <div class="play-introduction">
-                <div class="navigation-content-title position">
-                  <span>地理位置</span>
-                </div>
-                <div class="details-title">广州长隆度假区 —— 中国一站式综合性旅游度假区</div>
-                <div class="details-text">长隆欢乐世界是目前国内设备先进、科技含量高、游乐设备众多的超级游乐园，集世界精彩游乐和大型演艺表演为一体，被誉为“中国新一代游乐园的经典之作”。
-                  其拥有顶端落差达80米的垂直过山车；由著名游乐设备提供商INTAMIN提供的十环过山车，全世界仅英国和长隆欢乐世界两台；摩托过山车，0-80公里弹射式加速仅需2.8秒；U型滑板，曾作为挑战项目参与《奔跑吧，兄弟》录制；超级大摆锤是新奇酷炫的大型机动游乐设备，最高时速110公里/小时，最大摆幅240度；国际特技剧场，大型水陆空特效剧场结合爆破、枪战、烟火、声光、机动设备、滑水、高空特技等多种超高难度特效；星际决战，原创360度不规则环形荧幕，模拟实景立体观影效果，是超大型5D探险游乐项目。
-                  ”、“ 科普教育基地 ”、中国首批国家AAAAA 级景区，年接待游客连续多年超过千万人次，位居世界主题景区前列，成为中国在世界旅游业的标杆。</div>
-              </div>
-              <!-- 购买须知-->
-              <div class="play-introduction">
-                <div class="navigation-content-title explain">
-                  <span>购买须知</span>
-                </div>
-                <div class="details-text">
-                  广州长隆度假区是长隆集团旗下首个综合性主题旅游度假区，拥有长隆欢乐世界、长隆国际大马戏、长隆水上乐园、长隆野生动物世界、长隆飞鸟乐园和长隆酒店等多家主题公园及酒店，是中国拥有主题公园数量众多和超大规模的综合性主题旅游度假区，先后被评为“文化产业示范基地
-                  ”、“ 科普教育基地 ”、中国首批国家AAAAA 级景区，年接待游客连续多年超过千万人次，位居世界主题景区前列，成为中国在世界旅游业的标杆。</div>
+                <pre class="details-text">{{productInfo.PlayIntroduce}}</pre>
               </div>
             </div>
           </div>
@@ -135,59 +101,27 @@ export default {
       productID: '', //当前详情的产品id
       productInfo: {}, //当前产品信息
       dateValue: '', //选择的日期
+      datePicker: {
+        disabledDate(time) {
+          let today = new Date()
+          return time.getTime() < today.getTime()
+        }
+      },
       sailNum: 1, //当前数量
       readyPayVisible: false, //立即购买弹窗
       checkVisible: true, //弹窗提交相关
-      navigationActive: 1, //锚点链接
-      articleChecked: true, //同意条款
-      sailTxt: [
-        {
-          name:
-            '主题乐园门票一经预定成功后购票订单一经确认即时成交，有关退改规定，请详见门票《预订须知》对应的退票和改期规则。请务必确认信息无误再进行购买',
-          id: 1
-        },
-        {
-          name:
-            '主题乐园的所有门票均为指定日票，游客购买门票需指定入园日期，日期选择以购票页面可选日期为准。',
-          id: 2
-        },
-        {
-          name:
-            '同一订单下的所有游客需同时入园，购票时登记的有效证件持有人本人必须在场，同行游客无需出示证件。',
-          id: 3
-        },
-        {
-          name:
-            '购买成功的门票仅限选择的入园日期当日有效，仅限使用一次，出园后再次入园需重新购买。',
-          id: 4
-        },
-        {
-          name:
-            '购票后如遇园区推出优惠促销活动，恕不另行通知，也不能享受该优惠。',
-          id: 5
-        },
-        {
-          name:
-            '购票信息请注意保密，因游客个人原因泄露该信息而造成的损失由游客自行承担。',
-          id: 6
-        },
-        {
-          name:
-            '购买儿小童或长老人票的游客，如儿童身高超过标准或老人游客入园时未能出示有效的身份证明文件，游客须按门市价自行重新购票。',
-          id: 7
-        }
-      ]
+      articleChecked: true //同意条款
     }
   },
   created() {
     let today = new Date()
     let ydate = today.getFullYear()
     let mdate =
-      today.getMonth() + 1 > 10
+      today.getMonth() + 1 >= 10
         ? today.getMonth() + 1
         : '0' + (today.getMonth() + 1)
     let ddate =
-      today.getDate() + 1 > 10
+      today.getDate() + 1 >= 10
         ? today.getDate() + 1
         : '0' + (today.getDate() + 1)
     let nextDate = ydate + '-' + mdate + '-' + ddate
@@ -205,13 +139,30 @@ export default {
     //获取产品详情
     getProInfo(pid) {
       this.$ajax.get('Product/ProductDetail', { ProductID: pid }).then(res => {
-        console.log(res)
         this.productInfo = res.Data[0] || {}
+        this.getInitPrice(this.productID, this.dateValue)
       })
+    },
+    //初始化请求日期价
+    getInitPrice(pid, v) {
+      this.$ajax
+        .get('Product/ProductDetail/' + v, { ProductID: pid, BuyDate: v })
+        .then(res => {
+          this.productInfo.SellPrice = res.Data.SellPrice
+          this.productInfo.TicketPrice = res.Data.TicketPrice
+        })
     },
     //日期切换获取当日价格
     changeData(v) {
-      console.log(v)
+      this.$ajax
+        .get('Product/ProductDetail/' + v, {
+          ProductID: this.productID,
+          BuyDate: v
+        })
+        .then(res => {
+          this.productInfo.SellPrice = res.Data.SellPrice
+          this.productInfo.TicketPrice = res.Data.TicketPrice
+        })
     },
     //数量加减
     changeNum(v) {
@@ -221,14 +172,6 @@ export default {
         if (this.sailNum > 1) {
           this.sailNum--
         }
-      }
-    },
-    //锚点链接
-    toScorll(v, n) {
-      const returnEle = document.querySelector('.' + v)
-      this.navigationActive = n
-      if (returnEle || false) {
-        returnEle.scrollIntoView(true)
       }
     },
     //点击购买须知弹窗
@@ -246,9 +189,8 @@ export default {
       this.$router.push({
         path: 'OrderForm',
         query: {
-          id: 1,
+          id: this.productID,
           ticketNum: this.sailNum,
-          sailPrice: this.sailPrice,
           palyData: this.dateValue
         }
       })
@@ -261,6 +203,14 @@ export default {
 .content {
   width: 100%;
   height: 100%;
+}
+.buy-read {
+  white-space: pre-wrap;
+  font-size: 16px;
+  font-family: SourceHanSansCN-Regular;
+  font-weight: 400;
+  color: rgba(51, 51, 51, 1);
+  line-height: 28px;
 }
 .details {
   background: white;
@@ -339,8 +289,9 @@ export default {
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
   overflow: hidden;
+  text-overflow: ellipsis;
   line-height: 34px;
-  padding-bottom: 15px;
+  margin-bottom: 15px;
   border-bottom: 1px dashed rgb(197, 197, 197);
 }
 .ticket-price {
@@ -465,22 +416,11 @@ export default {
   cursor: pointer;
   vertical-align: middle;
 }
-.immediately-purchase-div {
+.immediately-purchase-btn {
   display: flex;
   align-items: center;
 }
-.purchase-button {
-  background: rgba(255, 236, 226, 1);
-  border-radius: 2px;
-  border: 1px solid rgba(255, 128, 57, 1);
-  font-size: 18px;
-  font-family: SourceHanSansCN-Medium;
-  font-weight: 500;
-  color: rgba(255, 128, 57, 1);
-  height: 45px;
-  width: 130px;
-  margin-top: 10px;
-}
+
 .bread_crumb_navigation {
   width: 100%;
   height: 50px;
@@ -507,6 +447,9 @@ export default {
   font-family: SourceHanSansCN-Medium;
   font-weight: 500;
 }
+.navigation-content {
+  margin-top: 20px;
+}
 .navigation-content-title {
   width: 100%;
   height: 34px;
@@ -523,18 +466,13 @@ export default {
   margin-left: 8px;
   height: 14px;
 }
-.details-title {
-  font-size: 20px;
-  font-family: SourceHanSansCN-Medium;
-  font-weight: 500;
-  color: rgba(51, 51, 51, 1);
-  margin: 16px 0;
-}
 .details-text {
   font-size: 14px;
   font-family: SourceHanSansCN-Regular;
   font-weight: 400;
   color: rgba(102, 102, 102, 1);
-  margin: 16px 0;
+  margin: 10px 0;
+  padding: 0 10px;
+  text-indent: 28px;
 }
 </style>

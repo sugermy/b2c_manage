@@ -17,10 +17,10 @@
           <el-col :span="12">
             <el-form ref="TicketForm" class="TicketForm" :model="TicketForm" label-width="90px" label-position="left">
               <el-form-item label="门票名称：">
-                <span>长隆水上乐园</span>
+                <span>{{TicketInit.ProductName}}</span>
               </el-form-item>
               <el-form-item label="门票单价：">
-                <span>￥{{TicketInit.sailPrice}}/张</span>
+                <span>￥{{TicketInit.ProductSellPrice}}/张</span>
               </el-form-item>
               <el-form-item label="门票数量：">
                 <el-input-number class="form-control" v-model="TicketForm.ticketNum" :value="TicketInit.ticketNum" controls-position="right" @change="handleChange" :min="1"
@@ -33,6 +33,10 @@
               </el-form-item>
               <el-form-item label="订单总额：">
                 <span class="total-money">{{totalMoney}}</span>
+              </el-form-item>
+              <el-form-item label="付款方式：" class="pay-list">
+                <div @click="changePay(1)" class="pay-item" :class="payType==1?'choose-pay':''"><i class="pay-icon pay-zfb"></i>支付宝</div>
+                <div @click="changePay(2)" class="pay-item" :class="payType==2?'choose-pay':''"><i class="pay-icon pay-we"></i>微信</div>
               </el-form-item>
             </el-form>
           </el-col>
@@ -74,10 +78,13 @@
 </template>
 <script>
 export default {
-  data() {
+  data () {
     return {
+      payType: 1,
       activeTab: 1, //当前step
-      TicketInit: {},
+      productID: '', //产品ID
+      TicketInit: {}, //当前产品信息
+      SellPriceBase: 0, //产品当日单价
       TicketForm: {
         ticketNum: '',
         palyData: '',
@@ -95,7 +102,11 @@ export default {
           { min: 2, max: 6, message: '游客姓名格式不正确', trigger: 'blur' }
         ],
         touristIdCard: [
-          { required: true, message: '请输入身份证号', trigger: 'blur' },
+          {
+            required: true,
+            message: '请输入身份证号',
+            trigger: 'blur'
+          },
           {
             pattern: /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/,
             message: '身份证号格式不正确',
@@ -113,29 +124,64 @@ export default {
       }
     }
   },
-  created() {
+  created () {
     if (this.$route.query) {
-      this.TicketInit = { ...this.$route.query }
-      this.TicketForm.ticketNum = this.TicketInit.ticketNum
-      this.TicketForm.palyData = this.TicketInit.palyData
+      this.productID = this.$route.query.id
+      this.TicketForm.ticketNum = this.$route.query.ticketNum
+      this.TicketForm.palyData = this.$route.query.palyData
+      this.getDetail(this.productID, this.TicketForm.palyData)
     }
   },
   computed: {
     //当前总价
-    totalMoney() {
-      var totalN = this.TicketForm.ticketNum * this.TicketInit.sailPrice
+    totalMoney () {
+      let totalN = this.TicketForm.ticketNum * this.SellPriceBase
       return '￥' + totalN
     }
   },
   methods: {
+    getDetail (pid, date) {
+      this.$ajax.get('Product/ProductDetail', { ProductID: pid }).then(res => {
+        this.TicketInit = res.Data[0] || {}
+        this.rules.touristIdCard[0].required = res.Data[0].IsCheckPerson //身份证校验根据当前产品确定
+        this.getInitPrice(pid, date)
+      })
+    },
+    //初始化请求日期价
+    getInitPrice (pid, v) {
+      this.$ajax
+        .get('Product/ProductDetail/' + v, { ProductID: pid, BuyDate: v })
+        .then(res => {
+          this.SellPriceBase = res.Data.SellPrice
+          this.TicketInit.SellPrice = res.Data.SellPrice
+          this.TicketInit.TicketPrice = res.Data.TicketPrice
+        })
+    },
+    //切换支付方式
+    changePay (v) {
+      this.payType = v
+    },
     //门票数量切换
-    handleChange() {},
+    handleChange () { },
     //提交订单信息
-    submitForm(formName) {
+    submitForm (formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
           //验证成功
-          this.activeTab = 2
+          // this.activeTab = 2
+          let params = {
+            id: this.productID,
+            ticketNum: this.TicketForm.ticketNum,
+            totalMoney: this.totalMoney,
+            palyData: this.TicketForm.palyData,
+            ProductName: this.TicketInit.ProductName,
+            SellPrice: this.TicketInit.SellPrice,
+            TicketPrice: this.TicketInit.TicketPrice,
+            touristName: this.UserForm.touristName,
+            touristIdCard: this.UserForm.touristIdCard,
+            touristPhone: this.UserForm.touristPhone
+          }
+          console.log(params)
         } else {
           //非空验证失败
           return false
@@ -143,12 +189,12 @@ export default {
       })
     },
     //取消
-    resetForm(formName) {
+    resetForm (formName) {
       this.$refs[formName].resetFields()
     }
   },
   watch: {
-    activeTab: function(val) {
+    activeTab: function (val) {
       console.log(val)
     }
   }
@@ -212,6 +258,46 @@ export default {
 }
 .main-form {
   margin-top: 32px;
+  .pay-list {
+    display: flex;
+    align-items: center;
+    /deep/ .el-form-item__content {
+      margin-left: 0 !important;
+    }
+    .pay-item {
+      width: 80px;
+      height: 30px;
+      line-height: 30px;
+      text-align: center;
+      border: 1px solid #d4d4d4;
+      border-radius: 4px;
+      margin: 0 5px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      .pay-icon {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        margin-right: 5px;
+      }
+      .pay-zfb {
+        background: url('../../../assets/zfb.png') no-repeat;
+        background-size: 100% 100%;
+      }
+      .pay-we {
+        background: url('../../../assets/wechat.png') no-repeat;
+        background-size: 100% 100%;
+      }
+    }
+    .choose-pay {
+      animation: borderColor 1s infinite;
+      -moz-animation: borderColor 1s infinite; /* Firefox */
+      -webkit-animation: borderColor 1s infinite; /* Safari 和 Chrome */
+    }
+  }
+
   .form-title {
     margin: 0;
     font-size: 18px;
@@ -275,6 +361,50 @@ export default {
       margin-bottom: 60px;
       padding: 16px;
     }
+  }
+}
+@keyframes borderColor {
+  0% {
+    border-color: #409eff;
+    color: #409eff;
+  }
+  50% {
+    border-color: #ff8039;
+    color: #ff8039;
+  }
+  100% {
+    border-color: #409eff;
+    color: #409eff;
+  }
+}
+
+@-moz-keyframes borderColor /* Firefox */ {
+  0% {
+    border-color: #409eff;
+    color: #409eff;
+  }
+  50% {
+    border-color: #ff8039;
+    color: #ff8039;
+  }
+  100% {
+    border-color: #409eff;
+    color: #409eff;
+  }
+}
+
+@-webkit-keyframes borderColor /* Safari 和 Chrome */ {
+  0% {
+    border-color: #409eff;
+    color: #409eff;
+  }
+  50% {
+    border-color: #ff8039;
+    color: #ff8039;
+  }
+  100% {
+    border-color: #409eff;
+    color: #409eff;
   }
 }
 </style>

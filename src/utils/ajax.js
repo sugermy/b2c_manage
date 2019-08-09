@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { Promise } from 'q';
 import { Notification } from 'element-ui';
+import qs from 'qs'
+
 export default class Ajax {
   /**
    * @param { String } baseURL        基础请求地址
@@ -55,16 +57,8 @@ export default class Ajax {
     return this._axios({ method: 'get', url, params });
   }
   post (url, data = {}, params = {}) {
+    data = qs.stringify(data);
     return this._axios({
-
-      // transformRequest: [function (data, headers) {
-      //   // 可以对data做任何操作
-      //   let ret = ''
-      //   for (let it in data) {
-      //     ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
-      //   }
-      //   return ret
-      // }],
       method: 'post', headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' }, url, data, params
     });
   }
