@@ -86,10 +86,11 @@
 
 <script>
 import HeaderBar from './components/HeaderBar'
+import CryptoJS from 'crypto-js'
 
 export default {
   name: 'app',
-  data () {
+  data() {
     var checkPass = (rule, value, callback) => {
       if (!value) {
         return callback(new Error('请输入密码'))
@@ -152,59 +153,62 @@ export default {
           { required: true, validator: checkEnPassword, trigger: 'blur' }
         ]
       },
-      signShow: false
+      signShow: false,
+      storeState: ''
     }
   },
   components: {
     HeaderBar
   },
-  created () {
-    //刷新不丢失store状态
-    //在页面加载时,读取sessionStorage里的状态信息
+  created() {
+    //刷新不丢失store状态在页面加载时, 读取sessionStorage里的状态信息
     if (sessionStorage.getItem('userinfo')) {
+      this.storeState = sessionStorage.getItem('userinfo')
+      let bytes = CryptoJS.AES.decrypt(this.storeState, 'userinfo')
+      let originalText = bytes.toString(CryptoJS.enc.Utf8)
       this.$store.replaceState(
-        Object.assign(
-          {},
-          this.$store.state,
-          JSON.parse(sessionStorage.getItem('userinfo'))
-        )
+        Object.assign({}, this.$store.state, JSON.parse(originalText))
       )
     }
     //在页面刷新时,将vuex里的信息保存到sessionStorage里
     window.addEventListener('beforeunload', () => {
-      sessionStorage.setItem('userinfo', JSON.stringify(this.$store.state))
+      this.storeState = CryptoJS.AES.encrypt(
+        JSON.stringify(this.$store.state),
+        'userinfo'
+      ).toString()
+      sessionStorage.setItem('userinfo', this.storeState)
     })
     this.setTimer() //加载定时器
   },
-  mounted () { },
+  mounted() {},
   computed: {
     showLogin: {
       //根据登录状态改变弹出层是否显示
-      get () {
+      get() {
         return this.$store.state.showLogin
       },
-      set (v) {
+      set(v) {
         this.$store.dispatch('changeAppStatus', v)
       }
     }
   },
   methods: {
     //定时器记录当前是否点击dom  点击重置
-    setTimer () {
+    setTimer() {
       setInterval(() => {
         this.recordTime++
       }, 1000)
     },
     //记录点击事件  超时半小时退出登录
-    recordLogin () {
+    recordLogin() {
       this.recordTime = 1
     },
     //切换登录方式
-    changeTab (v) {
+    changeTab(v) {
       this.activeTab = v
     },
     //登录存登录信息
-    reday (formName) {
+    reday(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
           //保存实体
@@ -229,20 +233,20 @@ export default {
       })
     },
     //关闭弹窗回调
-    loginClose () {
+    loginClose() {
       this.$store.dispatch('changeAppStatus', false)
     },
     //注册显示
-    signIn () {
+    signIn() {
       this.showLogin = false
       this.signShow = true
     },
     //注册页关闭---重置已输入的表单内容
-    signClose (formName) {
+    signClose(formName) {
       this.$refs[formName].resetFields()
     },
     //注册提交
-    signAction (formName) {
+    signAction(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.$ajax
@@ -264,7 +268,7 @@ export default {
   },
 
   watch: {
-    recordTime (v) {
+    recordTime(v) {
       //监听当前记录时间 超过30分钟未执行js操作退出登录
       if (v == 1800) {
         this.$notify({

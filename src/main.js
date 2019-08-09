@@ -1,75 +1,78 @@
-import Vue from 'vue';
-import './plugins/axios';
-import App from './App.vue';
-import router from './router';
-import store from './store';
-import './plugins/element.js';
-import './theme/index.css';
-import Ajax from './utils/ajax.js';
-import './style/reset.less';
-import './style/ele_reset.less';
+import Vue from "vue";
+import "./plugins/axios";
+import App from "./App.vue";
+import router from "./router";
+import store from "./store";
+import "./plugins/element.js";
+import "./theme/index.css";
+import Ajax from "./utils/ajax.js";
+import "./style/reset.less";
+import "./style/ele_reset.less";
 import CryptoJS from "crypto-js";
-import { Notification } from 'element-ui';
-import scroll from 'vue-seamless-scroll'
-import '@babel/polyfill'
+import { Notification } from "element-ui";
+import scroll from "vue-seamless-scroll";
+import "@babel/polyfill";
 // import qs from 'qs'
 // Vue.prototype.$qs = qs; //post请求转换数据
 
-Vue.use(scroll)
+Vue.use(scroll);
 Vue.config.productionTip = false;
 
 // const baseURL = 'http://192.168.33.154:61780/official/'; //基础服务地址
-const baseURL = 'http://192.168.33.154:8025/official/'; //基础服务地址
-let Token = localStorage.getItem('Token');
-let MerchantCode = 'S190304885'; //景区商户号
-let baseAjax = new Ajax(baseURL, '', MerchantCode);
+const baseURL = "http://192.168.33.154:8025/official/"; //基础服务地址
+let Token = "";
+let MerchantCode = "S190304885"; //景区商户号
+let baseAjax = new Ajax(baseURL, "", MerchantCode);
 let BTCAjax = new Ajax(baseURL, Token, MerchantCode);
 
-refrushTokenGet()
+refrushTokenGet();
 
 //刷新token的方法--get
-function refrushTokenGet () {
-  baseAjax.get('/Token', {}).then(res => {
-    Token = res.Data;
-    BTCAjax._axios.defaults.headers.Token = Token;
-    //加密处理
-    let resToken = CryptoJS.AES.encrypt(res.Data, "ACCESS_TOKEN").toString();
-    localStorage.setItem('Token', resToken)
-    if (!store.state.merchantInfo.B2CName) {
-      //若不存在商户信息则根据当前token重新获取商户信息
-      getMerchantInfo()
-    }
-  }).catch(err => {
-    Notification({
-      title: '网络通行证获取失败',
-      message: '请重新加载页面获取最新的通行证信息',
-      type: 'error',
-      showClose: false,
-      duration: 0
+function refrushTokenGet() {
+  baseAjax
+    .get("/Token", {})
+    .then(res => {
+      Token = res.Data;
+      BTCAjax._axios.defaults.headers.Token = Token;
+      //加密处理
+      // let resToken = CryptoJS.AES.encrypt(res.Data, "ACCESS_TOKEN").toString();
+      // localStorage.setItem("Token", resToken);
+      if (!store.state.merchantInfo.B2CName) {
+        //若不存在商户信息则根据当前token重新获取商户信息
+        getMerchantInfo();
+      }
+    })
+    .catch(err => {
+      Notification({
+        title: "网络通行证获取失败",
+        message: "请重新加载页面获取最新的通行证信息",
+        type: "error",
+        showClose: false,
+        duration: 0
+      });
     });
-  });
 }
 //获取商户信息
-function getMerchantInfo () {
-  BTCAjax.get('/Park/Info').then(res => {
-    if (res.Code == '200') {
-      store.dispatch('setMerchantData', res.Data)
+function getMerchantInfo() {
+  BTCAjax.get("/Park/Info").then(res => {
+    if (res.Code == "200") {
+      store.dispatch("setMerchantData", res.Data);
       new Vue({
         router,
         store,
         render: h => h(App)
-      }).$mount('#app');
-      router.push('/Home')
+      }).$mount("#app");
+      router.push("/Home");
     } else {
       Notification({
-        title: '商户获取失败',
+        title: "商户获取失败",
         message: res.Content,
-        type: 'error',
+        type: "error",
         showClose: false,
         duration: 0
       });
     }
-  })
+  });
 }
 /* 30分钟默认刷新token  为了方便使用29分钟时刷新赋值 */
 setInterval(() => {
@@ -82,13 +85,19 @@ Vue.prototype.$ajax = BTCAjax; //基于token的请求接口
 
 //路由跳转守卫判断是否是登录态
 router.beforeEach((to, from, next) => {
-  store.dispatch('enterRouter', to.path);
+  store.dispatch("enterRouter", to.path);
   if (to.meta.title) {
     //跳转前动态设置当前title
     document.title = to.meta.title;
   }
-  if (!store.state.loginInfo.loginStatus && to.name != 'HomeView' && to.name != 'Product' && to.name != 'Contactus' && to.name != 'TouristRules') {
-    store.dispatch('changeAppStatus', true);
+  if (
+    !store.state.loginInfo.loginStatus &&
+    to.name != "HomeView" &&
+    to.name != "Product" &&
+    to.name != "Contactus" &&
+    to.name != "TouristRules"
+  ) {
+    store.dispatch("changeAppStatus", true);
   } else {
     next();
   }
