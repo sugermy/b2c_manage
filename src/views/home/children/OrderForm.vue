@@ -65,18 +65,28 @@
       <el-row class="main-form" v-if="activeTab==2" type="flex" justify="center" align="middle">
         <el-col :span="6" class="main-pay">
           <h3 class="pay-name">商品名称：长隆水上乐园</h3>
-          <p class="pay-num">￥10086</p>
-          <div class="pay-img"></div>
-          <div>
-            <el-button type="primary" plain>取消</el-button>
-            <el-button type="primary" :loading="true">等待支付</el-button>
+          <p class="pay-num">￥{{totalMoney}}</p>
+          <div class="pay-img" id="paycode" ref="qrcode">
+            <div class="pay-list">
+              <div class="pay-item" v-show="payType==1"><i class="pay-icon pay-zfb"></i>支付宝</div>
+              <div class="pay-item" v-show="payType==2"><i class="pay-icon pay-we"></i>微信</div>
+            </div>
           </div>
         </el-col>
+        <div class="main-btn">
+          <el-button type="primary" plain>取消</el-button>
+          <el-button type="primary" v-show="loadPay" :loading="loadPay">等待支付</el-button>
+          <el-button type="primary" v-show="!loadPay" @click="replayPay">重新支付</el-button>
+        </div>
       </el-row>
     </el-col>
   </el-row>
 </template>
 <script>
+import QRCode from 'qrcodejs2'
+import { setInterval, clearInterval } from 'timers'
+import { mapState } from 'vuex'
+
 export default {
 	data() {
 		return {
@@ -85,6 +95,11 @@ export default {
 			productID: '', //产品ID
 			TicketInit: {}, //当前产品信息
 			SellPriceBase: 0, //产品当日单价
+			OrderNo: '', //创建订单生成订单号
+			resultURL: '', //生成的支付连接
+			timer: null, //设置定时器
+			loadPay: true, //等待支付按钮
+			paySearchNum: 1, //订单轮询次数
 			TicketForm: {
 				ticketNum: '',
 				palyData: '',
@@ -129,12 +144,17 @@ export default {
 			this.getDetail(this.productID, this.TicketForm.palyData)
 		}
 	},
+	mounted() {},
 	computed: {
 		//当前总价
 		totalMoney() {
 			let totalN = this.TicketForm.ticketNum * this.SellPriceBase
 			return totalN
-		}
+		},
+		...mapState({
+			//结构store仓库数据
+			loginInfo: state => state.loginInfo
+		})
 	},
 	methods: {
 		getDetail(pid, date) {
@@ -152,6 +172,7 @@ export default {
 				this.TicketInit.TicketPrice = res.Data.TicketPrice
 			})
 		},
+
 		//切换支付方式
 		changePay(v) {
 			this.payType = v
@@ -171,17 +192,23 @@ export default {
 						OrderAmount: this.totalMoney, //订单总额
 						TicketPrice: this.TicketInit.TicketPrice, //票面价格
 						SellPrice: this.TicketInit.SellPrice, //售卖价格
-						PayClient: this.payType
+						PayClient: this.payType,
+						LinkName: this.loginInfo.UserName,
+						LinkPhone: this.loginInfo.UserPhone,
+						LinkIDCareNo: this.loginInfo.UserIdCard
 					}
-					let PassengerJson = {
-						UserName: this.UserForm.touristName,
-						UserPhone: this.UserForm.touristPhone,
-						UserIdCard: this.UserForm.touristIdCard
-					}
+					let PassengerJson = [
+						{
+							UserName: this.UserForm.touristName,
+							UserPhone: this.UserForm.touristPhone,
+							UserIdCard: this.UserForm.touristIdCard
+						}
+					]
 					this.$ajax.post('Order/Create', { ReqParam: JSON.stringify(ReqParam), PassengerJson: JSON.stringify(PassengerJson) }).then(res => {
-						console.log(res)
 						if (res.Code == 200) {
-							this.$message({ type: 'success', message: res.Content })
+							this.$message({ type: 'success', message: '提交成功' })
+							this.OrderNo = res.Data.OrderNo
+							this.resultURL = res.Data.resultURL
 							this.activeTab = 2
 						} else {
 							this.$message({ type: 'error', message: res.Content })
@@ -193,14 +220,65 @@ export default {
 				}
 			})
 		},
+		//生成二维码
+		qrcode(url) {
+			let qrcode = new QRCode('paycode', {
+				width: 232,
+				height: 232,
+				text: url, // 二维码地址
+				colorDark: '#000',
+				colorLight: '#fff'
+			})
+		},
+		//订单支付状态轮询
+		payStatus() {
+			this.$ajax.get('Order/GetStatus', { resultURL: this.resultURL, OrderNo: this.OrderNo }).then(res => {
+				if (res.Code == 200) {
+					this.activeTab = 3
+					clearInterval(this.timer) //清除定时器
+				} else {
+					this.paySearchNum++
+					if (this.paySearchNum >= 13) {
+						this.$message({ type: 'error', message: res.Content })
+						this.loadPay = false
+						clearInterval(this.timer)
+						this.paySearchNum = 1
+					}
+				}
+			})
+		},
+		//重新支付
+		replayPay() {
+			let qrcodeChild = this.$refs.qrcode.getElementsByTagName('img')[0]
+			this.$refs.qrcode.removeChild(qrcodeChild)
+			this.qrcode(this.resultURL)
+			this.loadPay = true
+			let _this = this
+			this.timer = setInterval(function() {
+				_this.payStatus()
+			}, 5000)
+		},
 		//取消
 		resetForm(formName) {
 			this.$refs[formName].resetFields()
 		}
 	},
+	//组件销毁前清除定时器
+	beforeDestroy() {
+		clearInterval(this.timer)
+	},
 	watch: {
 		activeTab: function(val) {
-			console.log(val)
+			if (val == 2) {
+				//支付中---轮询支付状态
+				this.$nextTick(() => {
+					this.qrcode(this.resultURL)
+					let _this = this
+					this.timer = setInterval(function() {
+						_this.payStatus()
+					}, 5000)
+				})
+			}
 		}
 	}
 }
@@ -261,8 +339,10 @@ export default {
 		left: 0%;
 	}
 }
+
 .main-form {
 	margin-top: 32px;
+	flex-direction: column;
 	.pay-list {
 		display: flex;
 		align-items: center;
@@ -302,7 +382,17 @@ export default {
 			-webkit-animation: borderColor 1s infinite; /* Safari 和 Chrome */
 		}
 	}
-
+	#paycode {
+		.pay-list {
+			justify-content: center;
+			.pay-item {
+				border: none;
+			}
+		}
+		display: flex;
+		flex-direction: column-reverse;
+		justify-content: space-around;
+	}
 	.form-title {
 		margin: 0;
 		font-size: 18px;

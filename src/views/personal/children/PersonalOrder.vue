@@ -80,162 +80,175 @@
 import { mapState } from 'vuex'
 
 export default {
-  data() {
-    return {
-      changeOrder: 1,
-      tableData: [
-        {
-          date: '2016-05-02',
-          name: '王小虎',
-          card: '6217589635896',
-          num: 1,
-          type: '支付宝',
-          id: 1,
-          address: '上海市普陀区金沙江路 1518 弄'
-        },
-        {
-          date: '2016-05-04',
-          name: '王小虎',
-          num: 2,
-          type: '支付宝',
-          card: '6217589635896',
-          id: 2,
-          address: '上海市普陀区金沙江路 1517 弄'
-        },
-        {
-          date: '2016-05-01',
-          name: '王小虎',
-          type: '支付宝',
-          id: 3,
-          num: 3,
-          card: '6217589635896',
-          address: '上海市普陀区金沙江路 1519 弄'
-        },
-        {
-          date: '2016-05-03',
-          type: '微信',
-          num: 4,
-          id: 4,
-          name: '王小虎',
-          card: '6217589635896',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }
-      ],
-      infoStatus: ['未付款', '已付款', '已使用', '已过期'],
-      tableParams: {
-        totalNum: 1,
-        pageNum: 1
-      }
-    }
-  },
-  computed: {
-    ...mapState({
-      //结构store仓库数据
-      loginInfo: state => state.loginInfo
-    })
-  },
-  methods: {
-    //单条查看详情
-    lookDetail(i, r) {
-      console.log(this.loginInfo)
-      this.changeOrder = 2
-    },
-    handleEdit(index, row) {
-      console.log(index, row)
-    },
-    handleDelete(index, row) {
-      console.log(index, row)
-    },
-    goBack() {
-      this.changeOrder = 1
-    },
-    //切换分页
-    changePage(pageNum) {
-      console.log(pageNum)
-    }
-  }
+	data() {
+		return {
+			changeOrder: 1,
+			tableData: [
+				{
+					date: '2016-05-02',
+					name: '王小虎',
+					card: '6217589635896',
+					num: 1,
+					type: '支付宝',
+					id: 1,
+					address: '上海市普陀区金沙江路 1518 弄'
+				},
+				{
+					date: '2016-05-04',
+					name: '王小虎',
+					num: 2,
+					type: '支付宝',
+					card: '6217589635896',
+					id: 2,
+					address: '上海市普陀区金沙江路 1517 弄'
+				},
+				{
+					date: '2016-05-01',
+					name: '王小虎',
+					type: '支付宝',
+					id: 3,
+					num: 3,
+					card: '6217589635896',
+					address: '上海市普陀区金沙江路 1519 弄'
+				},
+				{
+					date: '2016-05-03',
+					type: '微信',
+					num: 4,
+					id: 4,
+					name: '王小虎',
+					card: '6217589635896',
+					address: '上海市普陀区金沙江路 1516 弄'
+				}
+			],
+			infoStatus: ['未付款', '已付款', '已使用', '已过期'],
+			tableParams: {
+				totalNum: 1,
+				pageNum: 1
+			}
+		}
+	},
+	computed: {
+		...mapState({
+			//结构store仓库数据
+			loginInfo: state => state.loginInfo
+		})
+	},
+	created() {
+		console.log(this.loginInfo)
+		this.getOrder()
+	},
+	methods: {
+		//查看订单详情
+		getOrder() {
+			this.$ajax.get('Order/OrderList', { Mobile: this.loginInfo.UserPhone, page: this.tableParams.pageNum, Rows: 10 }).then(res => {
+				console.log(res)
+			})
+		},
+		//单条查看详情
+		lookDetail(i, r) {
+			console.log(this.loginInfo)
+			this.changeOrder = 2
+		},
+		//去支付
+		handleEdit(index, row) {
+			console.log(index, row)
+		},
+		//重发短信
+		handleDelete(index, row) {
+			console.log(index, row)
+		},
+		//返回上一步
+		goBack() {
+			this.changeOrder = 1
+		},
+		//切换分页
+		changePage(pageNum) {
+			console.log(pageNum)
+		}
+	}
 }
 </script>
 <style lang="less" scoped>
 .to-detail {
-  font-size: 14px;
-  color: rgba(0, 160, 233, 1);
-  cursor: pointer;
+	font-size: 14px;
+	color: rgba(0, 160, 233, 1);
+	cursor: pointer;
 }
 .info-content {
-  height: 100%;
-  background: #fff;
-  padding: 16px 16px 0 16px;
+	height: 100%;
+	background: #fff;
+	padding: 16px 16px 0 16px;
 }
 .info-main {
-  .info-i {
-    margin-bottom: 40px;
-    h3 {
-      font-size: 16px;
-      font-family: SourceHanSansCN-Medium;
-      font-weight: 500;
-      color: rgba(51, 51, 51, 1);
-      display: flex;
-      align-items: center;
-      margin-bottom: 16px;
-      .info-icon {
-        display: inline-block;
-        width: 3px;
-        height: 16px;
-        background: rgba(255, 128, 57, 1);
-        margin-right: 6px;
-      }
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      .tr-head {
-        span:nth-of-type(n + 2) {
-          margin-left: 14%;
-        }
-      }
-      td {
-        height: 54px;
-        border: 1px solid rgba(229, 229, 229, 1);
-        text-indent: 32px;
-        font-size: 14px;
-        font-family: SourceHanSansCN-Regular;
-        font-weight: 400;
-        color: rgba(51, 51, 51, 1);
-      }
-    }
-    .info-status {
-      display: flex;
-      justify-content: space-between;
-      .info-s-i {
-        width: 24.5%;
-        height: 54px;
-        line-height: 54px;
-        color: rgba(255, 255, 255, 1);
-        background: rgba(216, 216, 216, 1);
-        text-align: center;
-      }
-      .active-i {
-        background: rgba(54, 128, 255, 1);
-      }
-    }
-    .info-toturs {
-      display: flex;
-      justify-content: space-between;
-      .info-s-i {
-        width: 33%;
-        height: 54px;
-        line-height: 54px;
-        color: #333333;
-        background: rgba(242, 249, 255, 1);
-        text-align: center;
-      }
-    }
-  }
+	.info-i {
+		margin-bottom: 40px;
+		h3 {
+			font-size: 16px;
+			font-family: SourceHanSansCN-Medium;
+			font-weight: 500;
+			color: rgba(51, 51, 51, 1);
+			display: flex;
+			align-items: center;
+			margin-bottom: 16px;
+			.info-icon {
+				display: inline-block;
+				width: 3px;
+				height: 16px;
+				background: rgba(255, 128, 57, 1);
+				margin-right: 6px;
+			}
+		}
+		table {
+			width: 100%;
+			border-collapse: collapse;
+			.tr-head {
+				span:nth-of-type(n + 2) {
+					margin-left: 14%;
+				}
+			}
+			td {
+				height: 54px;
+				border: 1px solid rgba(229, 229, 229, 1);
+				text-indent: 32px;
+				font-size: 14px;
+				font-family: SourceHanSansCN-Regular;
+				font-weight: 400;
+				color: rgba(51, 51, 51, 1);
+			}
+		}
+		.info-status {
+			display: flex;
+			justify-content: space-between;
+			.info-s-i {
+				width: 24.5%;
+				height: 54px;
+				line-height: 54px;
+				color: rgba(255, 255, 255, 1);
+				background: rgba(216, 216, 216, 1);
+				text-align: center;
+			}
+			.active-i {
+				background: rgba(54, 128, 255, 1);
+			}
+		}
+		.info-toturs {
+			display: flex;
+			justify-content: space-between;
+			.info-s-i {
+				width: 33%;
+				height: 54px;
+				line-height: 54px;
+				color: #333333;
+				background: rgba(242, 249, 255, 1);
+				text-align: center;
+			}
+		}
+	}
 }
 .pagination-wrapper {
-  text-align: center;
-  padding: 15px 0;
+	text-align: center;
+	padding: 15px 0;
 }
 </style>
 

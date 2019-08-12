@@ -460,6 +460,5 @@ export default {
 	color: rgba(102, 102, 102, 1);
 	margin: 10px 0;
 	padding: 0 10px;
-	text-indent: 28px;
 }
 </style>

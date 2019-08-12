@@ -11,6 +11,7 @@
     "core-js": "^2.6.5",
     "crypto-js": "^3.1.9-1",
     "element-ui": "^2.4.5",
+    "qrcodejs2": "^0.0.2",
     "vue": "^2.6.10",
     "vue-router": "^3.0.3",
     "vue-seamless-scroll": "^1.1.17",
