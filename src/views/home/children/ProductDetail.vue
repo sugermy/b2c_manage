@@ -26,7 +26,7 @@
                   <div class="ticket-explain">{{productInfo.ProductIntroduce}}</div>
                   <div class="ticket-price">
                     <span class="ticket-price-name">门票价格：</span>
-                    <span class="ticket-price-num">￥{{productInfo.ProductSellPrice}}</span>
+                    <span class="ticket-price-num">￥{{SellPrice}}</span>
                   </div>
                   <div class="purchase-date">
                     <span class="purchase-date-name">选择日期：</span>
@@ -96,383 +96,370 @@
 
 <script>
 export default {
-  data() {
-    return {
-      productID: '', //当前详情的产品id
-      productInfo: {}, //当前产品信息
-      dateValue: '', //选择的日期
-      datePicker: {
-        disabledDate(time) {
-          let today = new Date()
-          return time.getTime() < today.getTime()
-        }
-      },
-      sailNum: 1, //当前数量
-      readyPayVisible: false, //立即购买弹窗
-      checkVisible: true, //弹窗提交相关
-      articleChecked: true //同意条款
-    }
-  },
-  created() {
-    let today = new Date()
-    let ydate = today.getFullYear()
-    let mdate =
-      today.getMonth() + 1 >= 10
-        ? today.getMonth() + 1
-        : '0' + (today.getMonth() + 1)
-    let ddate =
-      today.getDate() + 1 >= 10
-        ? today.getDate() + 1
-        : '0' + (today.getDate() + 1)
-    let nextDate = ydate + '-' + mdate + '-' + ddate
-    this.dateValue = nextDate
-    this.productID = this.$route.query.id || ''
-    this.getProInfo(this.productID)
-  },
-  computed: {
-    //总计
-    totalMoney: function() {
-      return this.sailNum * this.productInfo.ProductSellPrice
-    }
-  },
-  methods: {
-    //获取产品详情
-    getProInfo(pid) {
-      this.$ajax.get('Product/ProductDetail', { ProductID: pid }).then(res => {
-        this.productInfo = res.Data[0] || {}
-        this.getInitPrice(this.productID, this.dateValue)
-      })
-    },
-    //初始化请求日期价
-    getInitPrice(pid, v) {
-      this.$ajax
-        .get('Product/ProductDetail/' + v, { ProductID: pid, BuyDate: v })
-        .then(res => {
-          this.productInfo.SellPrice = res.Data.SellPrice
-          this.productInfo.TicketPrice = res.Data.TicketPrice
-        })
-    },
-    //日期切换获取当日价格
-    changeData(v) {
-      this.$ajax
-        .get('Product/ProductDetail/' + v, {
-          ProductID: this.productID,
-          BuyDate: v
-        })
-        .then(res => {
-          this.productInfo.SellPrice = res.Data.SellPrice
-          this.productInfo.TicketPrice = res.Data.TicketPrice
-        })
-    },
-    //数量加减
-    changeNum(v) {
-      if (v == '+') {
-        this.sailNum++
-      } else {
-        if (this.sailNum > 1) {
-          this.sailNum--
-        }
-      }
-    },
-    //点击购买须知弹窗
-    lookExplain() {
-      this.checkVisible = false
-      this.readyPayVisible = true
-    },
-    //立即订购调用弹窗
-    readyPay() {
-      this.checkVisible = true
-      this.readyPayVisible = true
-    },
-    //确定购买
-    goPay() {
-      this.$router.push({
-        path: 'OrderForm',
-        query: {
-          id: this.productID,
-          ticketNum: this.sailNum,
-          palyData: this.dateValue
-        }
-      })
-    }
-  },
-  watch: {}
+	data() {
+		return {
+			productID: '', //当前详情的产品id
+			productInfo: {}, //当前产品信息
+			dateValue: '', //选择的日期
+			SellPrice: 0, //当日价格
+			datePicker: {
+				disabledDate(time) {
+					let today = new Date()
+					return time.getTime() < today.getTime()
+				}
+			},
+			sailNum: 1, //当前数量
+			readyPayVisible: false, //立即购买弹窗
+			checkVisible: true, //弹窗提交相关
+			articleChecked: true //同意条款
+		}
+	},
+	created() {
+		let today = new Date()
+		let ydate = today.getFullYear()
+		let mdate = today.getMonth() + 1 >= 10 ? today.getMonth() + 1 : '0' + (today.getMonth() + 1)
+		let ddate = today.getDate() + 1 >= 10 ? today.getDate() + 1 : '0' + (today.getDate() + 1)
+		let nextDate = ydate + '-' + mdate + '-' + ddate
+		this.dateValue = nextDate
+		this.productID = this.$route.query.id || ''
+		this.getProInfo(this.productID)
+	},
+	computed: {
+		//总计
+		totalMoney: function() {
+			return this.sailNum * this.SellPrice
+		}
+	},
+	methods: {
+		//获取产品详情
+		getProInfo(pid) {
+			this.$ajax.get('Product/ProductDetail', { ProductID: pid }).then(res => {
+				this.productInfo = res.Data[0] || {}
+				this.getInitPrice(this.productID, this.dateValue)
+			})
+		},
+		//初始化请求日期价
+		getInitPrice(pid, v) {
+			this.$ajax.get('Product/ProductDetail/' + v, { ProductID: pid, BuyDate: v }).then(res => {
+				this.SellPrice = res.Data.SellPrice
+			})
+		},
+		//日期切换获取当日价格
+		changeData(v) {
+			this.$ajax.get('Product/ProductDetail/' + v, { ProductID: this.productID, BuyDate: v }).then(res => {
+				this.SellPrice = res.Data.SellPrice
+			})
+		},
+		//数量加减
+		changeNum(v) {
+			if (v == '+') {
+				this.sailNum++
+			} else {
+				if (this.sailNum > 1) {
+					this.sailNum--
+				}
+			}
+		},
+		//点击购买须知弹窗
+		lookExplain() {
+			this.checkVisible = false
+			this.readyPayVisible = true
+		},
+		//立即订购调用弹窗
+		readyPay() {
+			this.checkVisible = true
+			this.readyPayVisible = true
+		},
+		//确定购买
+		goPay() {
+			this.$router.push({
+				path: 'OrderForm',
+				query: {
+					id: this.productID,
+					ticketNum: this.sailNum,
+					palyData: this.dateValue
+				}
+			})
+		}
+	},
+	watch: {}
 }
 </script>
 <style lang="less" scoped>
 .content {
-  width: 100%;
-  height: 100%;
+	width: 100%;
+	height: 100%;
 }
 .buy-read {
-  white-space: pre-wrap;
-  font-size: 16px;
-  font-family: SourceHanSansCN-Regular;
-  font-weight: 400;
-  color: rgba(51, 51, 51, 1);
-  line-height: 28px;
+	white-space: pre-wrap;
+	font-size: 16px;
+	font-family: SourceHanSansCN-Regular;
+	font-weight: 400;
+	color: rgba(51, 51, 51, 1);
+	line-height: 28px;
 }
 .details {
-  background: white;
-  padding: 40px;
-  box-sizing: border-box;
-  margin: 50px 0;
-  text-align: left;
+	background: white;
+	padding: 40px;
+	box-sizing: border-box;
+	margin: 50px 0;
+	text-align: left;
 }
 .disabled {
-  pointer-events: none;
-  opacity: 0.5;
+	pointer-events: none;
+	opacity: 0.5;
 }
 .details-top {
-  width: 100%;
-  height: 100%;
+	width: 100%;
+	height: 100%;
 }
 .ticket-img-big {
-  height: 340px;
-  width: 100%;
-  margin-bottom: 4px;
+	height: 340px;
+	width: 100%;
+	margin-bottom: 4px;
 }
 .ticket-img-small-div {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
 }
 .ticket-img-small {
-  height: 110px;
-  width: calc(100% / 3 - 5px);
+	height: 110px;
+	width: calc(100% / 3 - 5px);
 }
 .ticket-information-div {
-  vertical-align: top;
-  padding-left: 45px;
-  box-sizing: border-box;
+	vertical-align: top;
+	padding-left: 45px;
+	box-sizing: border-box;
 }
 .ticket-name {
-  font-size: 26px;
-  font-family: SourceHanSansCN-Medium;
-  font-weight: 500;
-  color: rgba(255, 128, 57, 1);
+	font-size: 26px;
+	font-family: SourceHanSansCN-Medium;
+	font-weight: 500;
+	color: rgba(255, 128, 57, 1);
 }
 .ticket-discount-type {
-  font-size: 14px;
-  font-family: SourceHanSansCN-Regular;
-  font-weight: 400;
-  color: rgba(153, 153, 153, 1);
-  margin: 14px 0;
+	font-size: 14px;
+	font-family: SourceHanSansCN-Regular;
+	font-weight: 400;
+	color: rgba(153, 153, 153, 1);
+	margin: 14px 0;
 }
 .type-i {
-  background: rgba(245, 255, 238, 1);
-  font-size: 12px;
-  font-family: SourceHanSansCN-Medium;
-  font-weight: 500;
-  padding: 2px;
-  display: inline-block;
-  margin-right: 5px;
+	background: rgba(245, 255, 238, 1);
+	font-size: 12px;
+	font-family: SourceHanSansCN-Medium;
+	font-weight: 500;
+	padding: 2px;
+	display: inline-block;
+	margin-right: 5px;
 }
 .type-g {
-  color: #5dc775;
-  border: 1px solid #5dc775;
+	color: #5dc775;
+	border: 1px solid #5dc775;
 }
 .type-r {
-  color: #ff6666;
-  border: 1px solid #ff6666;
+	color: #ff6666;
+	border: 1px solid #ff6666;
 }
 .type-b {
-  color: #5e99ff;
-  border: 1px solid #5e99ff;
+	color: #5e99ff;
+	border: 1px solid #5e99ff;
 }
 .ticket-explain {
-  font-size: 14px;
-  font-family: SourceHanSansCN-Regular;
-  font-weight: 400;
-  color: rgba(153, 153, 153, 1);
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  line-height: 34px;
-  margin-bottom: 15px;
-  border-bottom: 1px dashed rgb(197, 197, 197);
+	font-size: 14px;
+	font-family: SourceHanSansCN-Regular;
+	font-weight: 400;
+	color: rgba(153, 153, 153, 1);
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	line-height: 34px;
+	margin-bottom: 15px;
+	border-bottom: 1px dashed rgb(197, 197, 197);
 }
 .ticket-price {
-  margin: 16px 0;
+	margin: 16px 0;
 }
 .ticket-price-name {
-  font-size: 16px;
-  font-family: SourceHanSansCN-Regular;
-  font-weight: 400;
-  color: rgba(103, 119, 142, 1);
+	font-size: 16px;
+	font-family: SourceHanSansCN-Regular;
+	font-weight: 400;
+	color: rgba(103, 119, 142, 1);
 }
 .ticket-price-num {
-  font-size: 18px;
-  font-family: DINAlternate-Bold;
-  font-weight: bold;
-  color: rgba(255, 82, 82, 1);
+	font-size: 18px;
+	font-family: DINAlternate-Bold;
+	font-weight: bold;
+	color: rgba(255, 82, 82, 1);
 }
 .purchase-date {
-  margin: 20px 0;
+	margin: 20px 0;
 }
 .purchase-date-name {
-  font-size: 16px;
-  font-family: SourceHanSansCN-Regular;
-  font-weight: 400;
-  color: rgba(103, 119, 142, 1);
+	font-size: 16px;
+	font-family: SourceHanSansCN-Regular;
+	font-weight: 400;
+	color: rgba(103, 119, 142, 1);
 }
 .purchase-num {
-  margin: 18px 0;
+	margin: 18px 0;
 }
 .purchase-num-name {
-  font-size: 16px;
-  font-family: SourceHanSansCN-Regular;
-  font-weight: 400;
-  color: rgba(103, 119, 142, 1);
+	font-size: 16px;
+	font-family: SourceHanSansCN-Regular;
+	font-weight: 400;
+	color: rgba(103, 119, 142, 1);
 }
 .operational {
-  display: inline-block;
-  width: 24px;
-  height: 24px;
-  vertical-align: middle;
-  cursor: pointer;
+	display: inline-block;
+	width: 24px;
+	height: 24px;
+	vertical-align: middle;
+	cursor: pointer;
 }
 .purchase-num-value {
-  font-size: 18px;
-  font-family: DINAlternate-Bold;
-  font-weight: bold;
-  color: rgba(51, 51, 51, 1);
-  margin: 0 10px;
-  vertical-align: middle;
+	font-size: 18px;
+	font-family: DINAlternate-Bold;
+	font-weight: bold;
+	color: rgba(51, 51, 51, 1);
+	margin: 0 10px;
+	vertical-align: middle;
 }
 .ticket-exchange {
-  margin-top: 28px;
-  margin-bottom: 5px;
-  padding-bottom: 25px;
-  border-bottom: 1px dashed rgb(197, 197, 197);
+	margin-top: 28px;
+	margin-bottom: 5px;
+	padding-bottom: 25px;
+	border-bottom: 1px dashed rgb(197, 197, 197);
 }
 .ticket-exchange-name {
-  font-size: 16px;
-  font-family: SourceHanSansCN-Regular;
-  font-weight: 400;
-  color: rgba(103, 119, 142, 1);
+	font-size: 16px;
+	font-family: SourceHanSansCN-Regular;
+	font-weight: 400;
+	color: rgba(103, 119, 142, 1);
 }
 .ticket-exchange-img {
-  height: 14px;
-  width: 14px;
-  vertical-align: middle;
-  padding-left: 12px;
-  border-left: 1px solid rgb(216, 216, 216);
+	height: 14px;
+	width: 14px;
+	vertical-align: middle;
+	padding-left: 12px;
+	border-left: 1px solid rgb(216, 216, 216);
 }
 .ticket-exchange-value {
-  font-size: 16px;
-  font-family: SourceHanSansCN-Regular;
-  font-weight: 400;
-  color: rgba(51, 51, 51, 1);
-  margin: 0 12px 0 6px;
+	font-size: 16px;
+	font-family: SourceHanSansCN-Regular;
+	font-weight: 400;
+	color: rgba(51, 51, 51, 1);
+	margin: 0 12px 0 6px;
 }
 .ticket-total {
-  margin-top: 15px;
-  display: flex;
-  justify-content: space-between;
+	margin-top: 15px;
+	display: flex;
+	justify-content: space-between;
 }
 .ticket-total-price {
-  margin-right: 20px;
+	margin-right: 20px;
 }
 .total-price-div {
-  margin-bottom: 10px;
-  height: 30px;
-  line-height: 30px;
-  display: flex;
-  align-items: center;
+	margin-bottom: 10px;
+	height: 30px;
+	line-height: 30px;
+	display: flex;
+	align-items: center;
 }
 .total-price-name {
-  font-size: 16px;
-  font-family: SourceHanSansCN-Regular;
-  font-weight: 400;
-  color: rgba(103, 119, 142, 1);
+	font-size: 16px;
+	font-family: SourceHanSansCN-Regular;
+	font-weight: 400;
+	color: rgba(103, 119, 142, 1);
 }
 .total-price-num {
-  font-size: 24px;
-  font-family: PingFangSC-Medium;
-  font-weight: 500;
-  color: rgba(255, 82, 82, 1);
-  margin-left: 3px;
+	font-size: 24px;
+	font-family: PingFangSC-Medium;
+	font-weight: 500;
+	color: rgba(255, 82, 82, 1);
+	margin-left: 3px;
 }
 .warning-img {
-  width: 14px;
-  height: 14px;
-  margin-right: 7px;
-  vertical-align: middle;
+	width: 14px;
+	height: 14px;
+	margin-right: 7px;
+	vertical-align: middle;
 }
 .price-tips-text {
-  font-size: 14px;
-  font-family: SourceHanSansCN-Regular;
-  font-weight: 400;
-  color: rgba(153, 153, 153, 1);
-  vertical-align: middle;
+	font-size: 14px;
+	font-family: SourceHanSansCN-Regular;
+	font-weight: 400;
+	color: rgba(153, 153, 153, 1);
+	vertical-align: middle;
 }
 .price-tips-red {
-  font-size: 14px;
-  font-weight: 400;
-  color: #ff5151;
-  cursor: pointer;
-  vertical-align: middle;
+	font-size: 14px;
+	font-weight: 400;
+	color: #ff5151;
+	cursor: pointer;
+	vertical-align: middle;
 }
 .immediately-purchase-btn {
-  display: flex;
-  align-items: center;
+	display: flex;
+	align-items: center;
 }
 
 .bread_crumb_navigation {
-  width: 100%;
-  height: 50px;
-  border: 1px solid rgba(202, 202, 202, 1);
-  margin: 32px 0;
-  box-sizing: border-box;
+	width: 100%;
+	height: 50px;
+	border: 1px solid rgba(202, 202, 202, 1);
+	margin: 32px 0;
+	box-sizing: border-box;
 }
 .navigation-to {
-  font-size: 14px;
-  font-family: SourceHanSansCN-Regular;
-  font-weight: 400;
-  color: rgba(153, 153, 153, 1);
-  margin: 14.5px 0;
-  padding: 0 32px;
-  display: inline-block;
-  border-right: 1px dotted #959595;
-  cursor: pointer;
+	font-size: 14px;
+	font-family: SourceHanSansCN-Regular;
+	font-weight: 400;
+	color: rgba(153, 153, 153, 1);
+	margin: 14.5px 0;
+	padding: 0 32px;
+	display: inline-block;
+	border-right: 1px dotted #959595;
+	cursor: pointer;
 }
 .navigation-to:last-child {
-  border-right: none;
+	border-right: none;
 }
 .navigation-to-active {
-  color: rgba(255, 128, 57, 1);
-  font-family: SourceHanSansCN-Medium;
-  font-weight: 500;
+	color: rgba(255, 128, 57, 1);
+	font-family: SourceHanSansCN-Medium;
+	font-weight: 500;
 }
 .navigation-content {
-  margin-top: 20px;
+	margin-top: 20px;
 }
 .navigation-content-title {
-  width: 100%;
-  height: 34px;
-  background: rgba(238, 238, 238, 1);
-  line-height: 34px;
+	width: 100%;
+	height: 34px;
+	background: rgba(238, 238, 238, 1);
+	line-height: 34px;
 }
 .navigation-content-title span {
-  font-size: 14px;
-  font-family: SourceHanSansCN-Medium;
-  font-weight: 500;
-  color: rgba(255, 128, 57, 1);
-  padding-left: 9px;
-  border-left: 4px solid rgba(255, 128, 57, 1);
-  margin-left: 8px;
-  height: 14px;
+	font-size: 14px;
+	font-family: SourceHanSansCN-Medium;
+	font-weight: 500;
+	color: rgba(255, 128, 57, 1);
+	padding-left: 9px;
+	border-left: 4px solid rgba(255, 128, 57, 1);
+	margin-left: 8px;
+	height: 14px;
 }
 .details-text {
-  font-size: 14px;
-  font-family: SourceHanSansCN-Regular;
-  font-weight: 400;
-  color: rgba(102, 102, 102, 1);
-  margin: 10px 0;
-  padding: 0 10px;
-  text-indent: 28px;
+	white-space: pre-wrap;
+	font-size: 14px;
+	font-family: SourceHanSansCN-Regular;
+	font-weight: 400;
+	color: rgba(102, 102, 102, 1);
+	margin: 10px 0;
+	padding: 0 10px;
+	text-indent: 28px;
 }
 </style>
