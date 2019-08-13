@@ -257,12 +257,8 @@ export default {
 		},
 		//重新支付
 		replayPay() {
-			let qrcodeChild = this.$refs.qrcode.getElementsByTagName('img')[0]
-			console.log(qrcodeChild)
-
+			let qrcodeChild = this.$refs.qrcode.getElementsByTagName('img')[1]
 			this.$refs.qrcode.removeChild(qrcodeChild)
-			console.log(this.$refs.qrcode)
-
 			// this.qrcode(this.resultURL)
 			// this.loadPay = true
 			// let _this = this
@@ -290,12 +286,6 @@ export default {
 						_this.payStatus()
 					}, 5000)
 				})
-			} else {
-				let qrcodeChild = this.$refs.qrcode.getElementsByTagName('img')[0]
-				console.log(qrcodeChild)
-
-				// this.$refs.qrcode.removeChild(qrcodeChild)
-				console.log(this.$refs.qrcode)
 			}
 		}
 	}
