@@ -67,7 +67,7 @@
           <h3 class="pay-name">商品名称：{{TicketInit.ProductName}}</h3>
           <p class="pay-num">￥{{totalMoney}}</p>
           <div class="pay-img" id="paycode" ref="qrcode">
-            <img src="../../../assets/homeImage/pay_fail.png" v-show="!loadPay">
+            <img src="../../../assets/homeImage/pay_fail.png" class="pay-status" v-show="!loadPay">
             <div class="pay-list">
               <div class="pay-item" v-show="payType==1"><i class="pay-icon pay-zfb"></i>支付宝</div>
               <div class="pay-item" v-show="payType==2"><i class="pay-icon pay-we"></i>微信</div>
@@ -78,6 +78,18 @@
           <el-button type="primary" plain @click="cancelPay">取消</el-button>
           <el-button type="primary" v-show="loadPay" :loading="loadPay">等待支付</el-button>
           <el-button type="primary" v-show="!loadPay" @click="replayPay">重新支付</el-button>
+        </div>
+      </el-row>
+      <el-row class="main-form" v-if="activeTab==3" type="flex" justify="center" align="middle">
+        <el-col :span="6" class="main-pay">
+          <h3 class="pay-name">商品名称：{{TicketInit.ProductName}}</h3>
+          <p class="pay-num">￥{{totalMoney}}</p>
+          <div class="pay-img">
+            <img src="../../../assets/homeImage/pay_suc.png" class="pay-status">
+          </div>
+        </el-col>
+        <div class="main-btn">
+          <el-button type="primary" @click="successPay">完成</el-button>
         </div>
       </el-row>
     </el-col>
@@ -238,6 +250,10 @@ export default {
 			this.activeTab = 1
 			clearInterval(this.timer)
 		},
+		//支付完成---跳转到个人订单页面
+		successPay() {
+			this.$router.push({ path: '/Personal/PersonalOrder' })
+		},
 		//订单支付状态轮询
 		payStatus() {
 			this.$ajax.get('Order/GetStatus', { resultURL: this.resultURL, OrderNo: this.OrderNo }).then(res => {
@@ -391,11 +407,16 @@ export default {
 		}
 	}
 	#paycode {
+		position: relative;
 		.pay-list {
 			justify-content: center;
 			.pay-item {
 				border: none;
 			}
+		}
+		.pay-status {
+			position: absolute;
+			z-index: 99;
 		}
 		display: flex;
 		flex-direction: column-reverse;
