@@ -64,9 +64,10 @@
       </el-row>
       <el-row class="main-form" v-if="activeTab==2" type="flex" justify="center" align="middle">
         <el-col :span="6" class="main-pay">
-          <h3 class="pay-name">商品名称：长隆水上乐园</h3>
+          <h3 class="pay-name">商品名称：{{TicketInit.ProductName}}</h3>
           <p class="pay-num">￥{{totalMoney}}</p>
           <div class="pay-img" id="paycode" ref="qrcode">
+            <img src="" v-show="!loadPay">
             <div class="pay-list">
               <div class="pay-item" v-show="payType==1"><i class="pay-icon pay-zfb"></i>支付宝</div>
               <div class="pay-item" v-show="payType==2"><i class="pay-icon pay-we"></i>微信</div>
@@ -74,7 +75,7 @@
           </div>
         </el-col>
         <div class="main-btn">
-          <el-button type="primary" plain>取消</el-button>
+          <el-button type="primary" plain @click="cancelPay">取消</el-button>
           <el-button type="primary" v-show="loadPay" :loading="loadPay">等待支付</el-button>
           <el-button type="primary" v-show="!loadPay" @click="replayPay">重新支付</el-button>
         </div>
@@ -142,9 +143,11 @@ export default {
 			this.TicketForm.ticketNum = this.$route.query.ticketNum
 			this.TicketForm.palyData = this.$route.query.palyData
 			this.getDetail(this.productID, this.TicketForm.palyData)
+			this.UserForm.touristName = this.loginInfo.UserName
+			this.UserForm.touristIdCard = this.loginInfo.UserIdCard
+			this.UserForm.touristPhone = this.loginInfo.UserPhone
 		}
 	},
-	mounted() {},
 	computed: {
 		//当前总价
 		totalMoney() {
@@ -230,6 +233,11 @@ export default {
 				colorLight: '#fff'
 			})
 		},
+		//取消订单支付
+		cancelPay() {
+			this.activeTab = 1
+			clearInterval(this.timer)
+		},
 		//订单支付状态轮询
 		payStatus() {
 			this.$ajax.get('Order/GetStatus', { resultURL: this.resultURL, OrderNo: this.OrderNo }).then(res => {
@@ -238,7 +246,7 @@ export default {
 					clearInterval(this.timer) //清除定时器
 				} else {
 					this.paySearchNum++
-					if (this.paySearchNum >= 13) {
+					if (this.paySearchNum >= 2) {
 						this.$message({ type: 'error', message: res.Content })
 						this.loadPay = false
 						clearInterval(this.timer)
@@ -250,13 +258,17 @@ export default {
 		//重新支付
 		replayPay() {
 			let qrcodeChild = this.$refs.qrcode.getElementsByTagName('img')[0]
+			console.log(qrcodeChild)
+
 			this.$refs.qrcode.removeChild(qrcodeChild)
-			this.qrcode(this.resultURL)
-			this.loadPay = true
-			let _this = this
-			this.timer = setInterval(function() {
-				_this.payStatus()
-			}, 5000)
+			console.log(this.$refs.qrcode)
+
+			// this.qrcode(this.resultURL)
+			// this.loadPay = true
+			// let _this = this
+			// this.timer = setInterval(function() {
+			// 	_this.payStatus()
+			// }, 5000)
 		},
 		//取消
 		resetForm(formName) {
@@ -278,6 +290,12 @@ export default {
 						_this.payStatus()
 					}, 5000)
 				})
+			} else {
+				let qrcodeChild = this.$refs.qrcode.getElementsByTagName('img')[0]
+				console.log(qrcodeChild)
+
+				// this.$refs.qrcode.removeChild(qrcodeChild)
+				console.log(this.$refs.qrcode)
 			}
 		}
 	}

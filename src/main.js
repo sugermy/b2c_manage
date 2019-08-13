@@ -30,7 +30,7 @@ Vue.filter("formatdate", function(value) {
 // const baseURL = "http://192.168.33.154:61780/official/"; //基础服务地址
 const baseURL = "http://192.168.33.154:8025/official/"; //基础服务地址
 let Token = "";
-let MerchantCode = "S190304885"; //景区商户号
+let MerchantCode = "S190304762"; //景区商户号
 let baseAjax = new Ajax(baseURL, "", MerchantCode);
 let BTCAjax = new Ajax(baseURL, Token, MerchantCode);
 

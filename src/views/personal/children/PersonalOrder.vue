@@ -110,7 +110,7 @@ export default {
 		//查看订单详情
 		getOrder(pageNum) {
 			this.$ajax.get('Order/OrderList', { Mobile: this.loginInfo.UserPhone, page: pageNum, Rows: this.tableParams.pageSize }).then(res => {
-				this.tableParams.totalNum = res.Data.RowsCount
+				this.tableParams.totalNum = res.Data.RowsCount || 1
 				this.tableData = res.Data.Result_Data || []
 			})
 		},
