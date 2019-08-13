@@ -259,12 +259,12 @@ export default {
 		replayPay() {
 			let qrcodeChild = this.$refs.qrcode.getElementsByTagName('img')[1]
 			this.$refs.qrcode.removeChild(qrcodeChild)
-			// this.qrcode(this.resultURL)
-			// this.loadPay = true
-			// let _this = this
-			// this.timer = setInterval(function() {
-			// 	_this.payStatus()
-			// }, 5000)
+			this.qrcode(this.resultURL)
+			this.loadPay = true
+			let _this = this
+			this.timer = setInterval(function() {
+				_this.payStatus()
+			}, 5000)
 		},
 		//取消
 		resetForm(formName) {
