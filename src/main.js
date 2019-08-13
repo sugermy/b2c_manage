@@ -17,8 +17,18 @@ import "@babel/polyfill";
 Vue.use(scroll);
 Vue.config.productionTip = false;
 
-const baseURL = "http://192.168.33.154:61780/official/"; //基础服务地址
-// const baseURL = "http://192.168.33.154:8025/official/"; //基础服务地址
+Vue.filter("formatdate", function(value) {
+  if (!value) return "";
+  let dateD = value.split(" ")[0];
+  let dateT = value.split(" ")[1];
+  let formatD =
+    dateD.split("/")[0] + "-" + dateD.split("/")[1] + "-" + dateD.split("/")[2];
+
+  return formatD + " " + dateT;
+});
+
+// const baseURL = "http://192.168.33.154:61780/official/"; //基础服务地址
+const baseURL = "http://192.168.33.154:8025/official/"; //基础服务地址
 let Token = "";
 let MerchantCode = "S190304885"; //景区商户号
 let baseAjax = new Ajax(baseURL, "", MerchantCode);
@@ -28,25 +38,14 @@ refrushTokenGet();
 
 //刷新token的方法--get
 function refrushTokenGet() {
-  baseAjax
-    .get("/Token", {})
-    .then(res => {
-      Token = res.Data;
-      BTCAjax._axios.defaults.headers.Token = Token;
-      if (!store.state.merchantInfo.B2CName) {
-        //若不存在商户信息则根据当前token重新获取商户信息
-        getMerchantInfo();
-      }
-    })
-    .catch(err => {
-      Notification({
-        title: "网络通行证获取失败",
-        message: "请重新加载页面获取最新的通行证信息",
-        type: "error",
-        showClose: false,
-        duration: 0
-      });
-    });
+  baseAjax.get("/Token", {}).then(res => {
+    Token = res.Data;
+    BTCAjax._axios.defaults.headers.Token = Token;
+    if (!store.state.merchantInfo.B2CName) {
+      //若不存在商户信息则根据当前token重新获取商户信息
+      getMerchantInfo();
+    }
+  });
 }
 //获取商户信息
 function getMerchantInfo() {

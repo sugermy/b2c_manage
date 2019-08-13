@@ -1,7 +1,7 @@
-import axios from 'axios';
-import { Promise } from 'q';
-import { Notification } from 'element-ui';
-import qs from 'qs'
+import axios from "axios";
+import { Promise } from "q";
+import { Notification } from "element-ui";
+import qs from "qs";
 
 export default class Ajax {
   /**
@@ -10,7 +10,7 @@ export default class Ajax {
    * @param { Number } TIMEOUT        超时时间
    * @param { String } MerchantCode  商户号
    */
-  constructor(baseURL = '', Token = '', MerchantCode = '', TIMEOUT = 60000) {
+  constructor(baseURL = "", Token = "", MerchantCode = "", TIMEOUT = 60000) {
     // 创建一个新的axios实例，并设置默认请求地址和请求头
     this._axios = axios.create({
       baseURL,
@@ -18,7 +18,7 @@ export default class Ajax {
       params: {
         MerchantCode: MerchantCode
       },
-      headers: { Token, }
+      headers: { Token }
     });
     this._axios.interceptors.request.use(
       config => {
@@ -26,9 +26,9 @@ export default class Ajax {
       },
       error => {
         Notification({
-          title: '网络请求失败',
-          message: '请检查网络请求是否配置正确',
-          type: 'error',
+          title: "网络请求失败",
+          message: "请检查网络请求是否配置正确",
+          type: "error",
           showClose: false
         });
         return Promise.reject(error);
@@ -44,22 +44,28 @@ export default class Ajax {
       },
       error => {
         Notification({
-          title: '网络响应失败',
-          message: '请检查网络请求是否配置正确',
-          type: 'error'
+          title: "网络响应失败",
+          message: "请检查网络请求是否配置正确",
+          type: "error"
         });
         return Promise.reject(error);
       }
     );
   }
   // 请求方式优化
-  get (url, params = {}) {
-    return this._axios({ method: 'get', url, params });
+  get(url, params = {}) {
+    return this._axios({ method: "get", url, params });
   }
-  post (url, data = {}, params = {}) {
+  post(url, data = {}, params = {}) {
     data = qs.stringify(data);
     return this._axios({
-      method: 'post', headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' }, url, data, params
+      method: "post",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+      },
+      url,
+      data,
+      params
     });
   }
 }
