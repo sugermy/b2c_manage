@@ -202,7 +202,7 @@ export default {
 					//保存实体
 					this.$ajax.post('User/Login/1', this.loginForm).then(res => {
 						if (res.Code == 200) {
-							this.$message({ type: 'success', message: res.Content })
+							this.$message({ type: 'success', message: res.Content, center: true })
 							let accountForm = res.Data
 							accountForm.loginStatus = true
 							this.$store.dispatch('setLonginInfo', accountForm)
@@ -212,7 +212,7 @@ export default {
 								path: enterPath
 							})
 						} else {
-							this.$message({ type: 'error', message: res.Content })
+							this.$message({ type: 'error', message: res.Content, center: true })
 						}
 					})
 				} else {
@@ -239,10 +239,10 @@ export default {
 				if (valid) {
 					this.$ajax.post('User/Register', { ReqParam: JSON.stringify(this.signForm) }).then(res => {
 						if (res.Code == 200) {
-							this.$message({ type: 'success', message: '注册成功' })
+							this.$message({ type: 'success', message: '注册成功',center: true })
 							this.signShow = false
 						} else {
-							this.$message({ type: 'warning', message: res.Content })
+							this.$message({ type: 'warning', message: res.Content ,center: true})
 							this.signShow = false
 						}
 					})

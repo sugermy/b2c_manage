@@ -113,7 +113,7 @@ export default {
 					}
 					this.$ajax.post('User/Update/' + this.$store.state.loginInfo.UserPhone, params).then(res => {
 						if (res.Code == 200) {
-							this.$message({ type: 'success', message: res.Content })
+							this.$message({ type: 'success', message: res.Content, center: true })
 							this.$store.state.loginInfo = { loginStatus: false }
 							this.$router.push({ path: '/Home' })
 						}
@@ -127,11 +127,11 @@ export default {
 		modifyInfo(type, val) {
 			this.$ajax.post('User/Update', { Utype: type, CharValue: val, Mobile: this.$store.state.loginInfo.UserPhone }).then(res => {
 				if (res.Code == 200) {
-					this.$message({ type: 'success', message: res.Content })
+					this.$message({ type: 'success', message: res.Content, center: true })
 					this.$store.state.loginInfo[type] = val
 					this.infoStatus[type] = true
 				} else {
-					this.$message({ type: 'error', message: res.Content })
+					this.$message({ type: 'error', message: res.Content, center: true })
 					this.infoStatus[type] = true
 					this.infoForm[type] = this.baseInfo[type]
 				}

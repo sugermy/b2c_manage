@@ -221,12 +221,12 @@ export default {
 					]
 					this.$ajax.post('Order/Create', { ReqParam: JSON.stringify(ReqParam), PassengerJson: JSON.stringify(PassengerJson) }).then(res => {
 						if (res.Code == 200) {
-							this.$message({ type: 'success', message: '提交成功' })
+							this.$message({ type: 'success', message: '提交成功', center: true })
 							this.OrderNo = res.Data.OrderNo
 							this.resultURL = res.Data.resultURL
 							this.activeTab = 2
 						} else {
-							this.$message({ type: 'error', message: res.Content })
+							this.$message({ type: 'error', message: res.Content, center: true })
 						}
 					})
 				} else {
@@ -263,7 +263,7 @@ export default {
 				} else {
 					this.paySearchNum++
 					if (this.paySearchNum >= 13) {
-						this.$message({ type: 'error', message: res.Content })
+						this.$message({ type: 'error', message: res.Content, center: true })
 						this.loadPay = false
 						clearInterval(this.timer)
 						this.paySearchNum = 1
@@ -406,6 +406,10 @@ export default {
 			-webkit-animation: borderColor 1s infinite; /* Safari 和 Chrome */
 		}
 	}
+	.pay-status {
+		position: absolute;
+		z-index: 99;
+	}
 	#paycode {
 		position: relative;
 		.pay-list {
@@ -414,10 +418,7 @@ export default {
 				border: none;
 			}
 		}
-		.pay-status {
-			position: absolute;
-			z-index: 99;
-		}
+
 		display: flex;
 		flex-direction: column-reverse;
 		justify-content: space-around;

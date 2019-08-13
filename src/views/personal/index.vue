@@ -4,7 +4,12 @@
       <el-col :span="3" class="personal-bus personal-l">
         <div class="personal-head">
           <img src="../../assets/personal/baseImg.png">
-          <p class="personal-name">{{loginName}}</p>
+          <el-dropdown placement="bottom-start" @command="menuCommand">
+            <p class="personal-name">{{loginName}}&nbsp;&nbsp;<i class="el-icon-arrow-down"></i></p>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item command="exit">退出登录</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </div>
         <router-link class="link-menu" tag="div" :to="{path:'PersonalCenter'}"><i class="link-per"></i>个人中心
         </router-link>
@@ -33,6 +38,18 @@ export default {
 	},
 	created() {
 		// this.loginName = this.$store.state.loginInfo.NickName
+	},
+	methods: {
+		menuCommand(command) {
+			if (command == 'exit') {
+				let nologin = { loginStatus: false }
+				this.$store.dispatch('setLonginInfo', nologin)
+				this.$message({ type: 'success', message: '退出成功', center: true })
+				this.$router.push({
+					path: '/Home'
+				})
+			}
+		}
 	}
 }
 </script>
@@ -60,6 +77,7 @@ export default {
 				align-items: center;
 				.personal-name {
 					font-size: 14px;
+					cursor: pointer;
 					font-family: SourceHanSansCN-Medium;
 					font-weight: 600;
 					color: rgba(255, 255, 255, 1);

@@ -38,23 +38,23 @@
           <tbody>
             <tr>
               <td colspan="2">
-                <div class="tr-head"><span>序号：1</span><span>订单号：{{orderDetail.OrderNo}}</span><span>产品编码：174728728782</span></div>
+                <div class="tr-head"><span>序号：{{orderDetail.sortNo}}</span><span>订单号：{{orderDetail.OrderNo}}</span><span>产品编码：{{orderDetail.ProductCode}}</span></div>
               </td>
             </tr>
             <tr>
               <td>产品名称：{{orderDetail.ProductName}}</td>
-              <td>下单时间：{{orderDetail.CreateDate}}</td>
+              <td>下单时间：{{orderDetail.CreateTime | formatdate}}</td>
             </tr>
             <tr>
-              <td>订单数量：2</td>
-              <td>支付方式：支付宝支付</td>
+              <td>订单数量：{{orderDetail.ProductCount}}</td>
+              <td>支付方式：{{orderDetail.PayType}}</td>
             </tr>
             <tr>
-              <td>总金额： 200</td>
-              <td>使用数量：1</td>
+              <td>总金额： {{orderDetail.Amount}}</td>
+              <td>使用数量：{{orderDetail.UseCount}}</td>
             </tr>
             <tr>
-              <td>入园时间：2019-08-08</td>
+              <td>入园时间：{{orderDetail.UseTime}}</td>
               <td></td>
             </tr>
           </tbody>
@@ -63,15 +63,15 @@
       <el-row class="info-i">
         <h3><i class="info-icon"></i>订单状态</h3>
         <div class="info-status">
-          <div class="info-s-i" :class="index==2?'active-i':''" v-for="(item,index) in infoStatus" :key="index">{{item}}</div>
+          <div class="info-s-i" :class="item.id==orderDetail.OrderStatus?'active-i':''" v-for="(item,index) in infoStatus" :key="index">{{item.status}}</div>
         </div>
       </el-row>
       <el-row class="info-i">
         <h3><i class="info-icon"></i>游客信息</h3>
         <div class="info-toturs">
-          <div class="info-s-i">姓名：{{loginInfo.UserName}}</div>
-          <div class="info-s-i">身份证号：278827823728</div>
-          <div class="info-s-i">手机号：1872847282</div>
+          <div class="info-s-i">姓名：{{orderDetail.UserName}}</div>
+          <div class="info-s-i">身份证号：{{orderDetail.IDCard}}</div>
+          <div class="info-s-i">手机号：{{orderDetail.UserPhone}}</div>
         </div>
       </el-row>
       <el-row style="text-align:center">
@@ -88,7 +88,7 @@ export default {
 		return {
 			changeOrder: 1,
 			tableData: [],
-			infoStatus: ['未付款', '已付款', '已使用', '已过期', '其他'],
+			infoStatus: [{ status: '未付款', id: '1' }, { status: '已付款', id: '2' }, { status: '已使用', id: '3' }, { status: '已过期', id: '4' }, { status: '其他', id: '0' }],
 			tableParams: {
 				totalNum: 1,
 				pageNum: 1,
@@ -110,22 +110,20 @@ export default {
 		//查看订单详情
 		getOrder(pageNum) {
 			this.$ajax.get('Order/OrderList', { Mobile: this.loginInfo.UserPhone, page: pageNum, Rows: this.tableParams.pageSize }).then(res => {
-				this.tableParams.totalNum = res.Data.RowsCount || 1
-				this.tableData = res.Data.Result_Data || []
+				if (res.Data) {
+					this.tableParams.totalNum = res.Data.RowsCount || 1
+					this.tableData = res.Data.Result_Data || []
+				}
 			})
 		},
 		//单条查看详情
 		lookDetail(i, r) {
 			this.$ajax.get('Order/OrderDetail', { Mobile: this.loginInfo.UserPhone, OrderNo: r.OrderNo }).then(res => {
-				// if (res.Code == 200) {
-				// 	console.log(res)
-
-				// 	this.orderDetail = res.Data
-				// 	this.changeOrder = 2
-				// }
-				this.orderDetail = res.Data
-				this.changeOrder = 2
-				console.log(this.orderDetail)
+				if (res.Code == 200) {
+					this.orderDetail = res.Data
+					this.orderDetail.sortNo = i + 1
+					this.changeOrder = 2
+				}
 			})
 		},
 		//去支付
