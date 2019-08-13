@@ -67,7 +67,7 @@
           <h3 class="pay-name">商品名称：{{TicketInit.ProductName}}</h3>
           <p class="pay-num">￥{{totalMoney}}</p>
           <div class="pay-img" id="paycode" ref="qrcode">
-            <img src="" v-show="!loadPay">
+            <img src="../../../assets/homeImage/pay_fail.png" v-show="!loadPay">
             <div class="pay-list">
               <div class="pay-item" v-show="payType==1"><i class="pay-icon pay-zfb"></i>支付宝</div>
               <div class="pay-item" v-show="payType==2"><i class="pay-icon pay-we"></i>微信</div>
@@ -246,7 +246,7 @@ export default {
 					clearInterval(this.timer) //清除定时器
 				} else {
 					this.paySearchNum++
-					if (this.paySearchNum >= 2) {
+					if (this.paySearchNum >= 13) {
 						this.$message({ type: 'error', message: res.Content })
 						this.loadPay = false
 						clearInterval(this.timer)
