@@ -1,6 +1,6 @@
 <template>
   <el-row class="info-content">
-    <el-table :data="tableData" style="width: 100%" header-row-class-name="table-header" height="calc(100% - 60px)" v-show="changeOrder==1">
+    <el-table :data="tableData" style="width: 100%" height="calc(100vh - 298px)" header-row-class-name="table-header" v-show="changeOrder==1">
       <el-table-column type="index" width="50" label="序号" header-align="center" align="center">
       </el-table-column>
       <el-table-column prop="OrderNo" label="订单号" min-width="180" header-align="center" align="center"></el-table-column>
@@ -130,7 +130,8 @@ export default {
 		wentPay(row) {
 			console.log(row)
 			if (row.IsRepay) {
-				console.log(1)
+				console.log(row)
+				// this.$router.push({ path: '/Home/Product/OrderForm', query: { id: 1044, ticketNum: 1, palyData: '2019-08-14' } })
 			}
 		},
 		//重发短信
@@ -158,7 +159,6 @@ export default {
 	cursor: pointer;
 }
 .info-content {
-	height: 100%;
 	background: #fff;
 	padding: 16px 16px 0 16px;
 	.no-pass {

@@ -26,10 +26,14 @@
           <el-form-item prop="Mobile">
             <el-input type="text" placeholder="请输入用户手机账号" prefix-icon="el-icon-user-solid" v-model="loginForm.Mobile" autocomplete="off"></el-input>
           </el-form-item>
-          <el-form-item prop="Pwd">
+          <el-form-item prop="Pwd" v-show="activeTab==1">
             <el-input type="password" placeholder="请输入密码" prefix-icon="el-icon-unlock" v-model="loginForm.Pwd" autocomplete="off"></el-input>
           </el-form-item>
-          <el-form-item class="ormemery-pass">
+          <el-form-item prop="checkPwd" v-show="activeTab==2">
+            <el-input type="password" placeholder="请输入验证码" prefix-icon="el-icon-unlock" v-model="loginForm.checkPwd" autocomplete="off"></el-input>
+            <el-button type="primary" :loading="canNextTime" @click="onMsg">获取验证码 {{canNextTime?nextTime:''}}</el-button>
+          </el-form-item>
+          <el-form-item class="ormemery-pass" v-show="activeTab==1">
             <el-checkbox v-model="loginForm.checked">记住密码</el-checkbox>
           </el-form-item>
           <el-form-item class="dialog-footer">
@@ -87,6 +91,7 @@
 <script>
 import HeaderBar from './components/HeaderBar'
 import CryptoJS from 'crypto-js'
+import { setInterval } from 'timers'
 
 export default {
 	name: 'app',
@@ -112,6 +117,9 @@ export default {
 			activeTab: 1, //默认登录方式---账号登录
 			loginForm: { Mobile: '', Pwd: '', checked: true },
 			signForm: { Gender: '男' },
+			nextTime: 60, //计时
+			canNextTime: false, //可以点击下一次
+			timer: null,
 			loginRules: {
 				Mobile: [
 					{ required: true, message: '请输入登录账号', trigger: 'blur' },
@@ -195,6 +203,18 @@ export default {
 		changeTab(v) {
 			this.activeTab = v
 		},
+		//发送验证码
+		onMsg() {
+			this.canNextTime = true
+			let _this = this
+			this.timer = setInterval(function() {
+				if (_this.nextTime > 1) {
+					_this.nextTime--
+				} else {
+					_this.canNextTime = false
+				}
+			}, 1000)
+		},
 		//登录存登录信息
 		reday(formName) {
 			this.$refs[formName].validate(valid => {
@@ -239,10 +259,10 @@ export default {
 				if (valid) {
 					this.$ajax.post('User/Register', { ReqParam: JSON.stringify(this.signForm) }).then(res => {
 						if (res.Code == 200) {
-							this.$message({ type: 'success', message: '注册成功',center: true })
+							this.$message({ type: 'success', message: '注册成功', center: true })
 							this.signShow = false
 						} else {
-							this.$message({ type: 'warning', message: res.Content ,center: true})
+							this.$message({ type: 'warning', message: res.Content, center: true })
 							this.signShow = false
 						}
 					})

@@ -175,6 +175,7 @@ export default {
 .form-main {
 	margin-top: 50px;
 	margin-left: 20px;
+	height: calc(100vh - 270px);
 	.form-btn {
 		border: none;
 		font-size: 16px;

@@ -56,13 +56,13 @@ export default {
 
 <style lang="less" scoped>
 .content {
-	height: 100%;
-	margin-top: 50px;
+	margin: 50px 0;
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	height: 100%;
 	.personal {
-		height: 100%;
+		min-height: 100%;
 		background: #fff;
 		.personal-bus {
 			height: 100%;

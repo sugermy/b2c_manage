@@ -70,7 +70,7 @@
               </div>
               <div class="scenic-bottom">
                 <div class="qr-code">
-                  <img class="qr-code-img" src="../../../assets/homeImage/subscription_number_qr.png" />
+                  <img class="qr-code-img" :src="merchantInfo.PublicImg" />
                   <div class="qr-code-name">订阅号：{{merchantInfo.WxName}}</div>
                 </div>
               </div>
@@ -85,390 +85,391 @@
 <script>
 import { mapState } from 'vuex'
 export default {
-  data() {
-    return {
-      activeTypeName: 1, //当前激活的类型
-      typeList: [], //产品类型
-      listImgError: require('../../../assets/homeImage/test.png'), //产品图---无用  v-for对接可删掉
-      productList: [], //产品列表
-      count: 1, //产品总数
-      pageNum: 1, //当前页码
-      bannelList: [
-        {
-          title: require('../../../assets/homeImage/test.png')
-        },
-        {
-          title: require('../../../assets/homeImage/scenic_spot_description_bg.png')
-        }
-      ], //轮播图循环
-      seamWidth: 0 //根据生成的外层dom元素宽度赋值
-    }
-  },
-  computed: {
-    ...mapState({
-      //解构store仓库数据
-      merchantInfo: state => state.merchantInfo
-    }),
-    //无缝轮播插件配置
-    optionLeft() {
-      return {
-        direction: 2,
-        limitMoveNum: 2
-      }
-    }
-  },
-  mounted() {
-    this.getType()
-    this.seamWidth = this.$refs.carouseldom.$el.clientWidth
-    this.bannelList = this.merchantInfo.BannelList
-  },
-  methods: {
-    //获取类型
-    getType() {
-      this.$ajax.get('Product/TypeList', {}).then(res => {
-        this.typeList = res.Data || []
-        this.activeTypeName = this.typeList[0].TitleCode //存在监听事件---因此不必在此调用获取产品
-      })
-    },
-    //获取当前类型下的产品
-    getProduct(TitleCode, pageNum) {
-      this.$ajax
-        .get('Product/ProductList', {
-          ProdutType: TitleCode,
-          Page: pageNum,
-          Rows: 10
-        })
-        .then(res => {
-          this.count = res.RowsCount
-          this.productList = res.Data.Result_Data || []
-        })
-    },
-    //立即购买
-    subscribe(proId) {
-      this.$router.push({ path: '/Home/Product/Detail', query: { id: proId } })
-    },
-    //切换页码
-    changePage(pageNum) {
-      this.pageNum = pageNum
-      this.getProduct(this.activeTypeName, this.pageNum)
-    },
-    //点击轮播跳转---获取点击对象实现监听
-    targetLink(e) {
-      if (e.target.localName == 'img') {
-        let productId = e.target.dataset.product
-        let url = e.target.dataset.url
-        console.log(productId, url)
-      }
-    }
-  },
-  watch: {
-    //监听类型切换
-    activeTypeName(v) {
-      this.getProduct(v, this.pageNum)
-    }
-  }
+	data() {
+		return {
+			activeTypeName: 1, //当前激活的类型
+			typeList: [], //产品类型
+			listImgError: require('../../../assets/homeImage/test.png'), //产品图---无用  v-for对接可删掉
+			productList: [], //产品列表
+			count: 1, //产品总数
+			pageNum: 1, //当前页码
+			bannelList: [
+				{
+					title: require('../../../assets/homeImage/test.png')
+				},
+				{
+					title: require('../../../assets/homeImage/scenic_spot_description_bg.png')
+				}
+			], //轮播图循环
+			seamWidth: 0 //根据生成的外层dom元素宽度赋值
+		}
+	},
+	computed: {
+		...mapState({
+			//解构store仓库数据
+			merchantInfo: state => state.merchantInfo
+		}),
+		//无缝轮播插件配置
+		optionLeft() {
+			return {
+				direction: 2,
+				limitMoveNum: 2
+			}
+		}
+	},
+	mounted() {
+		this.getType()
+		this.seamWidth = this.$refs.carouseldom.$el.clientWidth
+		this.bannelList = this.merchantInfo.BannelList
+		console.log(this.merchantInfo)
+	},
+	methods: {
+		//获取类型
+		getType() {
+			this.$ajax.get('Product/TypeList', {}).then(res => {
+				this.typeList = res.Data || []
+				this.activeTypeName = this.typeList[0].TitleCode //存在监听事件---因此不必在此调用获取产品
+			})
+		},
+		//获取当前类型下的产品
+		getProduct(TitleCode, pageNum) {
+			this.$ajax
+				.get('Product/ProductList', {
+					ProdutType: TitleCode,
+					Page: pageNum,
+					Rows: 10
+				})
+				.then(res => {
+					this.count = res.RowsCount
+					this.productList = res.Data.Result_Data || []
+				})
+		},
+		//立即购买
+		subscribe(proId) {
+			this.$router.push({ path: '/Home/Product/Detail', query: { id: proId } })
+		},
+		//切换页码
+		changePage(pageNum) {
+			this.pageNum = pageNum
+			this.getProduct(this.activeTypeName, this.pageNum)
+		},
+		//点击轮播跳转---获取点击对象实现监听
+		targetLink(e) {
+			if (e.target.localName == 'img') {
+				let productId = e.target.dataset.product
+				let url = e.target.dataset.url
+				console.log(productId, url)
+			}
+		}
+	},
+	watch: {
+		//监听类型切换
+		activeTypeName(v) {
+			this.getProduct(v, this.pageNum)
+		}
+	}
 }
 </script>
 
 <style lang="less" scoped>
 .seamless-warp {
-  overflow: hidden;
-  height: 200px;
-  width: 100%;
-  > div {
-    width: 100% !important;
-  }
-  ul.scroll-list {
-    display: flex;
-    li {
-      width: 25%;
-      height: 200px;
-      margin-right: 10px;
-      cursor: pointer;
-      img {
-        width: 100%;
-        height: 100%;
-      }
-    }
-    li:first-child {
-      margin-left: 10px;
-    }
-  }
+	overflow: hidden;
+	height: 200px;
+	width: 100%;
+	> div {
+		width: 100% !important;
+	}
+	ul.scroll-list {
+		display: flex;
+		li {
+			width: 25%;
+			height: 200px;
+			margin-right: 10px;
+			cursor: pointer;
+			img {
+				width: 100%;
+				height: 100%;
+			}
+		}
+		li:first-child {
+			margin-left: 10px;
+		}
+	}
 }
 .content {
-  height: 100%;
+	height: 100%;
 }
 .carousel-d {
-  display: flex;
-  margin-top: 50px;
+	display: flex;
+	margin-top: 50px;
 }
 .scenic-spot-content {
-  margin: 16px 0;
-  display: flex;
-  justify-content: center;
+	margin: 16px 0;
+	display: flex;
+	justify-content: center;
 }
 .scenic-spot-l {
-  background: white;
-  padding: 25px 40px;
-  .el-radio-group {
-    width: 100%;
-    background: #ebf4f7;
-  }
+	background: white;
+	padding: 25px 40px;
+	.el-radio-group {
+		width: 100%;
+		background: #ebf4f7;
+	}
 }
 .qr-code {
-  text-align: center;
-  margin: 0 5px;
+	text-align: center;
+	margin: 0 5px;
 }
 .pro-list {
-  padding: 25px 0;
-  border-bottom: 1px dashed rgb(197, 197, 197);
-  position: relative;
+	padding: 25px 0;
+	border-bottom: 1px dashed rgb(197, 197, 197);
+	position: relative;
 }
 .list-img {
-  height: 170px;
-  width: 300px;
-  display: inline-block;
-  transition: all 300ms;
-  overflow: hidden;
-  img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    transition: all 0.3s;
-  }
-  img:hover {
-    transform: scale(1.4); //放大 倍数随意
-  }
+	height: 170px;
+	width: 300px;
+	display: inline-block;
+	transition: all 300ms;
+	overflow: hidden;
+	img {
+		display: block;
+		width: 100%;
+		height: 100%;
+		transition: all 0.3s;
+	}
+	img:hover {
+		transform: scale(1.4); //放大 倍数随意
+	}
 }
 .list-right {
-  display: inline-block;
-  width: calc(100% - 300px);
-  vertical-align: top;
-  padding: 0 16px;
-  box-sizing: border-box;
+	display: inline-block;
+	width: calc(100% - 300px);
+	vertical-align: top;
+	padding: 0 16px;
+	box-sizing: border-box;
 }
 .list-name {
-  font-size: 26px;
-  font-family: SourceHanSansCN-Medium;
-  font-weight: 500;
-  color: rgba(255, 128, 57, 1);
+	font-size: 26px;
+	font-family: SourceHanSansCN-Medium;
+	font-weight: 500;
+	color: rgba(255, 128, 57, 1);
 }
 .list-discount-type {
-  width: 100%;
-  margin: 8px 0;
+	width: 100%;
+	margin: 8px 0;
 }
 .list-type {
-  background: rgba(245, 255, 238, 1);
-  font-size: 12px;
-  font-family: SourceHanSansCN-Medium;
-  font-weight: 500;
-  display: inline-block;
-  padding: 3px;
-  margin-right: 8px;
+	background: rgba(245, 255, 238, 1);
+	font-size: 12px;
+	font-family: SourceHanSansCN-Medium;
+	font-weight: 500;
+	display: inline-block;
+	padding: 3px;
+	margin-right: 8px;
 }
 .list-type-g {
-  color: #5dc775;
-  border: 1px solid #5dc775;
+	color: #5dc775;
+	border: 1px solid #5dc775;
 }
 .list-type-r {
-  color: #ff6666;
-  border: 1px solid #ff6666;
+	color: #ff6666;
+	border: 1px solid #ff6666;
 }
 .list-type-b {
-  color: #5e99ff;
-  border: 1px solid #5e99ff;
+	color: #5e99ff;
+	border: 1px solid #5e99ff;
 }
 .list-explain {
-  font-size: 14px;
-  min-height: 30px;
-  font-family: SourceHanSansCN-Medium;
-  font-weight: 500;
-  color: rgba(153, 153, 153, 1);
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  overflow: hidden;
+	font-size: 14px;
+	min-height: 30px;
+	font-family: SourceHanSansCN-Medium;
+	font-weight: 500;
+	color: rgba(153, 153, 153, 1);
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+	overflow: hidden;
 }
 .list-button {
-  text-align: right;
-  margin: 10px 0;
-  .el-button--primary.is-plain {
-    background-color: #fff;
-    color: #5b94f8;
-    border-color: #5b94f8;
-  }
-  .el-button--primary.is-plain:hover {
-    background-color: #5b94f8;
-    color: #fff;
-    border-color: #5b94f8;
-  }
-  .el-button--primary.is-plain:active {
-    background-color: #1364ef;
-    border-color: #1364ef;
-  }
-  .el-button--primary {
-    background-color: #3680ff;
-    border-color: #3680ff;
-    color: #fff;
-  }
-  .el-button--primary.to-detail:hover {
-    background-color: #5b94f8;
-    border-color: #5b94f8;
-    color: #fff;
-  }
-  .el-button--primary.to-detail:active {
-    background-color: #1364ef;
-    border-color: #1364ef;
-  }
+	text-align: right;
+	margin: 10px 0;
+	.el-button--primary.is-plain {
+		background-color: #fff;
+		color: #5b94f8;
+		border-color: #5b94f8;
+	}
+	.el-button--primary.is-plain:hover {
+		background-color: #5b94f8;
+		color: #fff;
+		border-color: #5b94f8;
+	}
+	.el-button--primary.is-plain:active {
+		background-color: #1364ef;
+		border-color: #1364ef;
+	}
+	.el-button--primary {
+		background-color: #3680ff;
+		border-color: #3680ff;
+		color: #fff;
+	}
+	.el-button--primary.to-detail:hover {
+		background-color: #5b94f8;
+		border-color: #5b94f8;
+		color: #fff;
+	}
+	.el-button--primary.to-detail:active {
+		background-color: #1364ef;
+		border-color: #1364ef;
+	}
 }
 .pagination-wrapper {
-  text-align: center;
-  padding: 15px 0 0 0;
+	text-align: center;
+	padding: 15px 0 0 0;
 }
 .list-price {
-  position: absolute;
-  padding-top: 10px;
+	position: absolute;
+	padding-top: 10px;
 }
 .price-discount {
-  font-size: 28px;
-  font-family: Roboto-Medium;
-  font-weight: 500;
-  color: rgba(255, 82, 82, 1);
-  display: inline-block;
-  margin-right: 10px;
+	font-size: 28px;
+	font-family: Roboto-Medium;
+	font-weight: 500;
+	color: rgba(255, 82, 82, 1);
+	display: inline-block;
+	margin-right: 10px;
 }
 .price-original {
-  font-size: 16px;
-  font-family: PingFangSC-Medium;
-  font-weight: 500;
-  color: rgba(204, 204, 204, 1);
-  display: inline-block;
-  text-decoration: line-through;
+	font-size: 16px;
+	font-family: PingFangSC-Medium;
+	font-weight: 500;
+	color: rgba(204, 204, 204, 1);
+	display: inline-block;
+	text-decoration: line-through;
 }
 .scenic-spot-r {
-  width: 100%;
-  height: 100%;
+	width: 100%;
+	height: 100%;
 }
 .scenic-top {
-  background: rgb(255, 128, 57);
-  display: inline-block;
-  width: 100%;
+	background: rgb(255, 128, 57);
+	display: inline-block;
+	width: 100%;
 }
 .scenic-information-img {
-  width: 100%;
-  height: auto;
+	width: 100%;
+	height: auto;
 }
 .scenic-name {
-  font-size: 24px;
-  font-family: SourceHanSansCN-Medium;
-  font-weight: 500;
-  text-align: center;
-  color: rgba(255, 255, 255, 1);
+	font-size: 24px;
+	font-family: SourceHanSansCN-Medium;
+	font-weight: 500;
+	text-align: center;
+	color: rgba(255, 255, 255, 1);
 }
 
 .scenic-introduction {
-  margin: 0 20px;
-  font-size: 14px;
-  min-height: 80px;
-  font-family: SourceHanSansCN-Regular;
-  font-weight: 400;
-  color: rgba(255, 255, 255, 1);
-  line-height: 29px;
-  text-align: left;
-  text-indent: 28px;
+	margin: 0 20px;
+	font-size: 14px;
+	min-height: 80px;
+	font-family: SourceHanSansCN-Regular;
+	font-weight: 400;
+	color: rgba(255, 255, 255, 1);
+	line-height: 29px;
+	text-align: left;
+	text-indent: 28px;
 }
 .scenic-telephone-d {
-  // margin: 22px;
-  background: white;
-  display: flex;
-  padding: 15px;
+	// margin: 22px;
+	background: white;
+	display: flex;
+	padding: 15px;
 }
 .scenic-telephone-img-d {
-  align-items: center;
-  display: flex;
+	align-items: center;
+	display: flex;
 }
 .scenic-telephone-img {
-  height: 36px;
-  width: 36px;
+	height: 36px;
+	width: 36px;
 }
 .scenic-telephone-value {
-  margin-left: 5px;
-  text-align: left;
+	margin-left: 5px;
+	text-align: left;
 }
 .scenic-telephone-name {
-  font-size: 12px;
-  font-family: SourceHanSansCN-Medium;
-  font-weight: 500;
-  color: rgba(153, 153, 153, 1);
-  text-align: left;
-  margin-bottom: 6px;
+	font-size: 12px;
+	font-family: SourceHanSansCN-Medium;
+	font-weight: 500;
+	color: rgba(153, 153, 153, 1);
+	text-align: left;
+	margin-bottom: 6px;
 }
 .scenic-telephone-num {
-  font-size: 18px;
-  font-family: DINAlternate-Bold;
-  font-weight: bold;
-  color: rgba(63, 134, 255, 1);
-  letter-spacing: 3px;
-  text-align: left;
+	font-size: 18px;
+	font-family: DINAlternate-Bold;
+	font-weight: bold;
+	color: rgba(63, 134, 255, 1);
+	letter-spacing: 3px;
+	text-align: left;
 }
 .scenic-bottom {
-  width: 100%;
-  background: rgb(255, 128, 57);
-  display: inline-block;
-  display: flex;
-  height: 160px;
-  margin-top: 13px;
-  justify-content: space-around;
-  align-items: center;
-  position: relative;
+	width: 100%;
+	background: rgb(255, 128, 57);
+	display: inline-block;
+	display: flex;
+	height: 160px;
+	margin-top: 13px;
+	justify-content: space-around;
+	align-items: center;
+	position: relative;
 }
 .scenic-bottom:before {
-  content: '';
-  position: absolute;
-  width: 7px;
-  height: 31px;
-  border-radius: 4px;
-  top: -22px;
-  right: 60px;
-  background: white;
+	content: '';
+	position: absolute;
+	width: 7px;
+	height: 31px;
+	border-radius: 4px;
+	top: -22px;
+	right: 60px;
+	background: white;
 }
 .scenic-bottom:after {
-  content: '';
-  position: absolute;
-  width: 7px;
-  height: 31px;
-  border-radius: 4px;
-  top: -22px;
-  left: 60px;
-  background: white;
+	content: '';
+	position: absolute;
+	width: 7px;
+	height: 31px;
+	border-radius: 4px;
+	top: -22px;
+	left: 60px;
+	background: white;
 }
 .qr-code-img {
-  max-height: 100%;
-  max-width: 100%;
-  margin-bottom: 1px;
+	max-height: 60%;
+	max-width: 60%;
+	margin-bottom: 1px;
 }
 .qr-code-name {
-  font-size: 14px;
-  font-family: SourceHanSansCN-Medium;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 1);
+	font-size: 14px;
+	font-family: SourceHanSansCN-Medium;
+	font-weight: 500;
+	color: rgba(255, 255, 255, 1);
 }
 @media screen and (max-width: 1680px) and (min-width: 1381px) {
-  .scenic-name {
-    font-size: 20px;
-  }
-  .scenic-telephone-num {
-    font-size: 14px;
-    letter-spacing: 1px;
-  }
+	.scenic-name {
+		font-size: 20px;
+	}
+	.scenic-telephone-num {
+		font-size: 14px;
+		letter-spacing: 1px;
+	}
 }
 @media screen and (max-width: 1380px) {
-  .scenic-name {
-    font-size: 18px;
-  }
-  .scenic-telephone-num {
-    font-size: 12px;
-    letter-spacing: 0px;
-  }
+	.scenic-name {
+		font-size: 18px;
+	}
+	.scenic-telephone-num {
+		font-size: 12px;
+		letter-spacing: 0px;
+	}
 }
 </style>
