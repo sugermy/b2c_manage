@@ -121,7 +121,6 @@ export default {
 		this.getType()
 		this.seamWidth = this.$refs.carouseldom.$el.clientWidth
 		this.bannelList = this.merchantInfo.BannelList
-		console.log(this.merchantInfo)
 	},
 	methods: {
 		//获取类型
@@ -158,7 +157,6 @@ export default {
 			if (e.target.localName == 'img') {
 				let productId = e.target.dataset.product
 				let url = e.target.dataset.url
-				console.log(productId, url)
 			}
 		}
 	},
@@ -444,8 +442,7 @@ export default {
 	background: white;
 }
 .qr-code-img {
-	max-height: 60%;
-	max-width: 60%;
+	max-width: 80%;
 	margin-bottom: 1px;
 }
 .qr-code-name {

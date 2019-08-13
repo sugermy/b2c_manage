@@ -29,8 +29,8 @@
           <el-form-item prop="Pwd" v-show="activeTab==1">
             <el-input type="password" placeholder="请输入密码" prefix-icon="el-icon-unlock" v-model="loginForm.Pwd" autocomplete="off"></el-input>
           </el-form-item>
-          <el-form-item prop="checkPwd" v-show="activeTab==2">
-            <el-input type="password" placeholder="请输入验证码" prefix-icon="el-icon-unlock" v-model="loginForm.checkPwd" autocomplete="off"></el-input>
+          <el-form-item prop="MsgCode" v-show="activeTab==2">
+            <el-input type="password" placeholder="请输入验证码" prefix-icon="el-icon-unlock" v-model="loginForm.MsgCode" autocomplete="off"></el-input>
             <el-button type="primary" :loading="canNextTime" @click="onMsg">获取验证码 {{canNextTime?nextTime:''}}</el-button>
           </el-form-item>
           <el-form-item class="ormemery-pass" v-show="activeTab==1">
@@ -76,9 +76,9 @@
           <el-form-item prop="enPassword" label="确认密码">
             <el-input type="password" placeholder="确认密码" prefix-icon="el-icon-unlock" show-password v-model="signForm.enPassword" autocomplete="off"></el-input>
           </el-form-item>
-          <el-form-item prop="passCode" label="验证码">
+          <!-- <el-form-item prop="passCode" label="验证码">
             <el-input type="text" placeholder="请输入验证码" prefix-icon="el-icon-key" v-model="signForm.passCode" autocomplete="off"></el-input>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item class="dialog-footer">
             <el-button class="sign-btn" type="primary" @click="signAction('signRuleForm')">提 交</el-button>
           </el-form-item>
@@ -91,7 +91,8 @@
 <script>
 import HeaderBar from './components/HeaderBar'
 import CryptoJS from 'crypto-js'
-import { setInterval } from 'timers'
+import { setInterval, clearInterval } from 'timers'
+import { mapState } from 'vuex'
 
 export default {
 	name: 'app',
@@ -115,11 +116,11 @@ export default {
 		return {
 			recordTime: 1, //记录当前时间---作为30分钟无操作记录
 			activeTab: 1, //默认登录方式---账号登录
-			loginForm: { Mobile: '', Pwd: '', checked: true },
-			signForm: { Gender: '男' },
+			loginForm: { Mobile: '', Pwd: '', checked: true, MsgCode: '' }, //登录信息
+			signForm: { Gender: '男' }, //注册信息
 			nextTime: 60, //计时
 			canNextTime: false, //可以点击下一次
-			timer: null,
+			timer: null, //计时器
 			loginRules: {
 				Mobile: [
 					{ required: true, message: '请输入登录账号', trigger: 'blur' },
@@ -129,7 +130,8 @@ export default {
 						trigger: 'blur'
 					}
 				],
-				Pwd: [{ validator: checkPass, trigger: 'blur' }]
+				Pwd: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+				MsgCode: [{ required: false, message: '请输入验证码', trigger: 'blur' }]
 			},
 			signRules: {
 				//验证规则
@@ -154,8 +156,8 @@ export default {
 				Password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
 				enPassword: [{ required: true, validator: checkEnPassword, trigger: 'blur' }]
 			},
-			signShow: false,
-			storeState: ''
+			signShow: false, //注册页显示控制
+			storeState: '' //vuex状态转存
 		}
 	},
 	components: {
@@ -176,7 +178,6 @@ export default {
 		})
 		this.setTimer() //加载定时器
 	},
-	mounted() {},
 	computed: {
 		showLogin: {
 			//根据登录状态改变弹出层是否显示
@@ -186,7 +187,14 @@ export default {
 			set(v) {
 				this.$store.dispatch('changeAppStatus', v)
 			}
-		}
+		},
+		...mapState({
+			//结构store仓库数据
+			merchantInfo: state => state.merchantInfo
+		})
+	},
+	mounted() {
+		console.log(this.merchantInfo)
 	},
 	methods: {
 		//定时器记录当前是否点击dom  点击重置
@@ -202,25 +210,43 @@ export default {
 		//切换登录方式
 		changeTab(v) {
 			this.activeTab = v
+			if (v == 1) {
+				this.loginRules.Pwd[0].required = true
+				this.loginRules.MsgCode[0].required = false
+			} else {
+				this.loginRules.Pwd[0].required = false
+				this.loginRules.MsgCode[0].required = true
+			}
 		},
 		//发送验证码
 		onMsg() {
-			this.canNextTime = true
-			let _this = this
-			this.timer = setInterval(function() {
-				if (_this.nextTime > 1) {
-					_this.nextTime--
-				} else {
-					_this.canNextTime = false
+			this.loginRules.MsgCode[0].required = false
+			this.$refs.ruleForm.validate(valid => {
+				if (valid) {
+					this.canNextTime = true
+					let _this = this
+					this.timer = setInterval(function() {
+						if (_this.nextTime > 1) {
+							_this.nextTime--
+						} else {
+							_this.canNextTime = false
+							_this.nextTime = 60
+							clearInterval(_this.timer)
+						}
+					}, 1000)
+					this.$ajax.post('User/GetMsgCode', { Mobile: this.loginForm.Mobile, MerchantName: this.merchantInfo.B2CName }).then(res => {})
 				}
-			}, 1000)
+			})
 		},
 		//登录存登录信息
 		reday(formName) {
+			if (this.activeTab == 2) {
+				this.loginRules.MsgCode[0].required = true
+			}
 			this.$refs[formName].validate(valid => {
 				if (valid) {
 					//保存实体
-					this.$ajax.post('User/Login/1', this.loginForm).then(res => {
+					this.$ajax.post('User/Login/' + this.activeTab, this.loginForm).then(res => {
 						if (res.Code == 200) {
 							this.$message({ type: 'success', message: res.Content, center: true })
 							let accountForm = res.Data
@@ -242,6 +268,9 @@ export default {
 		},
 		//关闭弹窗回调
 		loginClose() {
+			this.canNextTime = false
+			this.nextTime = 60
+			clearInterval(this.timer)
 			this.$store.dispatch('changeAppStatus', false)
 		},
 		//注册显示

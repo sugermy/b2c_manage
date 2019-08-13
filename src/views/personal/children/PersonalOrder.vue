@@ -22,7 +22,7 @@
       <el-table-column label="操作" min-width="180" header-align="center" align="center">
         <template slot-scope="scope">
           <el-button size="mini" :class="scope.row.IsRepay?'':'no-pass'" @click="(scope.row.IsRepay?wentPay(scope.row):'')">去支付</el-button>
-          <el-button size="mini" :class="scope.row.IsReMsg?'':'no-pass'" type="danger" @click="(scope.row.IsReMsg?reMsg(scope.row):'')">重发短信</el-button>
+          <el-button size="mini" :class="scope.row.IsRefund?'':'no-pass'" type="danger" @click="(scope.row.IsRefund?refundPay(scope.row):'')">退款申请</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -129,17 +129,32 @@ export default {
 		//去支付
 		wentPay(row) {
 			console.log(row)
-			if (row.IsRepay) {
-				console.log(row)
-				// this.$router.push({ path: '/Home/Product/OrderForm', query: { id: 1044, ticketNum: 1, palyData: '2019-08-14' } })
-			}
+			this.$ajax.post('Order/RePay', { OrderNo: row.OrderNo, Mobile: this.loginInfo.UserPhone }).then(res => {
+				console.log(res)
+			})
+			// this.$router.push({ path: '/Home/Product/OrderForm', query: { id: row.ProductID, ticketNum: row.BuyCount, palyData: row.PlayDate, resultURL: true } })
 		},
-		//重发短信
-		reMsg(row) {
+		//退款申请
+		refundPay(row) {
 			console.log(row)
-			if (row.IsReMsg) {
-				console.log(1)
-			}
+			this.$prompt('请输入退款原因', '提示', {
+				confirmButtonText: '确定',
+				cancelButtonText: '取消',
+				inputPattern: /\S/,
+				inputErrorMessage: '请输入退款原因'
+			})
+				.then(({ value }) => {
+					this.$message({
+						type: 'success',
+						message: '你的邮箱是: ' + value
+					})
+				})
+				.catch(() => {
+					this.$message({
+						type: 'info',
+						message: '取消输入'
+					})
+				})
 		},
 		//返回上一步
 		goBack() {

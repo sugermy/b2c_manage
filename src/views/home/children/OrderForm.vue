@@ -158,6 +158,8 @@ export default {
 			this.UserForm.touristName = this.loginInfo.UserName
 			this.UserForm.touristIdCard = this.loginInfo.UserIdCard
 			this.UserForm.touristPhone = this.loginInfo.UserPhone
+			if (this.$route.query.resultURL) {
+			}
 		}
 	},
 	computed: {
