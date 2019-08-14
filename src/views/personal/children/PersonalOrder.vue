@@ -139,7 +139,6 @@ export default {
 		},
 		//退款申请
 		refundPay(row) {
-			console.log(row)
 			this.$prompt('请输入退款原因', '提示', {
 				confirmButtonText: '确定',
 				cancelButtonText: '取消',
@@ -148,7 +147,7 @@ export default {
 			})
 				.then(({ value }) => {
 					this.$ajax.post('Order/Refund', { OrderNo: row.OrderNo, Mobile: this.loginInfo.UserPhone, Remark: value }).then(res => {
-						console.log(res)
+						this.$message({ type: res.Type, message: res.Content, center: true })
 					})
 				})
 				.catch(() => {
