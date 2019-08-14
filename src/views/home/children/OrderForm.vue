@@ -75,7 +75,7 @@
           </div>
         </el-col>
         <div class="main-btn">
-          <el-button type="primary" plain @click="cancelPay">取消</el-button>
+          <el-button type="primary" v-show="!$route.query.paramsCR" plain @click="cancelPay">取消</el-button>
           <el-button type="primary" v-show="loadPay" :loading="loadPay">等待支付</el-button>
           <el-button type="primary" v-show="!loadPay" @click="replayPay">重新支付</el-button>
         </div>
@@ -83,7 +83,7 @@
       <el-row class="main-form" v-if="activeTab==3" type="flex" justify="center" align="middle">
         <el-col :span="6" class="main-pay">
           <h3 class="pay-name">商品名称：{{TicketInit.ProductName}}</h3>
-          <p class="pay-num">￥{{totalMoney}}</p>
+          <p class="pay-num">￥{{Amount}}</p>
           <div class="pay-img">
             <img src="../../../assets/homeImage/pay_suc.png" class="pay-status">
           </div>
@@ -99,11 +99,13 @@
 import QRCode from 'qrcodejs2'
 import { setInterval, clearInterval } from 'timers'
 import { mapState } from 'vuex'
+import CryptoJS from 'crypto-js'
 
 export default {
 	data() {
 		return {
 			payType: 1,
+			Amount: 0,
 			activeTab: 1, //当前step
 			productID: '', //产品ID
 			TicketInit: {}, //当前产品信息
@@ -158,8 +160,16 @@ export default {
 			this.UserForm.touristName = this.loginInfo.UserName
 			this.UserForm.touristIdCard = this.loginInfo.UserIdCard
 			this.UserForm.touristPhone = this.loginInfo.UserPhone
-			if (this.$route.query.resultURL) {
-				console.log(1)
+			if (this.$route.query.paramsCR) {
+				let bytes = CryptoJS.AES.decrypt(this.$route.query.paramsCR, 'paramsCR')
+				let originalText = bytes.toString(CryptoJS.enc.Utf8)
+				let paramsCR = JSON.parse(originalText)
+				this.activeTab = 2
+				this.resultURL = paramsCR.resultURL
+				this.payType = paramsCR.PayType
+				this.Amount = paramsCR.Amount
+				this.OrderNo = paramsCR.OrderNo
+				this.TicketInit.ProductName = paramsCR.ProductName
 			}
 		}
 	},
@@ -227,6 +237,7 @@ export default {
 							this.$message({ type: 'success', message: '提交成功', center: true })
 							this.OrderNo = res.Data.OrderNo
 							this.resultURL = res.Data.resultURL
+							this.Amount = this.totalMoney
 							this.activeTab = 2
 						} else {
 							this.$message({ type: 'error', message: res.Content, center: true })
@@ -276,14 +287,22 @@ export default {
 		},
 		//重新支付
 		replayPay() {
-			let qrcodeChild = this.$refs.qrcode.getElementsByTagName('img')[1]
-			this.$refs.qrcode.removeChild(qrcodeChild)
-			this.qrcode(this.resultURL)
-			this.loadPay = true
-			let _this = this
-			this.timer = setInterval(function() {
-				_this.payStatus()
-			}, 5000)
+			//需要重新生成订单支付连接
+			this.$ajax.post('Order/RePay', { OrderNo: this.OrderNo, Mobile: this.loginInfo.UserPhone }).then(res => {
+				if (res.Code == 200) {
+					this.resultURL = res.Data
+					let qrcodeChild = this.$refs.qrcode.getElementsByTagName('img')[1]
+					this.$refs.qrcode.removeChild(qrcodeChild)
+					this.qrcode(this.resultURL)
+					this.loadPay = true
+					let _this = this
+					this.timer = setInterval(function() {
+						_this.payStatus()
+					}, 5000)
+				} else {
+					this.$message({ type: 'error', message: res.Content, center: true })
+				}
+			})
 		},
 		//取消
 		resetForm(formName) {

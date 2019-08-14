@@ -82,6 +82,7 @@
 </template>
 <script>
 import { mapState } from 'vuex'
+import CryptoJS from 'crypto-js'
 
 export default {
 	data() {
@@ -128,11 +129,13 @@ export default {
 		},
 		//去支付
 		wentPay(row) {
-			console.log(row)
 			this.$ajax.post('Order/RePay', { OrderNo: row.OrderNo, Mobile: this.loginInfo.UserPhone }).then(res => {
-				console.log(res)
+				if (res.Code == 200) {
+					let params = { OrderNo: row.OrderNo, Mobile: this.loginInfo.UserPhone, resultURL: res.Data, PayType: row.DBPayType, Amount: row.Amount, ProductName: row.ProductName }
+					let paramsCR = CryptoJS.AES.encrypt(JSON.stringify(params), 'paramsCR').toString()
+					this.$router.push({ path: '/Home/Product/OrderForm', query: { id: row.ProductID, ticketNum: row.BuyCount, palyData: row.PlayDate, paramsCR: paramsCR } })
+				}
 			})
-			// this.$router.push({ path: '/Home/Product/OrderForm', query: { id: row.ProductID, ticketNum: row.BuyCount, palyData: row.PlayDate, resultURL: true } })
 		},
 		//退款申请
 		refundPay(row) {
