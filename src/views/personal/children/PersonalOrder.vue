@@ -63,7 +63,7 @@
       <el-row class="info-i">
         <h3><i class="info-icon"></i>订单状态</h3>
         <div class="info-status">
-          <div class="info-s-i" :class="item.id==orderDetail.OrderStatus?'active-i':''" v-for="(item,index) in infoStatus" :key="index">{{item.status}}</div>
+          <div class="info-s-i" :class="(item.id==orderDetail.OrderStatus)?'active-i':''" v-for="(item,index) in infoStatus" :key="index">{{item.status}}</div>
         </div>
       </el-row>
       <el-row class="info-i">
@@ -122,6 +122,9 @@ export default {
 			this.$ajax.get('Order/OrderDetail', { Mobile: this.loginInfo.UserPhone, OrderNo: r.OrderNo }).then(res => {
 				if (res.Code == 200) {
 					this.orderDetail = res.Data
+					if (this.orderDetail.OrderStatus != '1' && this.orderDetail.OrderStatus != '2' && this.orderDetail.OrderStatus != '3' && this.orderDetail.OrderStatus != '4') {
+						this.infoStatus[4].id = this.orderDetail.OrderStatus
+					}
 					this.orderDetail.sortNo = i + 1
 					this.changeOrder = 2
 				}
@@ -147,7 +150,7 @@ export default {
 			})
 				.then(({ value }) => {
 					this.$ajax.post('Order/Refund', { OrderNo: row.OrderNo, Mobile: this.loginInfo.UserPhone, Remark: value }).then(res => {
-						this.$message({ type: res.Type, message: res.Content, center: true })
+						this.$message({ type: res.Type.toLowerCase(), message: res.Content, center: true })
 					})
 				})
 				.catch(() => {
