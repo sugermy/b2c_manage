@@ -159,6 +159,7 @@ export default {
 			this.UserForm.touristIdCard = this.loginInfo.UserIdCard
 			this.UserForm.touristPhone = this.loginInfo.UserPhone
 			if (this.$route.query.resultURL) {
+				console.log(1)
 			}
 		}
 	},

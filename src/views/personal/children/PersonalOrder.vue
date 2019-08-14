@@ -144,16 +144,10 @@ export default {
 				inputErrorMessage: '请输入退款原因'
 			})
 				.then(({ value }) => {
-					this.$message({
-						type: 'success',
-						message: '你的邮箱是: ' + value
-					})
+					this.$message({ type: 'success', message: '你的退款原因是: ' + value, center: true })
 				})
 				.catch(() => {
-					this.$message({
-						type: 'info',
-						message: '取消输入'
-					})
+					this.$message({ type: 'info', message: '取消输入', center: true })
 				})
 		},
 		//返回上一步
