@@ -60,7 +60,8 @@ export default {
 			line-height: 24px;
 			p {
 				margin: 0;
-				text-indent: 20px;
+				padding: 0 10px;
+				text-indent: 10px;
 			}
 		}
 	}
