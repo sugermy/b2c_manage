@@ -314,6 +314,7 @@ export default {
 				})
 				let nologin = { loginStatus: false }
 				this.$store.dispatch('setLonginInfo', nologin)
+				this.$router.push({ path: '/Home' })
 			}
 		}
 	}
