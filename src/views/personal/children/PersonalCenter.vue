@@ -3,7 +3,7 @@
     <el-col v-show="showTab==1" :span="10" class="form-main">
       <el-form :model="infoForm" label-position="right" :rules="rules" ref="infoForm" label-width="100px" class="infoForm">
         <el-form-item class="label-form" label="昵称：" prop="NickName">
-          <el-input class="form-control" :readonly="infoStatus.NickName" v-model="infoForm.NickName"></el-input>
+          <el-input class="form-control" :maxlength="10" :readonly="infoStatus.NickName" v-model="infoForm.NickName"></el-input>
           <el-button class="form-btn" v-show="infoStatus.NickName" @click.prevent="modifyItem('NickName')">修改</el-button>
           <el-button class="form-btn" v-show="!infoStatus.NickName" @click.prevent="modifyInfo('NickName',infoForm.NickName)">确定</el-button>
         </el-form-item>

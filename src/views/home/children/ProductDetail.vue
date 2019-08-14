@@ -16,14 +16,15 @@
                 </div>
               </el-col>
               <el-col :span="14">
-                <div class="ticket-information-div">
+                <div class="ticket-information">
                   <div class="ticket-name">{{productInfo.ProductName}}</div>
                   <div class="ticket-discount-type">
                     <div class="type-i type-g">{{productInfo.IsRundAnyTime?'随时退':'规则退'}}</div>
                     <div class="type-i type-r" v-if="productInfo.IsDateLine">延时入园</div>
                     <div class="type-i type-b" v-if="productInfo.IsCheckPerson">身份证入园</div>
                   </div>
-                  <div class="ticket-explain">{{productInfo.ProductIntroduce}}</div>
+                  <div class="ticket-explain" :class="showDetail?'ticket-explain-show':''">{{productInfo.ProductIntroduce}}<i class="show-icon"
+                      :class="showDetail?'el-icon-arrow-up':'el-icon-arrow-down'" @click="showAction()"></i></div>
                   <div class="ticket-price">
                     <span class="ticket-price-name">门票价格：</span>
                     <span class="ticket-price-num">￥{{SellPrice}}</span>
@@ -102,6 +103,7 @@ export default {
 			productInfo: {}, //当前产品信息
 			dateValue: '', //选择的日期
 			SellPrice: 0, //当日价格
+			showDetail: false,
 			datePicker: {
 				disabledDate(time) {
 					let today = new Date()
@@ -137,6 +139,9 @@ export default {
 				this.productInfo = res.Data[0] || {}
 				this.getInitPrice(this.productID, this.dateValue)
 			})
+		},
+		showAction() {
+			this.showDetail = !this.showDetail
 		},
 		//初始化请求日期价
 		getInitPrice(pid, v) {
@@ -227,10 +232,10 @@ export default {
 	height: 110px;
 	width: calc(100% / 3 - 5px);
 }
-.ticket-information-div {
-	vertical-align: top;
+.ticket-information {
 	padding-left: 45px;
 	box-sizing: border-box;
+	position: relative;
 }
 .ticket-name {
 	font-size: 26px;
@@ -267,21 +272,39 @@ export default {
 	border: 1px solid #5e99ff;
 }
 .ticket-explain {
+	position: absolute;
 	font-size: 14px;
+	height: 59px;
 	font-family: SourceHanSansCN-Regular;
 	font-weight: 400;
 	color: rgba(153, 153, 153, 1);
-	display: -webkit-box;
-	-webkit-box-orient: vertical;
-	-webkit-line-clamp: 2;
+	background: #fff;
 	overflow: hidden;
-	text-overflow: ellipsis;
 	line-height: 34px;
-	margin-bottom: 15px;
+	padding-bottom: 15px;
+	padding-right: 15px;
 	border-bottom: 1px dashed rgb(197, 197, 197);
+	.show-icon {
+		position: absolute;
+		right: -0.5%;
+		cursor: pointer;
+		font-size: 18px;
+		bottom: 20%;
+		z-index: 10;
+	}
+}
+.ticket-explain-show {
+	overflow-y: auto;
+	height: 80%;
+	z-index: 99;
+	.show-icon {
+		bottom: 0%;
+		top: 2%;
+	}
 }
 .ticket-price {
 	margin: 16px 0;
+	margin-top: 98px;
 }
 .ticket-price-name {
 	font-size: 16px;

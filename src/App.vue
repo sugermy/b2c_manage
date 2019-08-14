@@ -193,9 +193,6 @@ export default {
 			merchantInfo: state => state.merchantInfo
 		})
 	},
-	mounted() {
-		console.log(this.merchantInfo)
-	},
 	methods: {
 		//定时器记录当前是否点击dom  点击重置
 		setTimer() {
@@ -253,9 +250,10 @@ export default {
 							accountForm.loginStatus = true
 							this.$store.dispatch('setLonginInfo', accountForm)
 							this.$store.dispatch('changeAppStatus', false) //隐藏登录窗口
-							let enterPath = this.$store.state.toRouter
+							let enterPath = JSON.parse(this.$store.state.toRouter)
 							this.$router.push({
-								path: enterPath
+								path: enterPath.path,
+								query: enterPath.query
 							})
 						} else {
 							this.$message({ type: 'error', message: res.Content, center: true })

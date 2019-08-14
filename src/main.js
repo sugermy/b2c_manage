@@ -38,7 +38,7 @@ refrushTokenGet();
 
 //刷新token的方法--get
 function refrushTokenGet() {
-  baseAjax.get("/Token", {}).then(res => {
+  baseAjax.get("Token", {}).then(res => {
     Token = res.Data;
     BTCAjax._axios.defaults.headers.Token = Token;
     if (!store.state.merchantInfo.B2CName) {
@@ -80,7 +80,10 @@ Vue.prototype.$ajax = BTCAjax; //基于token的请求接口
 
 //路由跳转守卫判断是否是登录态
 router.beforeEach((to, from, next) => {
-  store.dispatch("enterRouter", to.path);
+  store.dispatch(
+    "enterRouter",
+    JSON.stringify({ path: to.path, query: to.query })
+  );
   if (to.meta.title) {
     //跳转前动态设置当前title
     document.title = to.meta.title;

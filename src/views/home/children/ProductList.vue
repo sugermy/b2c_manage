@@ -279,13 +279,13 @@ export default {
 }
 .list-explain {
 	font-size: 14px;
-	min-height: 30px;
+	height: 40px;
 	font-family: SourceHanSansCN-Medium;
 	font-weight: 500;
 	color: rgba(153, 153, 153, 1);
-	display: -webkit-box;
-	-webkit-box-orient: vertical;
-	-webkit-line-clamp: 2;
+	// display: -webkit-box;
+	// -webkit-box-orient: vertical;
+	// -webkit-line-clamp: 2;
 	overflow: hidden;
 }
 .list-button {

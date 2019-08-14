@@ -147,7 +147,9 @@ export default {
 				inputErrorMessage: '请输入退款原因'
 			})
 				.then(({ value }) => {
-					this.$message({ type: 'success', message: '你的退款原因是: ' + value, center: true })
+					this.$ajax.post('Order/Refund', { OrderNo: row.OrderNo, Mobile: this.loginInfo.UserPhone, Remark: value }).then(res => {
+						console.log(res)
+					})
 				})
 				.catch(() => {
 					this.$message({ type: 'info', message: '取消输入', center: true })

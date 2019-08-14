@@ -8,7 +8,7 @@
       </div>
       <div class="tips-div">
         <span class="tips-red">温馨提示：</span>
-        <span>如果您在预定过程中遇到问题，请及时查看，或电话咨询道控系统客服！</span>
+        <span>如果您在预定过程中遇到问题，请及时查看，或电话咨询{{merchantInfo.B2CName}}客服！</span>
       </div>
     </div>
     <div class="footer">深圳市道控技术有限公司提供技术支持</div>
@@ -23,7 +23,7 @@ export default {
 	},
 	computed: {
 		...mapState({
-			//结构store仓库数据
+			//解构store仓库数据
 			merchantInfo: state => state.merchantInfo
 		})
 	},
