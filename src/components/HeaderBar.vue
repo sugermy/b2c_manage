@@ -124,6 +124,7 @@ export default {
 .menu {
 	display: flex;
 	align-items: center;
+	margin-right: 30px;
 }
 .menu-item {
 	font-size: 18px;

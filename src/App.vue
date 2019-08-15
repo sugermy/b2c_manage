@@ -67,6 +67,9 @@
           <el-form-item prop="UserPhone" label="手机号">
             <el-input type="text" placeholder="请输入手机号用于登录使用" prefix-icon="el-icon-phone" v-model="signForm.UserPhone" autocomplete="off"></el-input>
           </el-form-item>
+          <el-form-item prop="passCode" label="验证码">
+            <el-input type="text" placeholder="请输入验证码" prefix-icon="el-icon-key" v-model="signForm.passCode" autocomplete="off"></el-input>
+          </el-form-item>
           <el-form-item prop="UserIdCard" label="身份证号">
             <el-input type="text" placeholder="请输入身份证号" prefix-icon="el-icon-postcard" v-model="signForm.UserIdCard" autocomplete="off"></el-input>
           </el-form-item>
@@ -76,9 +79,6 @@
           <el-form-item prop="enPassword" label="确认密码">
             <el-input type="password" placeholder="确认密码" prefix-icon="el-icon-unlock" show-password v-model="signForm.enPassword" autocomplete="off"></el-input>
           </el-form-item>
-          <!-- <el-form-item prop="passCode" label="验证码">
-            <el-input type="text" placeholder="请输入验证码" prefix-icon="el-icon-key" v-model="signForm.passCode" autocomplete="off"></el-input>
-          </el-form-item> -->
           <el-form-item class="dialog-footer">
             <el-button class="sign-btn" type="primary" @click="signAction('signRuleForm')">提 交</el-button>
           </el-form-item>
@@ -154,7 +154,8 @@ export default {
 					}
 				],
 				Password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
-				enPassword: [{ required: true, validator: checkEnPassword, trigger: 'blur' }]
+				enPassword: [{ required: true, validator: checkEnPassword, trigger: 'blur' }],
+				passCode: [{ required: true, message: '请输入验证码', trigger: 'blur' }]
 			},
 			signShow: false, //注册页显示控制
 			storeState: '', //vuex状态转存
@@ -340,9 +341,9 @@ export default {
 	width: 100%;
 	height: calc(100% - 100px);
 }
-.load-msg{
-	.el-icon-loading{
-		display: none
+.load-msg {
+	.el-icon-loading {
+		display: none;
 	}
 }
 .dialog-longin {
