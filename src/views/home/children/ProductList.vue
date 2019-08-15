@@ -52,7 +52,7 @@
           <el-col :span="4">
             <div class="scenic-spot-r">
               <div class="scenic-top">
-                <img :src="merchantInfo.BackgroundImg" class="scenic-information-img" />
+                <img :src="merchantInfo.PersonalCancerlImg" class="scenic-information-img" />
                 <div class="scenic-name">{{merchantInfo.B2CName}}</div>
                 <div class="scenic-introduction">
                   {{merchantInfo.Remark}}

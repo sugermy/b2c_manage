@@ -7,7 +7,7 @@
       <el-table-column prop="ProductName" label="产品名称" min-width="120" header-align="center" align="center"></el-table-column>
       <el-table-column prop="CreateDate" label="购买日期" min-width="140" header-align="center" align="center">
         <template slot-scope="scope">
-          {{scope.row.CreateDate | formatdate}}
+          {{scope.row.CreateDate}}
         </template>
       </el-table-column>
       <el-table-column prop="PlayDate" label="游玩日期" min-width="120" header-align="center" align="center"></el-table-column>
@@ -63,7 +63,7 @@
       <el-row class="info-i">
         <h3><i class="info-icon"></i>订单状态</h3>
         <div class="info-status">
-          <div class="info-s-i" :class="(item.id==orderDetail.OrderStatus)?'active-i':''" v-for="(item,index) in infoStatus" :key="index">{{item.status}}</div>
+          <div class="info-s-i" :class="(item.id==orderDetail.ShowDBStatus)?'active-i':''" v-for="(item,index) in infoStatus" :key="index">{{item.status}}</div>
         </div>
       </el-row>
       <el-row class="info-i">
@@ -89,7 +89,7 @@ export default {
 		return {
 			changeOrder: 1,
 			tableData: [],
-			infoStatus: [{ status: '未付款', id: '1' }, { status: '已付款', id: '2' }, { status: '已使用', id: '3' }, { status: '已过期', id: '4' }, { status: '其他', id: '0' }],
+			infoStatus: [{ status: '未付款', id: 1 }, { status: '已付款', id: 2 }, { status: '已使用', id: 3 }, { status: '已过期', id: 4 }, { status: '其他', id: '0' }],
 			tableParams: {
 				totalNum: 1,
 				pageNum: 1,
@@ -122,8 +122,12 @@ export default {
 			this.$ajax.get('Order/OrderDetail', { Mobile: this.loginInfo.UserPhone, OrderNo: r.OrderNo }).then(res => {
 				if (res.Code == 200) {
 					this.orderDetail = res.Data
-					if (this.orderDetail.OrderStatus != '1' && this.orderDetail.OrderStatus != '2' && this.orderDetail.OrderStatus != '3' && this.orderDetail.OrderStatus != '4') {
-						this.infoStatus[4].id = this.orderDetail.OrderStatus
+					if (this.orderDetail.ShowDBStatus != 1 && this.orderDetail.ShowDBStatus != 2 && this.orderDetail.ShowDBStatus != 3 && this.orderDetail.ShowDBStatus != 4) {
+						this.infoStatus[4].id = this.orderDetail.ShowDBStatus
+						this.infoStatus[4].status = this.orderDetail.OrderStatus
+					} else {
+						this.infoStatus[4].id = 0
+						this.infoStatus[4].status = '其他'
 					}
 					this.orderDetail.sortNo = i + 1
 					this.changeOrder = 2
