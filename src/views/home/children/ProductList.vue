@@ -29,7 +29,7 @@
                   <div class="list-name">{{item.ProductName}}</div>
                   <div class="list-discount-type">
                     <div class="list-type list-type-g">{{item.IsRundAnyTime?'随时退':'规则退'}}</div>
-                    <div class="list-type list-type-r" v-if="item.IsDateLine">延时入园</div>
+                    <div class="list-type list-type-r">{{item.WaitHour==0?'随时用':('延时'+item.WaitHour+'小时使用')}}</div>
                     <div class="list-type list-type-b" v-if="item.IsCheckPerson">身份证入园</div>
                   </div>
                   <div class="list-explain">{{item.ProductIntroduce!=''?item.ProductIntroduce:'暂无详情'}}</div>

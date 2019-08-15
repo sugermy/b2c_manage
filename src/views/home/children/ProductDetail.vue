@@ -20,7 +20,7 @@
                   <div class="ticket-name">{{productInfo.ProductName}}</div>
                   <div class="ticket-discount-type">
                     <div class="type-i type-g">{{productInfo.IsRundAnyTime?'随时退':'规则退'}}</div>
-                    <div class="type-i type-r" v-if="productInfo.IsDateLine">延时入园</div>
+                    <div class="type-i type-r">{{productInfo.WaitHour==0?'随时用':('延时'+productInfo.WaitHour+'小时使用')}}</div>
                     <div class="type-i type-b" v-if="productInfo.IsCheckPerson">身份证入园</div>
                   </div>
                   <div class="ticket-explain" :class="showDetail?'ticket-explain-show':''">{{productInfo.ProductIntroduce}}<i class="show-icon"

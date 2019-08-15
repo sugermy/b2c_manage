@@ -31,7 +31,7 @@
           </el-form-item>
           <el-form-item prop="MsgCode" v-show="activeTab==2">
             <el-input type="password" placeholder="请输入验证码" prefix-icon="el-icon-unlock" v-model="loginForm.MsgCode" autocomplete="off"></el-input>
-            <el-button type="primary" :loading="canNextTime" @click="onMsg">获取验证码 {{canNextTime?nextTime:''}}</el-button>
+            <el-button type="primary" :loading="canNextTime" class="load-msg" @click="onMsg">获取验证码 {{canNextTime?nextTime:''}}</el-button>
           </el-form-item>
           <el-form-item class="ormemery-pass" v-show="activeTab==1">
             <el-checkbox v-model="loginForm.checked">记住密码</el-checkbox>
@@ -339,6 +339,11 @@ export default {
 .main-con {
 	width: 100%;
 	height: calc(100% - 100px);
+}
+.load-msg{
+	.el-icon-loading{
+		display: none
+	}
 }
 .dialog-longin {
 	.login-head {
