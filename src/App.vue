@@ -2,7 +2,7 @@
   <div id="app" @click="recordLogin">
     <el-row type="flex" justify="center">
       <el-col :span="20">
-        <header-bar ref="headerBar"></header-bar>
+        <header-bar ref="headerBar" :msg="toChilde" @toLogin="toLogin"></header-bar>
       </el-col>
     </el-row>
     <el-row class="bg">
@@ -37,7 +37,7 @@
             <el-checkbox v-model="loginForm.checked">记住密码</el-checkbox>
           </el-form-item>
           <el-form-item class="dialog-footer">
-            <el-button type="primary" @click="reday('ruleForm')">登 陆</el-button>
+            <el-button type="primary" @click="reday('ruleForm')">登 录</el-button>
           </el-form-item>
           <el-row class="sigin-ready"><span @click="signIn">立即注册</span></el-row>
         </el-form>
@@ -157,7 +157,8 @@ export default {
 				enPassword: [{ required: true, validator: checkEnPassword, trigger: 'blur' }]
 			},
 			signShow: false, //注册页显示控制
-			storeState: '' //vuex状态转存
+			storeState: '', //vuex状态转存
+			toChilde: true
 		}
 	},
 	components: {
@@ -235,6 +236,10 @@ export default {
 				}
 			})
 		},
+		//headerbar响应事件
+		toLogin() {
+			this.$store.dispatch('changeAppStatus', true)
+		},
 		//登录存登录信息
 		reday(formName) {
 			if (this.activeTab == 2) {
@@ -255,6 +260,7 @@ export default {
 								path: enterPath.path,
 								query: enterPath.query
 							})
+							this.toChilde = false
 						} else {
 							this.$message({ type: 'error', message: res.Content, center: true })
 						}

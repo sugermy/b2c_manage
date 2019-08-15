@@ -20,6 +20,7 @@ const Contactus = () => import("./views/contactus/index");
 Vue.use(Router);
 
 export default new Router({
+  mode: "history",
   routes: [
     //无路由默认跳转
     {

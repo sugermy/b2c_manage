@@ -35,13 +35,11 @@ export default {
 
 <style lang="less" scoped>
 .sail-con {
-	height: 100%;
 	margin: 50px 0;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	.middle {
-		height: 100%;
 		background: #fff;
 	}
 	.sail-header {

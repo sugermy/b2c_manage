@@ -8,6 +8,18 @@
         <router-link tag="li" v-for="(item,index) in menuList" :key="index" class="menu-item" :to="{ path: item.path }">
           {{item.name}}</router-link>
       </ul>
+      <div class="login-area">
+        <el-button type="primary" size="small" @click="login" v-show="!$store.state.loginInfo.loginStatus">登录</el-button>
+        <el-dropdown v-show="$store.state.loginInfo.loginStatus" @command="menuCommand">
+          <span class="el-dropdown-link">
+            {{loginInfo.NickName}}<i class="el-icon-arrow-down el-icon--right"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="center">个人中心</el-dropdown-item>
+            <el-dropdown-item command="exit">退出登录</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
     </div>
   </div>
 </template>
@@ -16,6 +28,9 @@
 import { mapState } from 'vuex'
 export default {
 	name: 'HeaderBar',
+	props: {
+		msg: Boolean
+	},
 	data() {
 		return {
 			menuList: [
@@ -43,11 +58,12 @@ export default {
 	computed: {
 		...mapState({
 			//结构store仓库数据
-			merchantInfo: state => state.merchantInfo
+			merchantInfo: state => state.merchantInfo,
+			loginInfo: state => state.loginInfo
 		})
 	},
 	mounted() {
-		//页面回调完成之后派发设置城市ID事件
+		//页面回调完成之后派发
 		this.$nextTick(() => {
 			this.imgSrc = this.merchantInfo.LogoImg
 		})
@@ -56,6 +72,28 @@ export default {
 		//点击logo---回到首页
 		goHome() {
 			this.$router.push({ path: '/Home' })
+		},
+		login() {
+			this.$emit('toLogin')
+		},
+		menuCommand(command) {
+			switch (command) {
+				case 'center':
+					this.$router.push({
+						path: '/Personal'
+					})
+					break
+				case 'exit':
+					let nologin = { loginStatus: false }
+					this.$store.dispatch('setLonginInfo', nologin)
+					this.$message({ type: 'success', message: '退出成功', center: true })
+					this.$router.push({
+						path: '/Home'
+					})
+					break
+				default:
+					break
+			}
 		}
 	}
 }
@@ -104,5 +142,10 @@ export default {
 	color: white;
 	background: rgba(255, 128, 57, 1);
 	border-radius: 4px;
+}
+.login-area {
+	height: 40px;
+	display: flex;
+	align-items: center;
 }
 </style>
