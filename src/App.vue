@@ -65,10 +65,10 @@
             </div>
           </el-form-item>
           <el-form-item prop="UserPhone" label="手机号">
-            <el-input type="text" placeholder="请输入手机号用于登录使用" prefix-icon="el-icon-phone" v-model="signForm.UserPhone" autocomplete="off"></el-input>
+            <el-input type="text" placeholder="请输入手机号用于登录使用" @blur="sendMsg" prefix-icon="el-icon-phone" v-model="signForm.UserPhone" autocomplete="off"></el-input>
           </el-form-item>
-          <el-form-item prop="passCode" label="验证码">
-            <el-input type="text" placeholder="请输入验证码" prefix-icon="el-icon-key" v-model="signForm.passCode" autocomplete="off"></el-input>
+          <el-form-item prop="MsgCode" label="验证码">
+            <el-input type="text" placeholder="请输入验证码" prefix-icon="el-icon-key" v-model="signForm.MsgCode" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item prop="UserIdCard" label="身份证号">
             <el-input type="text" placeholder="请输入身份证号" prefix-icon="el-icon-postcard" v-model="signForm.UserIdCard" autocomplete="off"></el-input>
@@ -97,18 +97,24 @@ import { mapState } from 'vuex'
 export default {
 	name: 'app',
 	data() {
-		var checkPass = (rule, value, callback) => {
-			if (!value) {
-				return callback(new Error('请输入密码'))
+		var checkEnPassword = (rule, value, callback) => {
+			if (!this.signForm.Password) {
+				this.$refs.signRuleForm.validateField('Password')
+				callback()
+			} else if (value == '') {
+				callback(new Error('请再次输入密码'))
+			} else if (value != this.signForm.Password) {
+				callback(new Error('两次输入密码不一致!'))
 			} else {
 				callback()
 			}
 		}
-		var checkEnPassword = (rule, value, callback) => {
-			if (value == '') {
-				callback(new Error('请再次输入密码'))
-			} else if (value != this.signForm.Password) {
-				callback(new Error('两次输入密码不一致!'))
+		var checkMsgCode = (rule, value, callback) => {
+			if (!this.signForm.UserPhone) {
+				this.$refs.signRuleForm.validateField('UserPhone')
+				callback()
+			} else if (!value) {
+				callback(new Error('请输入验证码'))
 			} else {
 				callback()
 			}
@@ -155,7 +161,7 @@ export default {
 				],
 				Password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
 				enPassword: [{ required: true, validator: checkEnPassword, trigger: 'blur' }],
-				passCode: [{ required: true, message: '请输入验证码', trigger: 'blur' }]
+				MsgCode: [{ required: true, validator: checkMsgCode, trigger: 'blur' }]
 			},
 			signShow: false, //注册页显示控制
 			storeState: '', //vuex状态转存
@@ -179,6 +185,7 @@ export default {
 			sessionStorage.setItem('userinfo', this.storeState)
 		})
 		this.setTimer() //加载定时器
+		console.log(this.merchantInfo)
 	},
 	computed: {
 		showLogin: {
@@ -201,6 +208,26 @@ export default {
 			setInterval(() => {
 				this.recordTime++
 			}, 1000)
+		},
+		//手机号输入完成发送短信
+		sendMsg() {
+			this.$refs.signRuleForm.validateField('UserPhone', valiemsg => {
+				//先校验手机号成功 出现确认发送提示
+				if (valiemsg != '') {
+					return false
+				}
+				this.$confirm('是否确认使用该手机号注册?', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				})
+					.then(() => {
+						this.$ajax.post('User/RegCheck', { Mobile: this.signForm.UserPhone, MerchantName: this.merchantInfo.B2CName }).then(res => {
+							this.$message({ type: res.Type.toLowerCase(), message: res.Content, center: true })
+						})
+					})
+					.catch(() => {})
+			})
 		},
 		//记录点击事件  超时半小时退出登录
 		recordLogin() {
@@ -291,7 +318,7 @@ export default {
 		signAction(formName) {
 			this.$refs[formName].validate(valid => {
 				if (valid) {
-					this.$ajax.post('User/Register', { ReqParam: JSON.stringify(this.signForm) }).then(res => {
+					this.$ajax.post('User/Register', { ReqParam: JSON.stringify(this.signForm), MsgCode: JSON.stringify(this.signForm.MsgCode) }).then(res => {
 						if (res.Code == 200) {
 							this.$message({ type: 'success', message: '注册成功', center: true })
 							this.signShow = false
