@@ -3,14 +3,14 @@
     <el-table :data="tableData" style="width: 100%" height="calc(100vh - 298px)" header-row-class-name="table-header" v-show="changeOrder==1">
       <el-table-column type="index" width="50" label="序号" header-align="center" align="center">
       </el-table-column>
-      <el-table-column prop="OrderNo" label="订单号" min-width="180" header-align="center" align="center"></el-table-column>
+      <el-table-column prop="OrderNo" label="订单号" min-width="190" header-align="center" align="center"></el-table-column>
       <el-table-column prop="ProductName" label="产品名称" min-width="120" header-align="center" align="center"></el-table-column>
-      <el-table-column prop="CreateDate" label="购买日期" min-width="140" header-align="center" align="center">
+      <el-table-column prop="CreateDate" label="购买日期" min-width="150" header-align="center" align="center">
         <template slot-scope="scope">
           {{scope.row.CreateDate}}
         </template>
       </el-table-column>
-      <el-table-column prop="PlayDate" label="游玩日期" min-width="120" header-align="center" align="center"></el-table-column>
+      <el-table-column prop="PlayDate" label="游玩日期" min-width="100" header-align="center" align="center"></el-table-column>
       <el-table-column prop="BuyCount" label="订单数量" min-width="80" header-align="center" align="center"> </el-table-column>
       <el-table-column prop="PayType" label="支付方式" min-width="80" header-align="center" align="center"> </el-table-column>
       <el-table-column label="状态" min-width="100" header-align="center" align="center">
