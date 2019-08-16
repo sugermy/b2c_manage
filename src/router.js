@@ -79,7 +79,10 @@ export default new Router({
         {
           path: "PersonalCenter",
           name: "PersonalCenter",
-          component: PersonalCenter
+          component: PersonalCenter,
+          meta: {
+            title: "个人中心"
+          }
         },
         {
           path: "PersonalOrder",
@@ -88,17 +91,23 @@ export default new Router({
         }
       ]
     },
-    //游客须知
+    //购票须知
     {
       path: "/TouristRules",
       name: "TouristRules",
-      component: TouristRules
+      component: TouristRules,
+      meta: {
+        title: "购票须知"
+      }
     },
     //联系我们
     {
       path: "/Contactus",
       name: "Contactus",
-      component: Contactus
+      component: Contactus,
+      meta: {
+        title: "联系我们"
+      }
     }
   ]
 });
