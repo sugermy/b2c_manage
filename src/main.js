@@ -11,21 +11,10 @@ import "./style/ele_reset.less";
 import { Notification } from "element-ui";
 import scroll from "vue-seamless-scroll";
 import "@babel/polyfill";
-// import qs from 'qs'
-// Vue.prototype.$qs = qs; //post请求转换数据
+import "./utils/filters";
 
 Vue.use(scroll);
 Vue.config.productionTip = false;
-
-Vue.filter("formatdate", function(value) {
-  if (!value) return "";
-  let dateD = value.split(" ")[0];
-  let dateT = value.split(" ")[1];
-  let formatD =
-    dateD.split("/")[0] + "-" + dateD.split("/")[1] + "-" + dateD.split("/")[2];
-
-  return formatD + " " + dateT;
-});
 
 // const baseURL = "http://192.168.33.154:61780/official/"; //基础服务地址
 const baseURL = "http://192.168.33.154:8025/official/"; //基础服务地址

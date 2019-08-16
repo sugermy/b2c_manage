@@ -189,7 +189,6 @@ export default {
 			sessionStorage.setItem('userinfo', this.storeState)
 		})
 		this.setTimer() //加载定时器
-		console.log(this.merchantInfo)
 	},
 	computed: {
 		showLogin: {

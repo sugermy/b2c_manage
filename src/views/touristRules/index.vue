@@ -4,7 +4,7 @@
       <div class="sail-header">购票须知</div>
       <div class="sail-main">
         <div class="sail-explain" v-for="(item,index) in sailTxt" :key="index">
-          <h3 class="sail-title"><span>{{index+1}}. </span>{{item.Title}}</h3>
+          <h3 class="sail-title"><span>{{index+1}}、</span>{{item.Title}}</h3>
           <pre class="sail-txt">{{item.Info}}</pre>
         </div>
       </div>
@@ -25,7 +25,6 @@ export default {
 	methods: {
 		getBueInfo() {
 			this.$ajax.get('Park/BuyInfo', {}).then(res => {
-				console.log(res)
 				this.sailTxt = res.Data
 			})
 		}
