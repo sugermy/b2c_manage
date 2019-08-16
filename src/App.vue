@@ -65,10 +65,11 @@
             </div>
           </el-form-item>
           <el-form-item prop="UserPhone" label="手机号">
-            <el-input type="text" placeholder="请输入手机号用于登录使用" @blur="sendMsg" prefix-icon="el-icon-phone" v-model="signForm.UserPhone" autocomplete="off"></el-input>
+            <el-input type="text" placeholder="请输入手机号用于登录使用" prefix-icon="el-icon-phone" v-model="signForm.UserPhone" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item prop="MsgCode" label="验证码">
             <el-input type="text" placeholder="请输入验证码" prefix-icon="el-icon-key" v-model="signForm.MsgCode" autocomplete="off"></el-input>
+            <el-button type="primary" :loading="canSignNextTime" class="load-msg" @click="onSign">获取验证码 {{canSignNextTime?nextSignTime:''}}</el-button>
           </el-form-item>
           <el-form-item prop="UserIdCard" label="身份证号">
             <el-input type="text" placeholder="请输入身份证号" prefix-icon="el-icon-postcard" v-model="signForm.UserIdCard" autocomplete="off"></el-input>
@@ -127,6 +128,9 @@ export default {
 			nextTime: 60, //计时
 			canNextTime: false, //可以点击下一次
 			timer: null, //计时器
+			timer2: null,
+			nextSignTime: 60,
+			canSignNextTime: false,
 			loginRules: {
 				Mobile: [
 					{ required: true, message: '请输入登录账号', trigger: 'blur' },
@@ -209,24 +213,29 @@ export default {
 				this.recordTime++
 			}, 1000)
 		},
-		//手机号输入完成发送短信
-		sendMsg() {
+		//手机号输入完成点击发送短信
+		onSign() {
 			this.$refs.signRuleForm.validateField('UserPhone', valiemsg => {
 				//先校验手机号成功 出现确认发送提示
 				if (valiemsg != '') {
 					return false
 				}
-				this.$confirm('是否确认使用该手机号注册?', '提示', {
-					confirmButtonText: '确定',
-					cancelButtonText: '取消',
-					type: 'warning'
+				this.$ajax.post('User/RegCheck', { Mobile: this.signForm.UserPhone, MerchantName: this.merchantInfo.B2CName }).then(res => {
+					this.$message({ type: res.Type.toLowerCase(), message: res.Content, center: true })
+					if (res.Type.toLowerCase() == 'success') {
+						this.canSignNextTime = true
+						let _this = this
+						this.timer2 = setInterval(function() {
+							if (_this.nextSignTime > 1) {
+								_this.nextSignTime--
+							} else {
+								_this.canSignNextTime = false
+								_this.nextSignTime = 60
+								clearInterval(_this.timer2)
+							}
+						}, 1000)
+					}
 				})
-					.then(() => {
-						this.$ajax.post('User/RegCheck', { Mobile: this.signForm.UserPhone, MerchantName: this.merchantInfo.B2CName }).then(res => {
-							this.$message({ type: res.Type.toLowerCase(), message: res.Content, center: true })
-						})
-					})
-					.catch(() => {})
 			})
 		},
 		//记录点击事件  超时半小时退出登录
@@ -313,6 +322,9 @@ export default {
 		//注册页关闭---重置已输入的表单内容
 		signClose(formName) {
 			this.$refs[formName].resetFields()
+			this.canSignNextTime = false
+			this.nextSignTime = 60
+			clearInterval(this.timer2)
 		},
 		//注册提交
 		signAction(formName) {
@@ -322,9 +334,15 @@ export default {
 						if (res.Code == 200) {
 							this.$message({ type: 'success', message: '注册成功', center: true })
 							this.signShow = false
+							this.canSignNextTime = false
+							this.nextSignTime = 60
+							clearInterval(this.timer2)
 						} else {
 							this.$message({ type: 'warning', message: res.Content, center: true })
 							this.signShow = false
+							this.canSignNextTime = false
+							this.nextSignTime = 60
+							clearInterval(this.timer2)
 						}
 					})
 				} else {
