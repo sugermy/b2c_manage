@@ -255,21 +255,24 @@ export default {
 	font-size: 12px;
 	font-family: SourceHanSansCN-Medium;
 	font-weight: 500;
-	padding: 2px;
+	padding: 1px 3px;
 	display: inline-block;
 	margin-right: 5px;
 }
 .type-g {
 	color: #5dc775;
 	border: 1px solid #5dc775;
+	background: rgba(245, 255, 238, 1);
 }
 .type-r {
 	color: #ff6666;
 	border: 1px solid #ff6666;
+	background: rgba(255, 242, 242, 1);
 }
 .type-b {
 	color: #5e99ff;
 	border: 1px solid #5e99ff;
+	background: rgba(244, 248, 255, 1);
 }
 .ticket-explain {
 	position: absolute;

@@ -262,20 +262,23 @@ export default {
 	font-family: SourceHanSansCN-Medium;
 	font-weight: 500;
 	display: inline-block;
-	padding: 3px;
+	padding: 1px 3px;
 	margin-right: 8px;
 }
 .list-type-g {
 	color: #5dc775;
 	border: 1px solid #5dc775;
+	background: rgba(245, 255, 238, 1);
 }
 .list-type-r {
 	color: #ff6666;
 	border: 1px solid #ff6666;
+	background: rgba(255, 242, 242, 1);
 }
 .list-type-b {
 	color: #5e99ff;
 	border: 1px solid #5e99ff;
+	background: rgba(244, 248, 255, 1);
 }
 .list-explain {
 	font-size: 14px;

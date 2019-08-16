@@ -4,8 +4,8 @@
       <div class="sail-header">购票须知</div>
       <div class="sail-main">
         <div class="sail-explain" v-for="(item,index) in sailTxt" :key="index">
-          <h3><span>{{index+1}}. </span>{{item.Title}}</h3>
-          <p>{{item.Info}}</p>
+          <h3 class="sail-title"><span>{{index+1}}. </span>{{item.Title}}</h3>
+          <pre class="sail-txt">{{item.Info}}</pre>
         </div>
       </div>
     </el-col>
@@ -39,27 +39,39 @@ export default {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	.middle {
-		background: #fff;
-	}
+
 	.sail-header {
 		height: 50px;
+		text-align: center;
 		line-height: 50px;
-		background: #ff8039;
-		color: #fff;
+		background: linear-gradient(134deg, rgba(255, 128, 57, 1) 0%, rgba(255, 193, 65, 1) 100%);
+		border-radius: 14px 14px 0px 0px;
 		font-size: 18px;
 		font-weight: 600;
 		padding: 0 16px;
+		color: rgba(255, 255, 255, 1);
 	}
 	.sail-main {
 		padding: 0 16px;
+		background: #fff;
 		.sail-explain {
-			margin: 10px 0;
+			padding: 10px 0;
 			line-height: 24px;
-			p {
+			.sail-title {
+				font-size: 18px;
+				font-family: SourceHanSansCN-Medium;
+				font-weight: 500;
+				color: rgba(255, 128, 57, 1);
+			}
+			.sail-txt {
 				margin: 0;
 				padding: 0 10px;
-				text-indent: 10px;
+				font-size: 16px;
+				font-family: SourceHanSansCN-Regular;
+				white-space: pre-wrap;
+				font-weight: 400;
+				color: rgba(51, 51, 51, 1);
+				line-height: 36px;
 			}
 		}
 	}
