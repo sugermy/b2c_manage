@@ -106,7 +106,7 @@ export default {
 			showDetail: false,
 			datePicker: {
 				disabledDate(time) {
-					let today = new Date()
+					let today = new Date(new Date() - 24 * 60 * 60 * 1000)
 					return time.getTime() < today.getTime()
 				}
 			},
@@ -120,7 +120,7 @@ export default {
 		let today = new Date()
 		let ydate = today.getFullYear()
 		let mdate = today.getMonth() + 1 >= 10 ? today.getMonth() + 1 : '0' + (today.getMonth() + 1)
-		let ddate = today.getDate() + 1 >= 10 ? today.getDate() + 1 : '0' + (today.getDate() + 1)
+		let ddate = today.getDate() >= 10 ? today.getDate() : '0' + today.getDate()
 		let nextDate = ydate + '-' + mdate + '-' + ddate
 		this.dateValue = nextDate
 		this.productID = this.$route.query.id || ''
