@@ -155,7 +155,7 @@ export default {
 				.then(({ value }) => {
 					this.$ajax.post('Order/Refund', { OrderNo: row.OrderNo, Mobile: this.loginInfo.UserPhone, Remark: value }).then(res => {
 						this.$message({ type: res.Type.toLowerCase(), message: res.Content, center: true })
-						res.Type = 'Success' ? this.getOrder(this.tableParams.pageNum) : '' //提交成功之后刷新列表
+						res.Type == 'Success' ? this.getOrder(this.tableParams.pageNum) : '' //提交成功之后刷新列表
 					})
 				})
 				.catch(() => {
