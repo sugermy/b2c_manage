@@ -1,7 +1,7 @@
 <template>
   <div id="app" @click="recordLogin">
     <el-row type="flex" justify="center">
-      <el-col :span="20">
+      <el-col :span="18">
         <header-bar ref="headerBar" :msg="toChilde" @toLogin="toLogin"></header-bar>
       </el-col>
     </el-row>

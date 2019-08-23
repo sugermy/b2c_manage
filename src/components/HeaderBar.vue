@@ -114,7 +114,7 @@ export default {
 }
 .logo-img {
 	height: 44px;
-	width: 167px;
+	width: auto;
 }
 .header-right {
 	display: flex;

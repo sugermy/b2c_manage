@@ -113,7 +113,7 @@ export default {
 		optionLeft() {
 			return {
 				direction: 2,
-				limitMoveNum: 2
+				limitMoveNum: 1
 			}
 		}
 	},
@@ -179,14 +179,15 @@ export default {
 	}
 	ul.scroll-list {
 		display: flex;
+		width: 100% !important;
 		li {
-			width: 25%;
+			width: 300px;
 			height: 200px;
 			margin-right: 10px;
 			cursor: pointer;
 			img {
 				width: 100%;
-				height: 100%;
+				height: 200px;
 			}
 		}
 		li:first-child {
