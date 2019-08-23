@@ -8,6 +8,7 @@
               <ul class="scroll-list" :style="`width:${seamWidth}px`">
                 <li v-for="(item,index) in bannelList" :key="index">
                   <img :src="item.ImgUrl" :data-url="item.LinkUrl" :data-product="item.LinkProduct">
+                  <span class="bannel-title">{{item.BannelName}}</span>
                 </li>
               </ul>
             </vue-seamless-scroll>
@@ -184,10 +185,24 @@ export default {
 			width: 300px;
 			height: 200px;
 			margin-right: 10px;
+			position: relative;
 			cursor: pointer;
 			img {
 				width: 100%;
 				height: 200px;
+			}
+			.bannel-title {
+				position: absolute;
+				bottom: 0;
+				left: 0;
+				height: 30px;
+				line-height: 30px;
+				text-align: center;
+				width: 100%;
+				color: #fff;
+				font-weight: bold;
+				letter-spacing: 2px;
+				background: #ff8039;
 			}
 		}
 		li:first-child {

@@ -84,7 +84,7 @@ export default {
 					})
 					break
 				case 'exit':
-					let nologin = { loginStatus: false }
+					var nologin = { loginStatus: false }
 					this.$store.dispatch('setLonginInfo', nologin)
 					this.$message({ type: 'success', message: '退出成功', center: true })
 					this.$router.push({
