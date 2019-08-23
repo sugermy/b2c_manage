@@ -60,6 +60,7 @@ function getMerchantInfo() {
 }
 /* 30分钟默认刷新token  为了方便使用29分钟时刷新赋值 */
 setInterval(() => {
+  Token = "";
   refrushTokenGet();
 }, 1740000); //1740000
 
