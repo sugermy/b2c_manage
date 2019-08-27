@@ -5,7 +5,7 @@
         <header-bar ref="headerBar" :msg="toChilde" @toLogin="toLogin"></header-bar>
       </el-col>
     </el-row>
-    <el-row class="bg">
+    <el-row class="bg" :style="{backgroundImage:`url(${merchantInfo.BackgroundImg})`}">
       <el-scrollbar style="height:calc(100vh - 90px);">
         <el-col :span="20" class="main-con">
           <router-view></router-view>
@@ -447,7 +447,9 @@ export default {
 }
 .bg {
 	width: 100%;
-	background: url(./assets/home_bg.png) no-repeat center;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
 	.el-scrollbar__view {
 		display: flex;
 		justify-content: center;
