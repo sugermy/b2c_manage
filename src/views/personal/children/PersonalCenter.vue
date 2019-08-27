@@ -170,12 +170,12 @@ export default {
 <style lang="less" scoped>
 .form-content {
 	background: #fff;
-	height: 100%;
+	// height: 100%;
 }
 .form-main {
 	margin-top: 50px;
 	margin-left: 20px;
-	height: calc(100vh - 270px);
+	min-height: calc(100vh - 270px);
 	.form-btn {
 		border: none;
 		font-size: 16px;

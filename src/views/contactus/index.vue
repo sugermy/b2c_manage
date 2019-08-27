@@ -68,13 +68,12 @@ export default {
 </script>
 <style lang="less" scoped>
 .content {
-	height: 100%;
-	margin-top: 50px;
+	margin: 50px 0;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	.contactus-us {
-		height: 100%;
+		min-height: calc(100vh - 190px);
 		background: #fff;
 		padding: 40px 36px;
 		box-sizing: border-box;
@@ -83,7 +82,7 @@ export default {
 			.contactus-i {
 				display: flex;
 				align-items: center;
-				min-height: 15%;
+				min-height: 100px;
 				box-sizing: border-box;
 				border-bottom: 1px dashed #ccc;
 				padding: 0 12px;

@@ -61,13 +61,11 @@ export default {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	height: 100%;
 	.personal {
-		min-height: 100%;
 		background: #fff;
-		.personal-bus {
-			height: 100%;
-		}
+		// .personal-bus {
+		// 	height: 100%;
+		// }
 		.personal-l {
 			.personal-head {
 				height: 100px;
