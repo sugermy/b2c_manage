@@ -72,10 +72,12 @@
             <el-button type="primary" :loading="canSignNextTime" class="load-msg" @click="onSign">获取验证码 {{canSignNextTime?nextSignTime:''}}</el-button>
           </el-form-item>
           <el-form-item prop="UserIdCard" label="身份证号">
-            <el-input type="text" placeholder="请输入身份证号" prefix-icon="el-icon-postcard" v-model="signForm.UserIdCard" autocomplete="off"></el-input>
+            <el-input type="text" placeholder="请输入身份证号" :readonly="autoComplete" @focus="autoComplete=false" prefix-icon="el-icon-postcard" v-model="signForm.UserIdCard"
+              autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item prop="Password" label="密码">
-            <el-input type="password" placeholder="请输入密码" prefix-icon="el-icon-unlock" show-password v-model="signForm.Password" autocomplete="off"></el-input>
+            <el-input type="password" placeholder="请输入密码" :readonly="autoComplete" @focus="autoComplete=false" prefix-icon="el-icon-unlock" show-password
+              v-model="signForm.Password" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item prop="enPassword" label="确认密码">
             <el-input type="password" placeholder="确认密码" prefix-icon="el-icon-unlock" show-password v-model="signForm.enPassword" autocomplete="off"></el-input>
@@ -131,6 +133,7 @@ export default {
 			timer2: null,
 			nextSignTime: 60,
 			canSignNextTime: false,
+			autoComplete: true,
 			loginRules: {
 				Mobile: [
 					{ required: true, message: '请输入登录账号', trigger: 'blur' },
