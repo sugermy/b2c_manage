@@ -26,7 +26,7 @@ let BTCAjax = new Ajax(baseURL, Token, MerchantCode);
 refrushTokenGet();
 
 //刷新token的方法--get
-function refrushTokenGet() {
+function refrushTokenGet () {
   baseAjax.get("Token", {}).then(res => {
     Token = res.Data;
     BTCAjax._axios.defaults.headers.Token = Token;
@@ -37,7 +37,7 @@ function refrushTokenGet() {
   });
 }
 //获取商户信息
-function getMerchantInfo() {
+function getMerchantInfo () {
   BTCAjax.get("/Park/Info").then(res => {
     if (res.Code == "200") {
       store.dispatch("setMerchantData", res.Data);
