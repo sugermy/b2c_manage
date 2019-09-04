@@ -345,7 +345,6 @@ export default {
 							clearInterval(this.timer2)
 						} else {
 							this.$message({ type: 'warning', message: res.Content, center: true })
-							this.signShow = false
 							this.canSignNextTime = false
 							this.nextSignTime = 60
 							clearInterval(this.timer2)
