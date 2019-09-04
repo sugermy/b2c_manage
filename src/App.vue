@@ -39,7 +39,7 @@
           <el-form-item class="dialog-footer">
             <el-button type="primary" @click="reday('ruleForm')">登 录</el-button>
           </el-form-item>
-          <el-row class="sigin-ready"><span @click="signIn">立即注册</span></el-row>
+          <el-row class="sigin-ready"><span class="welogin" @click="weLogin"></span><span @click="signIn">立即注册</span></el-row>
         </el-form>
       </el-row>
     </el-dialog>
@@ -255,6 +255,10 @@ export default {
 				this.loginRules.MsgCode[0].required = true
 			}
 		},
+		//微信登录
+		weLogin() {
+			console.log(1)
+		},
 		//发送验证码
 		onMsg() {
 			this.loginRules.MsgCode[0].required = false
@@ -287,7 +291,7 @@ export default {
 			this.$refs[formName].validate(valid => {
 				if (valid) {
 					//保存实体
-					this.$ajax.post('User/Login/' + this.activeTab, this.loginForm).then(res => {
+					this.$ajax.post('Post_User_LoginByAccount/' + this.activeTab, this.loginForm).then(res => {
 						if (res.Code == 200) {
 							this.$message({ type: 'success', message: res.Content, center: true })
 							let accountForm = res.Data
@@ -384,6 +388,7 @@ export default {
 	width: 100%;
 	height: 100%;
 }
+
 .main-con {
 	width: 100%;
 	height: calc(100% - 100px);
@@ -438,7 +443,16 @@ export default {
 		color: rgba(44, 151, 222, 1);
 		text-align: right;
 		margin-top: 20px;
+		height: 24px;
+		line-height: 24px;
 		cursor: pointer;
+		// 微信登录
+		.welogin {
+			float: left;
+			height: 24px;
+			width: 118px;
+			background: url('./assets/welogin.png') no-repeat;
+		}
 	}
 	.login-active {
 		color: rgba(255, 128, 57, 1);

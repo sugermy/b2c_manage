@@ -3,6 +3,8 @@ import { Promise } from "q";
 import { Notification } from "element-ui";
 import qs from "qs";
 
+const baseURL = "http://192.168.33.154:8025/official/"; //基础服务地址
+
 export default class Ajax {
   /**
    * @param { String } baseURL        基础请求地址
@@ -10,7 +12,7 @@ export default class Ajax {
    * @param { Number } TIMEOUT        超时时间
    * @param { String } MerchantCode  商户号
    */
-  constructor(baseURL = "", Token = "", MerchantCode = "", TIMEOUT = 60000) {
+  constructor(Token = "", MerchantCode = "", TIMEOUT = 60000) {
     // 创建一个新的axios实例，并设置默认请求地址和请求头
     this._axios = axios.create({
       baseURL,
@@ -37,7 +39,15 @@ export default class Ajax {
     this._axios.interceptors.response.use(
       response => {
         if (response.data) {
-          return response.data;
+          let config = response.config
+          if (response.data.Code == 2 && response.data.Content.indexOf('Token已失效') != -1) {
+            this._axios.get('Token', {}).then(res => {
+              config.headers.Token = res.Data;
+              return this._axios(config)
+            })
+          } else {
+            return response.data;
+          }
         } else {
           return response;
         }
@@ -53,10 +63,10 @@ export default class Ajax {
     );
   }
   // 请求方式优化
-  get(url, params = {}) {
+  get (url, params = {}) {
     return this._axios({ method: "get", url, params });
   }
-  post(url, data = {}, params = {}) {
+  post (url, data = {}, params = {}) {
     data = qs.stringify(data);
     return this._axios({
       method: "post",

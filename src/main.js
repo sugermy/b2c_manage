@@ -17,11 +17,11 @@ Vue.use(scroll);
 Vue.config.productionTip = false;
 
 // const baseURL = "http://192.168.33.154:61780/official/"; //基础服务地址
-const baseURL = "http://192.168.33.154:8025/official/"; //基础服务地址
+// const baseURL = "http://192.168.33.154:8025/official/"; //基础服务地址
 let Token = "";
 let MerchantCode = "S190304762"; //景区商户号
-let baseAjax = new Ajax(baseURL, "", MerchantCode);
-let BTCAjax = new Ajax(baseURL, Token, MerchantCode);
+let baseAjax = new Ajax("", MerchantCode);
+let BTCAjax = new Ajax(Token, MerchantCode);
 
 refrushTokenGet();
 
@@ -62,7 +62,7 @@ function getMerchantInfo () {
 setInterval(() => {
   Token = "";
   refrushTokenGet();
-}, 1740000); //1740000
+}, 1800000); //1800000
 
 /* vue原型拓展ajax */
 Vue.prototype.$baseAjax = baseAjax; //登录请求接口

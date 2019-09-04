@@ -15,6 +15,11 @@
           <el-button class="form-btn" v-show="infoStatus.Gender" @click.prevent="modifyItem('Gender')">修改</el-button>
           <el-button class="form-btn" v-show="!infoStatus.Gender" @click.prevent="modifyInfo('Gender',infoForm.Gender)">确定</el-button>
         </el-form-item>
+        <el-form-item class="label-form" label="手机号：" prop="UserPhone">
+          <el-input class="form-control" :readonly="infoStatus.UserPhone" v-model="infoForm.UserPhone"></el-input>
+          <el-button class="form-btn" v-show="infoStatus.UserPhone" @click.prevent="modifyItem('UserPhone')">修改</el-button>
+          <el-button class="form-btn" v-show="!infoStatus.UserPhone" @click.prevent="modifyInfo('UserPhone',infoForm.UserPhone)">确定</el-button>
+        </el-form-item>
         <el-form-item class="label-form" label="姓名：" prop="UserName">
           <el-input class="form-control" :readonly="infoStatus.UserName" v-model="infoForm.UserName"></el-input>
           <el-button class="form-btn" v-show="infoStatus.UserName" @click.prevent="modifyItem('UserName')">修改</el-button>
@@ -69,14 +74,16 @@ export default {
 				NickName: true,
 				Gender: true,
 				UserIdCard: true,
-				UserName: true
+				UserName: true,
+				UserPhone: true
 			},
 			passFrom: {},
 			modifyStatus: false,
 			rules: {
-				name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
-				sex: [{ required: true, message: '请输入性别', trigger: 'blur' }],
-				Idcard: [
+				NickName: [{ required: true, message: '请输入昵称', trigger: 'blur' }],
+				UserName: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+				Gender: [{ required: true, message: '请输入性别', trigger: 'blur' }],
+				UserIdCard: [
 					{ required: true, message: '请输入身份证号', trigger: 'blur' },
 					{
 						pattern: /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/,
@@ -84,11 +91,11 @@ export default {
 						trigger: 'blur'
 					}
 				],
-				phone: [
-					{ required: true, message: '请输入联系电话', trigger: 'blur' },
+				UserPhone: [
+					{ required: true, message: '请输入手机号', trigger: 'blur' },
 					{
 						pattern: /^[1][3,4,5,7,8][0-9]{9}$/,
-						message: '联系电话格式不正确',
+						message: '手机号码格式不正确',
 						trigger: 'blur'
 					}
 				],
@@ -155,6 +162,13 @@ export default {
 					break
 				case 'Gender':
 					this.infoStatus.Gender = false
+					break
+				case 'UserPhone':
+					if (this.infoForm.UserPhone == '') {
+						this.infoStatus.UserPhone = false
+					} else {
+						this.$message({ type: 'warning', message: '当前手机号不允许修改', center: true })
+					}
 					break
 				case 'UserIdCard':
 					this.infoStatus.UserIdCard = false
