@@ -118,7 +118,7 @@ export default {
 						OldPwd: this.passFrom.oldPass,
 						NewPwd: this.passFrom.newPass
 					}
-					this.$ajax.post('User/Update/' + this.$store.state.loginInfo.UserPhone, params).then(res => {
+					this.$ajax.post('User/Update/' + this.$store.state.loginInfo.Account, params).then(res => {
 						if (res.Code == 200) {
 							this.$message({ type: 'success', message: res.Content, center: true })
 							this.$store.state.loginInfo = { loginStatus: false }
@@ -132,7 +132,7 @@ export default {
 		},
 		//个人信息修改调用
 		modifyInfo(type, val) {
-			this.$ajax.post('User/Update', { Utype: type, CharValue: val, Mobile: this.$store.state.loginInfo.UserPhone }).then(res => {
+			this.$ajax.post('User/Update', { Utype: type, CharValue: val, Account: this.$store.state.loginInfo.Account }).then(res => {
 				if (res.Code == 200) {
 					this.$message({ type: 'success', message: res.Content, center: true })
 					this.$store.state.loginInfo[type] = val
