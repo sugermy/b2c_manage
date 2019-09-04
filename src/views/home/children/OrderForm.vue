@@ -223,6 +223,7 @@ export default {
 						PayClient: this.payType,
 						LinkName: this.loginInfo.UserName,
 						LinkPhone: this.loginInfo.UserPhone,
+						PayAccount: this.loginInfo.Account,
 						LinkIDCareNo: this.loginInfo.UserIdCard
 					}
 					let PassengerJson = [

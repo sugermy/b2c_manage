@@ -291,7 +291,7 @@ export default {
 			this.$refs[formName].validate(valid => {
 				if (valid) {
 					//保存实体
-					this.$ajax.post('Post_User_LoginByAccount/' + this.activeTab, this.loginForm).then(res => {
+					this.$ajax.post('User/Login/' + this.activeTab, this.loginForm).then(res => {
 						if (res.Code == 200) {
 							this.$message({ type: 'success', message: res.Content, center: true })
 							let accountForm = res.Data

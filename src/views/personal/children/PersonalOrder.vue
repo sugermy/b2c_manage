@@ -108,9 +108,9 @@ export default {
 		this.getOrder(this.tableParams.pageNum)
 	},
 	methods: {
-		//查看订单详情
+		//获取订单列表
 		getOrder(pageNum) {
-			this.$ajax.get('Order/OrderList', { Mobile: this.loginInfo.UserPhone, page: pageNum, Rows: this.tableParams.pageSize }).then(res => {
+			this.$ajax.get('Order/OrderList', { Account: this.loginInfo.Account, page: pageNum, Rows: this.tableParams.pageSize }).then(res => {
 				if (res.Data) {
 					this.tableParams.totalNum = res.Data.RowsCount || 1
 					this.tableData = res.Data.Result_Data || []
@@ -119,7 +119,7 @@ export default {
 		},
 		//单条查看详情
 		lookDetail(i, r) {
-			this.$ajax.get('Order/OrderDetail', { Mobile: this.loginInfo.UserPhone, OrderNo: r.OrderNo }).then(res => {
+			this.$ajax.get('Order/OrderDetail', { Account: this.loginInfo.Account, OrderNo: r.OrderNo }).then(res => {
 				if (res.Code == 200) {
 					this.orderDetail = res.Data
 					if (this.orderDetail.ShowDBStatus != 1 && this.orderDetail.ShowDBStatus != 2 && this.orderDetail.ShowDBStatus != 3 && this.orderDetail.ShowDBStatus != 4) {
@@ -136,7 +136,7 @@ export default {
 		},
 		//去支付
 		wentPay(row) {
-			this.$ajax.post('Order/RePay', { OrderNo: row.OrderNo, Mobile: this.loginInfo.UserPhone }).then(res => {
+			this.$ajax.post('Order/RePay', { OrderNo: row.OrderNo, Account: this.loginInfo.Account }).then(res => {
 				if (res.Code == 200) {
 					let params = { OrderNo: row.OrderNo, Mobile: this.loginInfo.UserPhone, resultURL: res.Data, PayType: row.DBPayType, Amount: row.Amount, ProductName: row.ProductName }
 					let paramsCR = CryptoJS.AES.encrypt(JSON.stringify(params), 'paramsCR').toString()
@@ -153,7 +153,7 @@ export default {
 				inputErrorMessage: '请输入退款原因'
 			})
 				.then(({ value }) => {
-					this.$ajax.post('Order/Refund', { OrderNo: row.OrderNo, Mobile: this.loginInfo.UserPhone, Remark: value }).then(res => {
+					this.$ajax.post('Order/Refund', { OrderNo: row.OrderNo, Account: this.loginInfo.Account, Remark: value }).then(res => {
 						this.$message({ type: res.Type.toLowerCase(), message: res.Content, center: true })
 						res.Type == 'Success' ? this.getOrder(this.tableParams.pageNum) : '' //提交成功之后刷新列表
 					})
