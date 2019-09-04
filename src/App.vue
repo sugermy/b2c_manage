@@ -336,7 +336,7 @@ export default {
 		signAction(formName) {
 			this.$refs[formName].validate(valid => {
 				if (valid) {
-					this.$ajax.post('User/Register', { ReqParam: JSON.stringify(this.signForm), MsgCode: JSON.stringify(this.signForm.MsgCode) }).then(res => {
+					this.$ajax.post('User/Register', { ReqParam: JSON.stringify(this.signForm), MsgCode: this.signForm.MsgCode }).then(res => {
 						if (res.Code == 200) {
 							this.$message({ type: 'success', message: '注册成功', center: true })
 							this.signShow = false
