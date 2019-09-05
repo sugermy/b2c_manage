@@ -120,9 +120,11 @@ export default {
 					}
 					this.$ajax.post('User/Update/' + this.$store.state.loginInfo.Account, params).then(res => {
 						if (res.Code == 200) {
-							this.$message({ type: 'success', message: res.Content, center: true })
+							this.$message({ type: 'success', message: res.Content, center: true, duration: 2000 })
 							this.$store.state.loginInfo = { loginStatus: false }
 							this.$router.push({ path: '/Home' })
+						} else {
+							this.$message({ type: res.Type.toLowerCase(), message: res.Content, center: true, duration: 2000 })
 						}
 					})
 				} else {
@@ -134,11 +136,11 @@ export default {
 		modifyInfo(type, val) {
 			this.$ajax.post('User/Update', { Utype: type, CharValue: val, Account: this.$store.state.loginInfo.Account }).then(res => {
 				if (res.Code == 200) {
-					this.$message({ type: 'success', message: res.Content, center: true })
+					this.$message({ type: 'success', message: res.Content, center: true, duration: 2000 })
 					this.$store.state.loginInfo[type] = val
 					this.infoStatus[type] = true
 				} else {
-					this.$message({ type: 'error', message: res.Content, center: true })
+					this.$message({ type: 'error', message: res.Content, center: true, duration: 2000 })
 					this.infoStatus[type] = true
 					this.infoForm[type] = this.baseInfo[type]
 				}
@@ -167,7 +169,7 @@ export default {
 					if (this.infoForm.UserPhone == '') {
 						this.infoStatus.UserPhone = false
 					} else {
-						this.$message({ type: 'warning', message: '当前手机号不允许修改', center: true })
+						this.$message({ type: 'warning', message: '当前手机号不允许修改', center: true, duration: 2000 })
 					}
 					break
 				case 'UserIdCard':

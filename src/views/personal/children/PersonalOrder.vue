@@ -154,12 +154,12 @@ export default {
 			})
 				.then(({ value }) => {
 					this.$ajax.post('Order/Refund', { OrderNo: row.OrderNo, Account: this.loginInfo.Account, Remark: value }).then(res => {
-						this.$message({ type: res.Type.toLowerCase(), message: res.Content, center: true })
+						this.$message({ type: res.Type.toLowerCase(), message: res.Content, center: true, duration: 2000 })
 						res.Type == 'Success' ? this.getOrder(this.tableParams.pageNum) : '' //提交成功之后刷新列表
 					})
 				})
 				.catch(() => {
-					this.$message({ type: 'info', message: '取消输入', center: true })
+					this.$message({ type: 'info', message: '取消输入', center: true, duration: 2000 })
 				})
 		},
 		//返回上一步

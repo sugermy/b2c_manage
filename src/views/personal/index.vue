@@ -45,7 +45,7 @@ export default {
 			if (command == 'exit') {
 				let nologin = { loginStatus: false }
 				this.$store.dispatch('setLonginInfo', nologin)
-				this.$message({ type: 'success', message: '退出成功', center: true })
+				this.$message({ type: 'success', message: '退出成功', center: true, duration: 2000 })
 				this.$router.push({
 					path: '/Home'
 				})

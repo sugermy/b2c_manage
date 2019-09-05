@@ -31,7 +31,13 @@
 //登录弹窗中隐藏header
 .dialog-longin {
   .el-dialog__header {
-    display: none;
+    // display: none;
+    .el-dialog__headerbtn {
+      top: 12px;
+    }
+  }
+  .el-dialog--center .el-dialog__body {
+    padding-top: 0;
   }
   .dialog-footer {
     .el-form-item__content {

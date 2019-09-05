@@ -12,7 +12,7 @@
         </el-col>
       </el-scrollbar>
     </el-row>
-    <el-dialog title="" class="dialog-longin" :visible.sync="showLogin" width="400px" :show-close="false" @close="loginClose" center>
+    <el-dialog title="" :close-on-click-modal="false" class="dialog-longin" :visible.sync="showLogin" width="400px" show-close @close="loginClose" center>
       <el-row class="login-head">
         <el-col :span="12" class="login-t">
           <div @click="changeTab(1)"><span :class="activeTab==1?'login-active':''">普通登录</span></div>
@@ -27,10 +27,12 @@
             <el-input type="text" placeholder="请输入用户手机账号" prefix-icon="el-icon-user-solid" v-model="loginForm.Mobile" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item prop="Pwd" v-show="activeTab==1">
-            <el-input type="password" placeholder="请输入密码" prefix-icon="el-icon-unlock" v-model="loginForm.Pwd" autocomplete="off"></el-input>
+            <el-input type="password" placeholder="请输入密码" @keyup.enter.native="reday('ruleForm')" prefix-icon="el-icon-unlock" v-model="loginForm.Pwd" autocomplete="off">
+            </el-input>
           </el-form-item>
           <el-form-item prop="MsgCode" v-show="activeTab==2">
-            <el-input type="password" placeholder="请输入验证码" prefix-icon="el-icon-unlock" v-model="loginForm.MsgCode" autocomplete="off"></el-input>
+            <el-input type="password" placeholder="请输入验证码" @keyup.enter.native="reday('ruleForm')" prefix-icon="el-icon-unlock" v-model="loginForm.MsgCode" autocomplete="off">
+            </el-input>
             <el-button type="primary" :loading="canNextTime" class="load-msg" @click="onMsg">获取验证码 {{canNextTime?nextTime:''}}</el-button>
           </el-form-item>
           <el-form-item class="ormemery-pass" v-show="activeTab==1">
@@ -44,7 +46,7 @@
       </el-row>
     </el-dialog>
     <!-- 注册页 -->
-    <el-dialog title="" class="dialog-longin" :visible.sync="signShow" width="400px" :show-close="false" @close="signClose('signRuleForm')" center>
+    <el-dialog title="" :close-on-click-modal="false" class="dialog-longin" :visible.sync="signShow" width="400px" show-close @close="signClose('signRuleForm')" center>
       <el-row class="login-head">
         <el-col :span="24" class="login-top">
           <div><span class="login-active">注册</span></div>
@@ -80,7 +82,8 @@
               v-model="signForm.Password" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item prop="enPassword" label="确认密码">
-            <el-input type="password" placeholder="确认密码" prefix-icon="el-icon-unlock" show-password v-model="signForm.enPassword" autocomplete="off"></el-input>
+            <el-input type="password" placeholder="确认密码" @keyup.enter.native="signAction('signRuleForm')" prefix-icon="el-icon-unlock" show-password v-model="signForm.enPassword"
+              autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item class="dialog-footer">
             <el-button class="sign-btn" type="primary" @click="signAction('signRuleForm')">提 交</el-button>
@@ -209,6 +212,9 @@ export default {
 		})
 	},
 	methods: {
+		submit() {
+			console.log(1)
+		},
 		//定时器记录当前是否点击dom  点击重置
 		setTimer() {
 			setInterval(() => {
@@ -223,7 +229,7 @@ export default {
 					return false
 				}
 				this.$ajax.post('User/RegCheck', { Mobile: this.signForm.UserPhone, MerchantName: this.merchantInfo.B2CName }).then(res => {
-					this.$message({ type: res.Type.toLowerCase(), message: res.Content, center: true })
+					this.$message({ type: res.Type.toLowerCase(), message: res.Content, center: true, duration: 2000 })
 					if (res.Type.toLowerCase() == 'success') {
 						this.canSignNextTime = true
 						let _this = this
@@ -293,7 +299,7 @@ export default {
 					//保存实体
 					this.$ajax.post('User/Login/' + this.activeTab, this.loginForm).then(res => {
 						if (res.Code == 200) {
-							this.$message({ type: 'success', message: res.Content, center: true })
+							this.$message({ type: 'success', message: res.Content, center: true, duration: 2000 })
 							let accountForm = res.Data
 							accountForm.loginStatus = true
 							this.$store.dispatch('setLonginInfo', accountForm)
@@ -305,7 +311,7 @@ export default {
 							})
 							this.toChilde = false
 						} else {
-							this.$message({ type: 'error', message: res.Content, center: true })
+							this.$message({ type: 'error', message: res.Content, center: true, duration: 2000 })
 						}
 					})
 				} else {
@@ -338,13 +344,13 @@ export default {
 				if (valid) {
 					this.$ajax.post('User/Register', { ReqParam: JSON.stringify(this.signForm), MsgCode: this.signForm.MsgCode }).then(res => {
 						if (res.Code == 200) {
-							this.$message({ type: 'success', message: '注册成功', center: true })
+							this.$message({ type: 'success', message: '注册成功', center: true, duration: 2000 })
 							this.signShow = false
 							this.canSignNextTime = false
 							this.nextSignTime = 60
 							clearInterval(this.timer2)
 						} else {
-							this.$message({ type: 'warning', message: res.Content, center: true })
+							this.$message({ type: 'warning', message: res.Content, center: true, duration: 2000 })
 							this.canSignNextTime = false
 							this.nextSignTime = 60
 							clearInterval(this.timer2)

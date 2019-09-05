@@ -23,8 +23,8 @@
                 <span>￥{{SellPriceBase}}/张</span>
               </el-form-item>
               <el-form-item label="门票数量：">
-                <el-input-number class="form-control" v-model="TicketForm.ticketNum" :value="TicketInit.ticketNum" controls-position="right" @change="handleChange" :min="1"
-                  :max="999">
+                <el-input-number style="width:40%" class="form-control" v-model="TicketForm.ticketNum" :value="TicketInit.ticketNum" controls-position="right"
+                  @change="handleChange" :min="1" :max="999">
                 </el-input-number>
               </el-form-item>
               <el-form-item label="选择日期：">
@@ -235,13 +235,13 @@ export default {
 					]
 					this.$ajax.post('Order/Create', { ReqParam: JSON.stringify(ReqParam), PassengerJson: JSON.stringify(PassengerJson) }).then(res => {
 						if (res.Code == 200) {
-							this.$message({ type: 'success', message: '提交成功', center: true })
+							this.$message({ type: 'success', message: '提交成功', center: true, duration: 2000 })
 							this.OrderNo = res.Data.OrderNo
 							this.resultURL = res.Data.resultURL
 							this.Amount = this.totalMoney
 							this.activeTab = 2
 						} else {
-							this.$message({ type: 'error', message: res.Content, center: true })
+							this.$message({ type: 'error', message: res.Content, center: true, duration: 2000 })
 						}
 					})
 				} else {
@@ -278,7 +278,7 @@ export default {
 				} else {
 					this.paySearchNum++
 					if (this.paySearchNum >= 13) {
-						this.$message({ type: 'error', message: res.Content, center: true })
+						this.$message({ type: 'error', message: res.Content, center: true, duration: 2000 })
 						this.loadPay = false
 						clearInterval(this.timer)
 						this.paySearchNum = 1
@@ -301,7 +301,7 @@ export default {
 						_this.payStatus()
 					}, 5000)
 				} else {
-					this.$message({ type: 'error', message: res.Content, center: true })
+					this.$message({ type: 'error', message: res.Content, center: true, duration: 2000 })
 				}
 			})
 		},

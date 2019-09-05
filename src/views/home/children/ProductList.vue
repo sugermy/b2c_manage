@@ -158,6 +158,9 @@ export default {
 			if (e.target.localName == 'img') {
 				let productId = e.target.dataset.product
 				let url = e.target.dataset.url
+				if (url != '') {
+					window.open(url, '_blank')
+				}
 			}
 		}
 	},
