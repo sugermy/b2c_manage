@@ -182,7 +182,7 @@ export default {
 }
 .info-content {
 	background: #fff;
-	padding: 16px 16px 0 16px;
+	padding: 16px;
 	.no-pass {
 		background: rgba(229, 229, 229, 1);
 		color: #999999;
