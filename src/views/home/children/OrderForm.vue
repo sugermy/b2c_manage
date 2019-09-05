@@ -23,7 +23,7 @@
                 <span>￥{{SellPriceBase}}/张</span>
               </el-form-item>
               <el-form-item label="门票数量：">
-                <el-input-number style="width:40%" class="form-control" v-model="TicketForm.ticketNum" :value="TicketInit.ticketNum" controls-position="right"
+                <el-input-number style="width:120px" class="form-control" v-model="TicketForm.ticketNum" :value="TicketInit.ticketNum" controls-position="right"
                   @change="handleChange" :min="1" :max="999">
                 </el-input-number>
               </el-form-item>

@@ -463,8 +463,17 @@ export default {
 	left: 60px;
 	background: white;
 }
+.qr-code {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
 .qr-code-img {
-	max-width: 80%;
+	max-width: 70%;
+	max-height: 70%;
 	margin-bottom: 1px;
 }
 .qr-code-name {
