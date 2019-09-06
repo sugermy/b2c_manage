@@ -12,7 +12,8 @@
         </el-col>
       </el-scrollbar>
     </el-row>
-    <el-dialog title="" :close-on-click-modal="false" class="dialog-longin" :visible.sync="showLogin" width="400px" show-close @close="loginClose" center>
+    <el-dialog title="" v-loading="loading" element-loading-text="正在发送" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)"
+      :close-on-click-modal="false" class="dialog-longin" :visible.sync="showLogin" width="400px" show-close @close="loginClose" center>
       <el-row class="login-head">
         <el-col :span="12" class="login-t">
           <div @click="changeTab(1)"><span :class="activeTab==1?'login-active':''">普通登录</span></div>
@@ -46,7 +47,8 @@
       </el-row>
     </el-dialog>
     <!-- 注册页 -->
-    <el-dialog title="" :close-on-click-modal="false" class="dialog-longin" :visible.sync="signShow" width="400px" show-close @close="signClose('signRuleForm')" center>
+    <el-dialog title="" v-loading="loading" element-loading-text="正在发送" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)"
+      :close-on-click-modal="false" class="dialog-longin" :visible.sync="signShow" width="400px" show-close @close="signClose('signRuleForm')" center>
       <el-row class="login-head">
         <el-col :span="24" class="login-top">
           <div><span class="login-active">注册</span></div>
@@ -137,6 +139,7 @@ export default {
 			nextSignTime: 60,
 			canSignNextTime: false,
 			autoComplete: true,
+			loading: false,
 			loginRules: {
 				Mobile: [
 					{ required: true, message: '请输入登录账号', trigger: 'blur' },
@@ -281,7 +284,11 @@ export default {
 							clearInterval(_this.timer)
 						}
 					}, 1000)
-					this.$ajax.post('User/GetMsgCode', { Mobile: this.loginForm.Mobile, MerchantName: this.merchantInfo.B2CName }).then(res => {})
+					this.loading = true
+					this.$ajax.post('User/GetMsgCode', { Mobile: this.loginForm.Mobile, MerchantName: this.merchantInfo.B2CName }).then(res => {
+						this.loading = false
+						this.$message({ type: res.Type.toLowerCase(), message: res.Content, center: true, duration: 2000 })
+					})
 				}
 			})
 		},

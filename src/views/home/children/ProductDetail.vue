@@ -36,9 +36,10 @@
                   </div>
                   <div class="purchase-num">
                     <span class="purchase-num-name">购买数量：</span>
-                    <img class="operational" src="../../../assets/homeImage/reduce.png" @click="changeNum('-')" />
+                    <!-- <img class="operational" src="../../../assets/homeImage/reduce.png" @click="changeNum('-')" />
                     <span class="purchase-num-value">{{sailNum}}</span>
-                    <img class="operational" src="../../../assets/homeImage/plus.png" @click="changeNum('+')" />
+                    <img class="operational" src="../../../assets/homeImage/plus.png" @click="changeNum('+')" /> -->
+                    <el-input-number v-model="sailNum" @change="handleChange" :min="1"></el-input-number>
                   </div>
                   <div class="ticket-exchange">
                     <span class="ticket-exchange-name">兑换方式：</span>
@@ -164,6 +165,9 @@ export default {
 					this.sailNum--
 				}
 			}
+		},
+		handleChange(v) {
+			console.log(v)
 		},
 		//点击购买须知弹窗
 		lookExplain() {
