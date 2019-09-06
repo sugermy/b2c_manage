@@ -278,7 +278,7 @@ export default {
 				} else {
 					this.paySearchNum++
 					if (this.paySearchNum >= 13) {
-						this.$message({ type: 'error', message: res.Content, center: true, duration: 2000 })
+						this.$message({ type: 'error', message: '订单未支付', center: true, duration: 2000 })
 						this.loadPay = false
 						clearInterval(this.timer)
 						this.paySearchNum = 1
@@ -289,7 +289,7 @@ export default {
 		//重新支付
 		replayPay() {
 			//需要重新生成订单支付连接
-			this.$ajax.post('Order/RePay', { OrderNo: this.OrderNo, Mobile: this.loginInfo.UserPhone }).then(res => {
+			this.$ajax.post('Order/RePay', { OrderNo: this.OrderNo, Account: this.loginInfo.Account }).then(res => {
 				if (res.Code == 200) {
 					this.resultURL = res.Data
 					let qrcodeChild = this.$refs.qrcode.getElementsByTagName('img')[1]
