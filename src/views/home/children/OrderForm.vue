@@ -308,6 +308,7 @@ export default {
 		//取消
 		resetForm(formName) {
 			this.$refs[formName].resetFields()
+			this.$router.go(-1)
 		}
 	},
 	//组件销毁前清除定时器
