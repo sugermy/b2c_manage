@@ -139,7 +139,25 @@ export default {
 			this.$ajax.get('Product/ProductDetail', { ProductID: pid }).then(res => {
 				this.productInfo = res.Data[0] || {}
 				this.getInitPrice(this.productID, this.dateValue)
+				if (!res.Data[0].IsSellToday) {
+					this.datePicker = {
+						disabledDate(time) {
+							let today = new Date()
+							return time.getTime() < today.getTime()
+						}
+					}
+					this.dateValue = this.dateNext()
+				}
 			})
+		},
+		//日期修改
+		dateNext() {
+			let today = new Date()
+			let ydate = today.getFullYear()
+			let mdate = today.getMonth() + 1 >= 10 ? today.getMonth() + 1 : '0' + (today.getMonth() + 1)
+			let ddate = today.getDate() + 1 >= 10 ? today.getDate() + 1 : '0' + today.getDate() + 1
+			let nextDate = ydate + '-' + mdate + '-' + ddate
+			return nextDate
 		},
 		showAction() {
 			this.showDetail = !this.showDetail
