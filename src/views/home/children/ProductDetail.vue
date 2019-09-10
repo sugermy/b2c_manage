@@ -122,8 +122,8 @@ export default {
 		let ydate = today.getFullYear()
 		let mdate = today.getMonth() + 1 >= 10 ? today.getMonth() + 1 : '0' + (today.getMonth() + 1)
 		let ddate = today.getDate() >= 10 ? today.getDate() : '0' + today.getDate()
-		let nextDate = ydate + '-' + mdate + '-' + ddate
-		this.dateValue = nextDate
+		let TDate = ydate + '-' + mdate + '-' + ddate
+		this.dateValue = TDate
 		this.productID = this.$route.query.id || ''
 		this.getProInfo(this.productID)
 	},
@@ -139,24 +139,39 @@ export default {
 			this.$ajax.get('Product/ProductDetail', { ProductID: pid }).then(res => {
 				this.productInfo = res.Data[0] || {}
 				this.getInitPrice(this.productID, this.dateValue)
+				// 有效周期开始
+				let BaseStartDate = res.Data[0].StartTime
+				let BaseStartTime = new Date(BaseStartDate)
+				let BaseEndDate = res.Data[0].EndTime
+				let BaseEndTime = new Date(BaseEndDate)
+				// 有效周期结束
+
+				// 预售开始
+				let SellStartDate = res.Data[0].PreSellStartDate
+				let SellStartTime = new Date(SellStartDate)
+				let SellEndDate = res.Data[0].PreSellEndDate
+				let SellEndTime = new Date(SellEndDate)
+				// 预售结束
+				this.datePicker = {
+					disabledDate(time) {
+						let today = new Date(new Date() - 24 * 60 * 60 * 1000)
+						return time.getTime() < today.getTime() || time.getTime() > BaseEndTime.getTime()
+					}
+				}
 				if (!res.Data[0].IsSellToday) {
 					this.datePicker = {
 						disabledDate(time) {
 							let today = new Date()
-							return time.getTime() < today.getTime()
+							return time.getTime() < today.getTime() || time.getTime() > BaseEndTime.getTime()
 						}
 					}
 					this.dateValue = this.dateNext()
 				}
 				if (res.Data[0].IsPreSell) {
-					let startDate = res.Data[0].PreSellStartDate
-					let startTime = new Date(startDate)
-					let endDate = res.Data[0].PreSellEndDate
-					let endTime = new Date(endDate)
 					this.datePicker = {
 						disabledDate(time) {
 							let today = new Date()
-							return time.getTime() < startTime.getTime() || time.getTime() > endTime.getTime()
+							return time.getTime() < SellStartTime.getTime() || time.getTime() > SellEndTime.getTime()
 						}
 					}
 					this.dateValue = res.Data[0].PreSellStartDate
