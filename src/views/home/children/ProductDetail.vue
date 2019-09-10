@@ -148,6 +148,19 @@ export default {
 					}
 					this.dateValue = this.dateNext()
 				}
+				if (res.Data[0].IsPreSell) {
+					let startDate = res.Data[0].PreSellStartDate
+					let startTime = new Date(startDate)
+					let endDate = res.Data[0].PreSellEndDate
+					let endTime = new Date(endDate)
+					this.datePicker = {
+						disabledDate(time) {
+							let today = new Date()
+							return time.getTime() < startTime.getTime() || time.getTime() > endTime.getTime()
+						}
+					}
+					this.dateValue = res.Data[0].PreSellStartDate
+				}
 			})
 		},
 		//日期修改
