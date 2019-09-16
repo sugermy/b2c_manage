@@ -40,7 +40,7 @@ export default new Router({
           component: HomeView,
           meta: {
             title: "首页"
-          }
+          },
         },
         {
           path: "Product",

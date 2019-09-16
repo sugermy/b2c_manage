@@ -1,18 +1,20 @@
 // current use server
-const ACTIVE_SERVER = 'localhost'
+const ACTIVE_SERVER = 'official'//当前使用的服务器
 // all servers
 const ALL_SERVERS = {
-  // 1-1. online
+  // 1-1. 正式服务器
   official: {
     apiServer: 'http://b2cservice.core.x-jing.com/official/',
   },
-  // 1-2. test
+  // 1-2. 测试服务器
   localhost: {
     apiServer: 'http://192.168.33.154:8025/official/',
   },
 }
 
 window.SYSTEM_CONFIG = {
-  webServer: ALL_SERVERS[ACTIVE_SERVER]['apiServer'],
-  MerchantCode: 'S190304762'
+  webServer: ALL_SERVERS[ACTIVE_SERVER]['apiServer'],//启用服务器地址
+  MerchantCode: 'S190304762',//商户号
+  AppId: "wxbf5e0aff7a87e7bd",//公众平台授权 AppID
+  AppSecret: "e5101a53ac36911e9af317c91a4be7dc"//公众平台授权 AppSecret 
 }
