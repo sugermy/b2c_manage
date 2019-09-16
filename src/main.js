@@ -16,8 +16,6 @@ import "./utils/filters";
 Vue.use(scroll);
 Vue.config.productionTip = false;
 
-// const baseURL = "http://192.168.33.154:61780/official/"; //基础服务地址
-// const baseURL = "http://192.168.33.154:8025/official/"; //基础服务地址
 let Token = "";
 let MerchantCode = "S190304762"; //景区商户号
 let baseAjax = new Ajax("", MerchantCode);
