@@ -14,4 +14,5 @@ const ALL_SERVERS = {
 
 window.SYSTEM_CONFIG = {
   webServer: ALL_SERVERS[ACTIVE_SERVER]['apiServer'],
+  MerchantCode: 'S190304762'
 }

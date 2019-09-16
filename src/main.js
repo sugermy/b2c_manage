@@ -17,7 +17,7 @@ Vue.use(scroll);
 Vue.config.productionTip = false;
 
 let Token = "";
-let MerchantCode = "S190304762"; //景区商户号
+let MerchantCode = window.SYSTEM_CONFIG.MerchantCode; //景区商户号
 let baseAjax = new Ajax("", MerchantCode);
 let BTCAjax = new Ajax(Token, MerchantCode);
 
