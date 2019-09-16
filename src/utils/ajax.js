@@ -2,7 +2,7 @@ import axios from "axios";
 import { Promise } from "q";
 import { Notification } from "element-ui";
 import qs from "qs";
-const baseURL = "http://192.168.33.154:8025/official/"; //基础服务地址
+const baseURL = window.SYSTEM_CONFIG.webServer; //基础服务地址
 export default class Ajax {
   /**
    * @param { String } baseURL        基础请求地址
