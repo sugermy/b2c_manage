@@ -44,7 +44,6 @@ function getMerchantInfo () {
         store,
         render: h => h(App)
       }).$mount("#app");
-      router.push("/Home");
     } else {
       Notification({
         title: "商户获取失败",
@@ -76,21 +75,25 @@ router.beforeEach((to, from, next) => {
     //跳转前动态设置当前title
     document.title = to.meta.title;
   }
-  if (to.path.includes('code')) {
-    let code = getQuery('code');
-    BTCAjax.get(`https://api.weixin.qq.com/sns/oauth2/access_token?appid=${window.SYSTEM_CONFIG.AppId}&secret=${window.SYSTEM_CONFIG.AppSecret}&code=${code}&grant_type=authorization_code`).then(data => {
-      if (!data.errcode) {
-        BTCAjax.post('User/LoginByWechate', { ReqParam: JSON.stringify(data) }).then(res => {
-          if (res.Code == 200) {
-            Message({ type: res.Type.toLowerCase(), message: res.Content, center: true, duration: 2000 })
-            let accountForm = res.Data
-            accountForm.loginStatus = true
-            store.dispatch('setLonginInfo', accountForm)
-          } else {
-            Message({ type: res.Type.toLowerCase(), message: res.Content, center: true, duration: 2000 })
-          }
-        })
-      }
+  let code = getQuery('code');
+  if (code && code != '') {
+    // BTCAjax.get(`https://api.weixin.qq.com/sns/oauth2/access_token?appid=${window.SYSTEM_CONFIG.AppId}&secret=${window.SYSTEM_CONFIG.AppSecret}&code=${code}&grant_type=authorization_code`).then(data => {
+    //   if (!data.errcode) {
+    //     BTCAjax.post('User/LoginByWechate', { ReqParam: JSON.stringify(data) }).then(res => {
+    //       if (res.Code == 200) {
+    //         Message({ type: res.Type.toLowerCase(), message: res.Content, center: true, duration: 2000 })
+    //         let accountForm = res.Data
+    //         accountForm.loginStatus = true
+    //         store.dispatch('setLonginInfo', accountForm)
+    //       } else {
+    //         Message({ type: res.Type.toLowerCase(), message: res.Content, center: true, duration: 2000 })
+    //       }
+    //     })
+    //   }
+    // })
+    BTCAjax.get('GetAccessToken', { code: code }).then(res => {
+      console.log(res);
+
     })
   }
   if (
@@ -105,9 +108,7 @@ router.beforeEach((to, from, next) => {
     next();
   }
 });
+/* 获取url中的参数 */
 function getQuery (name) {
-  var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
-  var r = window.location.search.substr(1).match(reg);
-  if (r != null) return decodeURI(r[2]);
-  return null;
+  return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.href) || ['', ''])[1].replace(/\+/g, '%20')) || null
 }

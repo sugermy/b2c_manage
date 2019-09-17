@@ -1,5 +1,5 @@
 // current use server
-const ACTIVE_SERVER = 'official'//当前使用的服务器
+const ACTIVE_SERVER = 'other'//当前使用的服务器
 // all servers
 const ALL_SERVERS = {
   // 1-1. 正式服务器
@@ -9,6 +9,10 @@ const ALL_SERVERS = {
   // 1-2. 测试服务器
   localhost: {
     apiServer: 'http://192.168.33.154:8025/official/',
+  },
+  //1-3. 测试本机服务
+  other: {
+    apiServer: 'http://192.168.33.154:61780/official/',
   },
 }
 
