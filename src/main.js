@@ -28,6 +28,10 @@ function refrushTokenGet () {
   baseAjax.get("Token", {}).then(res => {
     Token = res.Data;
     BTCAjax._axios.defaults.headers.Token = Token;
+    let code = getQuery('code');
+    if (code && code != '') {
+      wechatLogin(code)
+    }
     if (!store.state.merchantInfo.B2CName) {
       //若不存在商户信息则根据当前token重新获取商户信息
       getMerchantInfo();
@@ -65,6 +69,22 @@ setInterval(() => {
 Vue.prototype.$baseAjax = baseAjax; //登录请求接口
 Vue.prototype.$ajax = BTCAjax; //基于token的请求接口
 
+
+//微信登录
+function wechatLogin (code) {
+  BTCAjax.post('User/LoginByWechate', { code: code }).then(res => {
+    if (res.Code == 200) {
+      Message({ type: res.Type.toLowerCase(), message: res.Content, center: true, duration: 2000 })
+      let accountForm = res.Data
+      accountForm.loginStatus = true
+      store.dispatch('setLonginInfo', accountForm)
+      store.dispatch('changeAppStatus', false)//关闭登录窗口
+    } else {
+      Message({ type: res.Type.toLowerCase(), message: res.Content, center: true, duration: 2000 })
+    }
+  })
+}
+
 //路由跳转守卫判断是否是登录态
 router.beforeEach((to, from, next) => {
   store.dispatch(
@@ -75,27 +95,7 @@ router.beforeEach((to, from, next) => {
     //跳转前动态设置当前title
     document.title = to.meta.title;
   }
-  let code = getQuery('code');
-  if (code && code != '') {
-    // BTCAjax.get(`https://api.weixin.qq.com/sns/oauth2/access_token?appid=${window.SYSTEM_CONFIG.AppId}&secret=${window.SYSTEM_CONFIG.AppSecret}&code=${code}&grant_type=authorization_code`).then(data => {
-    //   if (!data.errcode) {
-    //     BTCAjax.post('User/LoginByWechate', { ReqParam: JSON.stringify(data) }).then(res => {
-    //       if (res.Code == 200) {
-    //         Message({ type: res.Type.toLowerCase(), message: res.Content, center: true, duration: 2000 })
-    //         let accountForm = res.Data
-    //         accountForm.loginStatus = true
-    //         store.dispatch('setLonginInfo', accountForm)
-    //       } else {
-    //         Message({ type: res.Type.toLowerCase(), message: res.Content, center: true, duration: 2000 })
-    //       }
-    //     })
-    //   }
-    // })
-    BTCAjax.get('GetAccessToken', { code: code }).then(res => {
-      console.log(res);
 
-    })
-  }
   if (
     !store.state.loginInfo.loginStatus &&
     to.name != "HomeView" &&
