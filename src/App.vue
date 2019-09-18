@@ -267,7 +267,7 @@ export default {
 		//微信登录
 		weLogin() {
 			// let baseUrl = JSON.parse(JSON.stringify(location.href))
-			let baseUrl = escape('http://gavin-hsk.xicp.io/') //http://192.168.33.202:2020/#/Home/HomeView
+			let baseUrl = escape(window.SYSTEM_CONFIG.wechatUrl)
 			location.href = `https://open.weixin.qq.com/connect/qrconnect?appid=${window.SYSTEM_CONFIG.AppId}&redirect_uri=${baseUrl}&response_type=code&scope=snsapi_login&state=STATE#wechat_redirect`
 		},
 		//发送验证码
