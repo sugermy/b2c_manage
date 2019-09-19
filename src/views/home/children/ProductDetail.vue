@@ -227,6 +227,7 @@ export default {
 		},
 		//确定购买
 		goPay() {
+			this.readyPayVisible = false
 			this.$router.push({
 				path: 'OrderForm',
 				query: {

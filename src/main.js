@@ -79,6 +79,7 @@ function wechatLogin (code) {
       accountForm.loginStatus = true
       store.dispatch('setLonginInfo', accountForm)
       store.dispatch('changeAppStatus', false)//关闭登录窗口
+      location.href = location.href.split('?')[0] + '#' + localStorage.getItem('enter')
     } else {
       Message({ type: res.Type.toLowerCase(), message: res.Content, center: true, duration: 2000 })
     }
@@ -100,6 +101,7 @@ router.beforeEach((to, from, next) => {
     !store.state.loginInfo.loginStatus &&
     to.name != "HomeView" &&
     to.name != "Product" &&
+    to.name != "ProductDetail" &&
     to.name != "Contactus" &&
     to.name != "TouristRules"
   ) {
@@ -111,4 +113,7 @@ router.beforeEach((to, from, next) => {
 /* 获取url中的参数 */
 function getQuery (name) {
   return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.href) || ['', ''])[1].replace(/\+/g, '%20')) || null
+}
+function deleteQuery () {
+  return new RegExp(/\?code=([0-9a-zA-Z]{32})/)
 }

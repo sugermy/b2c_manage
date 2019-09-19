@@ -268,6 +268,7 @@ export default {
 		weLogin() {
 			// let baseUrl = JSON.parse(JSON.stringify(location.href))
 			let baseUrl = escape(window.SYSTEM_CONFIG.wechatUrl)
+			localStorage.setItem('enter', this.$route.fullPath)
 			location.href = `https://open.weixin.qq.com/connect/qrconnect?appid=${window.SYSTEM_CONFIG.AppId}&redirect_uri=${baseUrl}&response_type=code&scope=snsapi_login&state=STATE#wechat_redirect`
 		},
 		//发送验证码

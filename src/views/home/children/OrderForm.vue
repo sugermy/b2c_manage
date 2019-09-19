@@ -28,7 +28,8 @@
                 </el-input-number>
               </el-form-item>
               <el-form-item label="选择日期：">
-                <el-date-picker type="date" placeholder="选择日期" readonly :clearable="false" v-model="TicketForm.palyData" :value="TicketInit.palyData" class="form-control">
+                <el-date-picker type="date" placeholder="选择日期" :picker-options="datePicker" :clearable="false" v-model="TicketForm.palyData" :value="TicketInit.palyData"
+                  class="form-control">
                 </el-date-picker>
               </el-form-item>
               <el-form-item label="订单总额：">
@@ -148,6 +149,12 @@ export default {
 						trigger: 'blur'
 					}
 				]
+			},
+			datePicker: {
+				disabledDate(time) {
+					let today = new Date(new Date() - 24 * 60 * 60 * 1000)
+					return time.getTime() < today.getTime()
+				}
 			}
 		}
 	},
@@ -190,6 +197,43 @@ export default {
 				this.TicketInit = res.Data[0] || {}
 				this.rules.touristIdCard[0].required = res.Data[0].IsCheckPerson //身份证校验根据当前产品确定
 				this.getInitPrice(pid, date)
+				// 有效周期开始
+				let BaseStartDate = res.Data[0].StartTime
+				let BaseStartTime = new Date(BaseStartDate)
+				let BaseEndDate = res.Data[0].EndTime
+				let BaseEndTime = new Date(BaseEndDate)
+				// 有效周期结束
+
+				// 预售开始
+				let SellStartDate = res.Data[0].PreSellStartDate
+				let SellStartTime = new Date(SellStartDate)
+				let SellEndDate = res.Data[0].PreSellEndDate
+				let SellEndTime = new Date(SellEndDate)
+				// 预售结束
+				this.datePicker = {
+					disabledDate(time) {
+						let today = new Date(new Date() - 24 * 60 * 60 * 1000)
+						return time.getTime() < today.getTime() || time.getTime() > BaseEndTime.getTime()
+					}
+				}
+				if (!res.Data[0].IsSellToday) {
+					this.datePicker = {
+						disabledDate(time) {
+							let today = new Date()
+							return time.getTime() < today.getTime() || time.getTime() > BaseEndTime.getTime()
+						}
+					}
+					this.dateValue = this.dateNext()
+				}
+				if (res.Data[0].IsPreSell) {
+					this.datePicker = {
+						disabledDate(time) {
+							let today = new Date()
+							return time.getTime() < SellStartTime.getTime() || time.getTime() > SellEndTime.getTime()
+						}
+					}
+					this.dateValue = res.Data[0].PreSellStartDate
+				}
 			})
 		},
 		//初始化请求日期价
