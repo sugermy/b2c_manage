@@ -53,6 +53,7 @@ export default {
 	.sail-main {
 		padding: 0 16px;
 		background: #fff;
+		min-height: calc(100vh - 240px);
 		.sail-explain {
 			padding: 10px 0;
 			line-height: 24px;
