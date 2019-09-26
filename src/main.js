@@ -48,7 +48,7 @@ function getMerchantInfo () {
         store,
         render: h => h(App)
       }).$mount("#app");
-    } else {
+    } else if (res.Code == 1) {
       Notification({
         title: "商户获取失败",
         message: res.Content,
@@ -59,6 +59,7 @@ function getMerchantInfo () {
     }
   });
 }
+
 /* 30分钟默认刷新token  为了方便使用29分钟时刷新赋值 */
 setInterval(() => {
   Token = "";
@@ -109,6 +110,7 @@ router.beforeEach((to, from, next) => {
   } else {
     next();
   }
+
 });
 /* 获取url中的参数 */
 function getQuery (name) {

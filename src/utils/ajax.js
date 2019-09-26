@@ -3,6 +3,7 @@ import { Promise } from "q";
 import { Notification } from "element-ui";
 import qs from "qs";
 const baseURL = window.SYSTEM_CONFIG.webServer; //基础服务地址
+let count = 0
 export default class Ajax {
   /**
    * @param { String } baseURL        基础请求地址
@@ -37,25 +38,37 @@ export default class Ajax {
     this._axios.interceptors.response.use(
       response => {
         if (response.data) {
-          let config = response.config
-          if (response.data.Code == 2 && response.data.Content.indexOf('Token已失效') != -1) {
-            this._axios.get('Token', {}).then(res => {
-              config.headers.Token = res.Data;
-              return this._axios(config)
-            })
+          if (count < 5) {
+            let config = response.config
+            if (response.data.Code == 2 && response.data.Content.indexOf('Token已失效') != -1) {
+              this._axios.get('Token', {}).then(res => {
+                config.headers.Token = res.Data;
+                count++
+                return this._axios(config)
+              })
+            } else {
+              return response.data
+            }
           } else {
+            Notification({
+              title: "网络请求失败",
+              message: "请检查网络请求是否配置正确",
+              type: "error",
+              showClose: false
+            });
             return response.data;
           }
         } else {
+          Notification({
+            title: "网络请求失败",
+            message: "请检查网络请求是否配置正确",
+            type: "error",
+            showClose: false
+          });
           return response;
         }
       },
       error => {
-        Notification({
-          title: "网络响应失败",
-          message: "请检查网络请求是否配置正确",
-          type: "error"
-        });
         return Promise.reject(error);
       }
     );
