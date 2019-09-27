@@ -41,7 +41,7 @@ function refrushTokenGet () {
 //获取商户信息
 function getMerchantInfo () {
   BTCAjax.get("/Park/Info").then(res => {
-    if (res.Code == "200") {
+    if (res.Code == 200) {
       store.dispatch("setMerchantData", res.Data);
       new Vue({
         router,
